@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VITREFLAM - Oliver | Assistant SAV Intelligent</title>
+    <title>VITREFLAM - Oliver | Assistant SAV</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -29,7 +29,6 @@
             line-height: 1.6;
         }
 
-        /* Header */
         header {
             background: var(--red);
             border-bottom: 4px solid var(--black);
@@ -58,66 +57,65 @@
             font-size: 14px;
         }
 
-        /* Hero */
         .hero {
             background: var(--yellow);
             border-bottom: 4px solid var(--black);
-            padding: 80px 40px;
-            text-align: center;
+            padding: 60px 40px;
         }
 
         .hero h1 {
-            font-size: 72px;
+            font-size: 48px;
             font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -2px;
             margin-bottom: 20px;
         }
 
         .hero h1 span {
             background: var(--red);
             color: var(--white);
-            padding: 0 20px;
+            padding: 0 15px;
             display: inline-block;
-            transform: rotate(-1deg);
             border: 4px solid var(--black);
-            box-shadow: var(--shadow-lg);
+            box-shadow: var(--shadow);
         }
 
         .hero p {
-            font-size: 24px;
-            max-width: 700px;
-            margin: 30px auto 0;
-            font-weight: 600;
+            font-size: 20px;
+            max-width: 800px;
         }
 
-        /* Container */
+        .intro-box {
+            background: var(--white);
+            border: 4px solid var(--black);
+            padding: 20px 25px;
+            margin-top: 25px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 60px 40px;
         }
 
-        /* Section */
         section {
             margin-bottom: 60px;
         }
 
         .section-title {
             font-family: 'Space Mono', monospace;
-            font-size: 36px;
+            font-size: 28px;
             font-weight: 700;
             text-transform: uppercase;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             background: var(--black);
             color: var(--white);
-            padding: 15px 25px;
+            padding: 12px 20px;
             display: inline-block;
             border: 4px solid var(--black);
             box-shadow: var(--shadow);
         }
 
-        /* Cards Grid */
         .cards-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -128,18 +126,12 @@
             background: var(--white);
             border: 4px solid var(--black);
             box-shadow: var(--shadow-lg);
-            padding: 30px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .card:hover {
-            transform: translate(-4px, -4px);
-            box-shadow: 12px 12px 0px var(--black);
+            padding: 25px;
         }
 
         .card h3 {
             font-family: 'Space Mono', monospace;
-            font-size: 20px;
+            font-size: 18px;
             text-transform: uppercase;
             margin-bottom: 15px;
             padding-bottom: 10px;
@@ -147,7 +139,7 @@
         }
 
         .card p {
-            font-size: 16px;
+            font-size: 15px;
             color: #444;
         }
 
@@ -168,7 +160,6 @@
             color: var(--white);
         }
 
-        /* Features List */
         .features-list {
             list-style: none;
         }
@@ -193,7 +184,6 @@
             font-weight: 700;
         }
 
-        /* Table */
         .brutal-table {
             width: 100%;
             border-collapse: collapse;
@@ -221,7 +211,6 @@
             background: var(--gray);
         }
 
-        /* Flow Diagram */
         .flow {
             display: flex;
             flex-direction: column;
@@ -252,7 +241,6 @@
             margin: 10px 0;
         }
 
-        /* Example Chat */
         .chat-example {
             border: 4px solid var(--black);
             box-shadow: var(--shadow-lg);
@@ -312,7 +300,6 @@
             color: #666;
         }
 
-        /* Languages */
         .languages {
             display: flex;
             flex-wrap: wrap;
@@ -332,7 +319,6 @@
             background: var(--red);
         }
 
-        /* Tech Stack */
         .tech-stack {
             display: flex;
             flex-wrap: wrap;
@@ -348,7 +334,6 @@
             box-shadow: var(--shadow);
         }
 
-        /* Checklist */
         .checklist {
             list-style: none;
         }
@@ -378,7 +363,6 @@
             font-size: 18px;
         }
 
-        /* Footer */
         footer {
             background: var(--black);
             color: var(--white);
@@ -395,10 +379,9 @@
             color: var(--yellow);
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 40px;
+                font-size: 32px;
             }
 
             .hero p {
@@ -406,7 +389,7 @@
             }
 
             .section-title {
-                font-size: 24px;
+                font-size: 20px;
             }
 
             header {
@@ -420,52 +403,56 @@
 
     <header>
         <div class="logo">Vitreflam</div>
-        <div class="badge">v1.0.0 - Production Ready</div>
+        <div class="badge">Février 2026</div>
     </header>
 
     <section class="hero">
-        <h1>Rencontrez <span>Oliver</span></h1>
-        <p>Assistant SAV intelligent qui répond instantanément, se souvient de chaque client, et analyse les photos de verre cassé.</p>
+        <h1>Hello Fabien</h1>
+        <p>Je t'ai préparé un récap de ce que j'ai construit pour le SAV. Voici <span>Oliver</span>, ton nouvel assistant.</p>
+        <div class="intro-box">
+            <strong>En gros :</strong> Quand un client a un souci avec sa vitre, il discute avec Oliver sur le site. Oliver répond instantanément, reconnaît le client s'il est déjà venu, et peut même analyser les photos de verre cassé.
+        </div>
     </section>
 
     <div class="container">
 
-        <!-- Présentation -->
+        <!-- Ce que Oliver sait faire -->
         <section>
-            <div class="section-title">Présentation</div>
+            <div class="section-title">Ce que Oliver sait faire</div>
             <div class="cards-grid">
                 <div class="card highlight">
-                    <h3>Le Projet</h3>
-                    <p>J'ai créé Oliver, un assistant virtuel pour le SAV de Vitreflam. Quand un client a un souci avec sa vitre (cassée, en retard, mauvaises dimensions...), il peut discuter avec Oliver directement sur le site.</p>
+                    <h3>Il reconnaît les clients</h3>
+                    <p>Le client donne son email et Oliver sait direct si c'est quelqu'un de nouveau ou un habitué. S'il est déjà venu, Oliver a tout l'historique : les anciennes conversations, les problèmes passés, comment ça s'était terminé.</p>
                 </div>
                 <div class="card">
-                    <h3>Réponse Instantanée</h3>
-                    <p>Oliver répond en quelques secondes, 24h/24, 7j/7. Plus d'attente interminable au téléphone ou de mails sans réponse.</p>
+                    <h3>Il comprend le problème</h3>
+                    <p>Casse livraison, casse montage, souci de dimensions, suivi de commande... Oliver détecte automatiquement de quoi il s'agit et va chercher les bonnes infos pour répondre.</p>
                 </div>
                 <div class="card red">
-                    <h3>Mémoire Client</h3>
-                    <p>Oliver se souvient de chaque client. Historique des conversations, problèmes passés, remises en attente... Tout est là.</p>
+                    <h3>Il analyse les photos</h3>
+                    <p>Le client envoie une photo de sa vitre cassée, Oliver l'analyse vraiment. Il cherche les fissures, les éclats, et peut confirmer ou non la casse. Ça évite les abus.</p>
                 </div>
             </div>
         </section>
 
         <!-- Fonctionnalités -->
         <section>
-            <div class="section-title">Fonctionnalités</div>
+            <div class="section-title">Tout ce qu'il gère</div>
             <ul class="features-list">
                 <li>Reconnaissance automatique des clients par email</li>
-                <li>Détection intelligente du type de problème</li>
+                <li>Détection du type de problème (casse, retard, dimensions...)</li>
                 <li>Analyse de photos par intelligence artificielle</li>
                 <li>Création automatique de tickets SAV</li>
-                <li>Détection de la frustration client</li>
-                <li>Escalade vers un responsable si nécessaire</li>
-                <li>Fermeture automatique des conversations inactives</li>
+                <li>Détection quand un client est frustré</li>
+                <li>Escalade vers un responsable si ça dégénère</li>
+                <li>Fermeture auto des conversations inactives</li>
             </ul>
         </section>
 
         <!-- Langues -->
         <section>
-            <div class="section-title">6 Langues Supportées</div>
+            <div class="section-title">6 Langues</div>
+            <p style="margin-bottom: 20px;">Le client choisit sa langue au début et toute la conversation se fait dedans.</p>
             <div class="languages">
                 <div class="lang-tag">Français</div>
                 <div class="lang-tag">English</div>
@@ -476,82 +463,44 @@
             </div>
         </section>
 
-        <!-- Détection des problèmes -->
+        <!-- Parcours client -->
         <section>
-            <div class="section-title">Détection des Problèmes</div>
-            <table class="brutal-table">
-                <thead>
-                    <tr>
-                        <th>Type</th>
-                        <th>Description</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Casse livraison</strong></td>
-                        <td>Vitre cassée à la réception du colis</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Casse montage</strong></td>
-                        <td>Vitre cassée lors de l'installation</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Dimensions</strong></td>
-                        <td>Problème de taille de la vitre</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Suivi commande</strong></td>
-                        <td>Question sur le statut de livraison</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Remboursement</strong></td>
-                        <td>Demande de remboursement</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Retard</strong></td>
-                        <td>Livraison en retard</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Parcours utilisateur -->
-        <section>
-            <div class="section-title">Parcours Utilisateur</div>
+            <div class="section-title">Le parcours client</div>
             <div class="flow">
-                <div class="flow-step">Arrivée sur le chat</div>
+                <div class="flow-step">Arrive sur le chat</div>
                 <div class="flow-arrow">↓</div>
-                <div class="flow-step active">Choix de la langue</div>
+                <div class="flow-step active">Choisit sa langue</div>
                 <div class="flow-arrow">↓</div>
-                <div class="flow-step">Saisie de l'email</div>
+                <div class="flow-step">Donne son email</div>
                 <div class="flow-arrow">↓</div>
-                <div class="flow-step active">Description du problème</div>
+                <div class="flow-step active">Explique son problème</div>
                 <div class="flow-arrow">↓</div>
-                <div class="flow-step">Oliver analyse et répond</div>
+                <div class="flow-step">Oliver répond</div>
             </div>
         </section>
 
-        <!-- Exemple de conversation -->
+        <!-- Exemple -->
         <section>
-            <div class="section-title">Exemple de Conversation</div>
+            <div class="section-title">Un exemple concret</div>
+            <p style="margin-bottom: 20px;">Marie a reçu sa vitre cassée ce matin. Voilà comment ça se passe :</p>
             <div class="chat-example">
                 <div class="chat-header">Chat avec Oliver</div>
                 <div class="chat-body">
                     <div class="chat-message client">
-                        <div class="chat-label">Client</div>
+                        <div class="chat-label">Marie</div>
                         <div class="chat-bubble">Bonjour, j'ai reçu ma commande ce matin et la vitre est cassée</div>
                     </div>
                     <div class="chat-message oliver">
                         <div class="chat-label">Oliver</div>
-                        <div class="chat-bubble">Bonjour ! Je suis vraiment désolé d'apprendre que votre vitre est arrivée cassée. Avez-vous souscrit l'assurance transport lors de votre commande ?</div>
+                        <div class="chat-bubble">Bonjour Marie, je suis vraiment désolé. Avez-vous souscrit l'assurance transport lors de votre commande ?</div>
                     </div>
                     <div class="chat-message client">
-                        <div class="chat-label">Client</div>
+                        <div class="chat-label">Marie</div>
                         <div class="chat-bubble">Oui j'ai pris l'assurance</div>
                     </div>
                     <div class="chat-message oliver">
                         <div class="chat-label">Oliver</div>
-                        <div class="chat-bubble">Parfait. Avec l'assurance transport, vous avez 48 heures pour déclarer le sinistre. Pourriez-vous m'envoyer une photo du verre cassé ?</div>
+                        <div class="chat-bubble">Parfait. Vous avez 48h pour déclarer. Envoyez-moi une photo du verre cassé et je lance le remplacement.</div>
                     </div>
                 </div>
             </div>
@@ -559,52 +508,54 @@
 
         <!-- Règles d'assurance -->
         <section>
-            <div class="section-title">Règles d'Assurance</div>
+            <div class="section-title">Les règles qu'il connaît</div>
+            <p style="margin-bottom: 20px;">Oliver applique automatiquement les bonnes procédures selon la situation.</p>
             <div class="cards-grid">
                 <div class="card">
                     <h3>Assurance Transport</h3>
-                    <p><strong>Délai :</strong> 48 heures<br>
+                    <p><strong>Délai :</strong> 48 heures après livraison<br>
                     <strong>Pièces :</strong> Photos colis + verre<br>
-                    <strong>Remplacement :</strong> Gratuit<br>
+                    <strong>Action :</strong> Renvoi gratuit<br>
                     <strong>Limite :</strong> 1 fois par commande</p>
                 </div>
                 <div class="card">
                     <h3>Assurance Montage</h3>
-                    <p><strong>Délai :</strong> 8 jours<br>
+                    <p><strong>Délai :</strong> 8 jours après livraison<br>
                     <strong>Pièces :</strong> Photos verre cassé<br>
-                    <strong>Remplacement :</strong> Gratuit<br>
+                    <strong>Action :</strong> Renvoi gratuit<br>
                     <strong>Limite :</strong> 1 fois par commande</p>
                 </div>
                 <div class="card highlight">
                     <h3>Sans Assurance</h3>
-                    <p><strong>Casse transport :</strong> Réclamation Colissimo<br>
-                    <strong>Casse montage :</strong> Remise 30% sur prochaine commande</p>
+                    <p><strong>Casse transport :</strong> Oliver oriente vers Colissimo<br>
+                    <strong>Casse montage :</strong> Oliver propose 30% de remise sur la prochaine commande</p>
                 </div>
             </div>
         </section>
 
-        <!-- Analyse d'images -->
+        <!-- Analyse photos -->
         <section>
-            <div class="section-title">Analyse d'Images IA</div>
+            <div class="section-title">L'analyse des photos</div>
+            <p style="margin-bottom: 20px;">Oliver regarde vraiment les photos. Il ne fait pas semblant.</p>
             <table class="brutal-table">
                 <thead>
                     <tr>
-                        <th>Verdict</th>
-                        <th>Action</th>
+                        <th>Ce qu'il voit</th>
+                        <th>Ce qu'il fait</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Casse confirmée</strong></td>
-                        <td>Lancement du remplacement si conditions remplies</td>
+                        <td><strong>Casse confirmée</strong> (fissure, éclat visible)</td>
+                        <td>Lance le remplacement si les conditions sont ok</td>
                     </tr>
                     <tr>
-                        <td><strong>Casse non confirmée</strong></td>
-                        <td>Explication et demande de clarification</td>
+                        <td><strong>Pas de casse visible</strong></td>
+                        <td>Explique ce qu'il voit et demande une autre photo si besoin</td>
                     </tr>
                     <tr>
-                        <td><strong>Photo insuffisante</strong></td>
-                        <td>Demande d'une meilleure photo</td>
+                        <td><strong>Photo floue ou mal cadrée</strong></td>
+                        <td>Demande poliment une meilleure photo</td>
                     </tr>
                 </tbody>
             </table>
@@ -612,7 +563,7 @@
 
         <!-- Technologies -->
         <section>
-            <div class="section-title">Technologies Utilisées</div>
+            <div class="section-title">Côté technique</div>
             <div class="tech-stack">
                 <div class="tech-item">HTML/CSS/JS</div>
                 <div class="tech-item">Node.js</div>
@@ -624,26 +575,25 @@
 
         <!-- Statut -->
         <section>
-            <div class="section-title">Statut du Projet</div>
+            <div class="section-title">Où on en est</div>
+            <p style="margin-bottom: 20px;">Tout ça fonctionne. Le chatbot est prêt à être mis en ligne sur Render.</p>
             <ul class="checklist">
                 <li><span class="check">✓</span> Chat en temps réel</li>
-                <li><span class="check">✓</span> Réponses multilingues</li>
+                <li><span class="check">✓</span> Réponses dans les 6 langues</li>
                 <li><span class="check">✓</span> Analyse de photos par IA</li>
                 <li><span class="check">✓</span> Mémoire client</li>
-                <li><span class="check">✓</span> Création automatique de tickets</li>
+                <li><span class="check">✓</span> Création auto de tickets</li>
                 <li><span class="check">✓</span> Détection de frustration</li>
-                <li><span class="check">✓</span> Fermeture automatique des conversations</li>
+                <li><span class="check">✓</span> Fermeture auto des conversations</li>
             </ul>
         </section>
 
-        <!-- Prochaines étapes -->
+        <!-- Suite -->
         <section>
-            <div class="section-title">Prochaines Étapes</div>
+            <div class="section-title">La suite</div>
             <div class="card highlight">
                 <h3>Intégration Colissimo</h3>
-                <p>Je suis en train de contacter Colissimo pour mettre en place :<br><br>
-                • Récupération automatique des infos de suivi de colis<br>
-                • Facilitation des réclamations pour les clients sans assurance</p>
+                <p>Je suis en train de les contacter pour voir ce qu'on peut faire. L'idée c'est de récupérer automatiquement les infos de suivi et faciliter les réclamations pour les clients sans assurance. Je te tiens au courant.</p>
             </div>
         </section>
 
