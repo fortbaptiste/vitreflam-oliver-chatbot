@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEMI MVP - Plan 10 Jours</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue: #2563eb;
+            --yellow: #FFE66D;
+            --black: #1a1a1a;
+            --white: #FFFEF9;
+            --gray: #f5f5f5;
+            --green: #22c55e;
+            --orange: #f97316;
+            --shadow: 4px 4px 0px var(--black);
+            --shadow-lg: 8px 8px 0px var(--black);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--white);
+            color: var(--black);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--blue);
+            border-bottom: 4px solid var(--black);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Space Mono', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--white);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .badge {
+            background: var(--yellow);
+            color: var(--black);
+            padding: 8px 16px;
+            font-weight: 700;
+            border: 3px solid var(--black);
+            box-shadow: var(--shadow);
+            font-size: 14px;
+        }
+
+        .hero {
+            background: var(--yellow);
+            border-bottom: 4px solid var(--black);
+            padding: 60px 40px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 20px;
+            max-width: 800px;
+        }
+
+        .intro-box {
+            background: var(--white);
+            border: 4px solid var(--black);
+            padding: 20px 25px;
+            margin-top: 25px;
+            box-shadow: var(--shadow);
+            max-width: 800px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 40px;
+        }
+
+        section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-family: 'Space Mono', monospace;
+            font-size: 28px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            background: var(--black);
+            color: var(--white);
+            padding: 12px 20px;
+            display: inline-block;
+            border: 4px solid var(--black);
+            box-shadow: var(--shadow);
+        }
+
+        .brutal-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 4px solid var(--black);
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 30px;
+        }
+
+        .brutal-table th {
+            background: var(--black);
+            color: var(--white);
+            padding: 12px 16px;
+            text-align: left;
+            font-family: 'Space Mono', monospace;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        .brutal-table td {
+            padding: 12px 16px;
+            border: 2px solid var(--black);
+            background: var(--white);
+            font-size: 14px;
+        }
+
+        .brutal-table tr:nth-child(even) td {
+            background: var(--gray);
+        }
+
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+            .hero h1 {
+                font-size: 32px;
+            }
+        }
+
+        .card {
+            background: var(--white);
+            border: 4px solid var(--black);
+            box-shadow: var(--shadow-lg);
+            padding: 25px;
+        }
+
+        .card h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 18px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid var(--yellow);
+        }
+
+        .card.green {
+            background: #dcfce7;
+        }
+
+        .card.orange {
+            background: #ffedd5;
+        }
+
+        .card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .card li {
+            padding: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .card.green li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        .card.orange li::before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--orange);
+            font-weight: 700;
+        }
+
+        .day-card {
+            background: var(--white);
+            border: 4px solid var(--black);
+            box-shadow: var(--shadow);
+            margin-bottom: 25px;
+        }
+
+        .day-header {
+            background: var(--blue);
+            color: var(--white);
+            padding: 15px 20px;
+            border-bottom: 4px solid var(--black);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .day-header h3 {
+            font-family: 'Space Mono', monospace;
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+
+        .day-header .day-num {
+            background: var(--yellow);
+            color: var(--black);
+            padding: 5px 15px;
+            font-weight: 900;
+            font-size: 20px;
+            border: 3px solid var(--black);
+        }
+
+        .day-content {
+            padding: 20px;
+        }
+
+        .day-content h4 {
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+            color: #666;
+            margin: 15px 0 10px 0;
+            text-transform: uppercase;
+        }
+
+        .day-content h4:first-child {
+            margin-top: 0;
+        }
+
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .task-list li {
+            padding: 8px 12px;
+            background: var(--gray);
+            border: 2px solid var(--black);
+            margin-bottom: 8px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-list li::before {
+            content: "□";
+            font-family: 'Space Mono', monospace;
+            font-weight: 700;
+        }
+
+        .livrable {
+            background: var(--yellow);
+            border: 3px solid var(--black);
+            padding: 12px 15px;
+            margin-top: 15px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .livrable::before {
+            content: "→ ";
+            font-weight: 900;
+        }
+
+        footer {
+            background: var(--black);
+            color: var(--white);
+            padding: 30px 40px;
+            text-align: center;
+            border-top: 4px solid var(--blue);
+        }
+
+        footer p {
+            font-family: 'Space Mono', monospace;
+            font-size: 14px;
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 900px) {
+            .timeline {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .timeline-item {
+            background: var(--white);
+            border: 3px solid var(--black);
+            padding: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .timeline-item .num {
+            font-family: 'Space Mono', monospace;
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--blue);
+        }
+
+        .timeline-item .label {
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AEMI</div>
+        <div class="badge">MVP - 10 Jours</div>
+    </header>
+
+    <section class="hero">
+        <h1>Hello Vincent</h1>
+        <p>Je t'ai préparé un plan pour le MVP. En 10 jours on peut sortir quelque chose de solide.</p>
+        <div class="intro-box">
+            <strong>L'objectif :</strong> Livrer une app fonctionnelle et installable que Clément peut montrer à sa direction et tester avec 2-3 techniciens sur le terrain.
+        </div>
+    </section>
+
+    <div class="container">
+
+        <!-- Stack -->
+        <section>
+            <div class="section-title">Ma Stack</div>
+            <table class="brutal-table">
+                <thead>
+                    <tr>
+                        <th>Composant</th>
+                        <th>Techno</th>
+                        <th>Pourquoi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Frontend</strong></td>
+                        <td>React existant</td>
+                        <td>Déjà fait, on le connecte</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Backend</strong></td>
+                        <td>Supabase</td>
+                        <td>BaaS avec auth, DB, storage, realtime inclus</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Base de données</strong></td>
+                        <td>PostgreSQL (Supabase)</td>
+                        <td>Inclus, SQL standard</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Auth</strong></td>
+                        <td>Supabase Auth</td>
+                        <td>Email/password prêt à l'emploi</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Stockage fichiers</strong></td>
+                        <td>Supabase Storage</td>
+                        <td>Photos interventions</td>
+                    </tr>
+                    <tr>
+                        <td><strong>App Mobile</strong></td>
+                        <td>PWA</td>
+                        <td>Installable sans app store, fonctionne offline</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hébergement</strong></td>
+                        <td>Vercel ou Netlify</td>
+                        <td>Gratuit, déploiement auto</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Notifications</strong></td>
+                        <td>Supabase Edge Functions</td>
+                        <td>Simple et efficace</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Scope -->
+        <section>
+            <div class="section-title">Le Scope</div>
+            <div class="two-columns">
+                <div class="card green">
+                    <h3>Inclus dans les 10 jours</h3>
+                    <ul>
+                        <li>App web connectée à une vraie DB</li>
+                        <li>App installable sur Android (PWA)</li>
+                        <li>Authentification (login/logout)</li>
+                        <li>2 rôles : Admin et Technicien</li>
+                        <li>CRUD complet interventions</li>
+                        <li>Dashboard avec vrais KPIs</li>
+                        <li>Carte interactive fonctionnelle</li>
+                        <li>Mode offline basique</li>
+                        <li>Upload photos interventions</li>
+                        <li>Notifications email basiques</li>
+                    </ul>
+                </div>
+                <div class="card orange">
+                    <h3>Hors scope MVP</h3>
+                    <ul>
+                        <li>App native Android (Play Store)</li>
+                        <li>Mode offline complet avec sync</li>
+                        <li>Rapports automatiques IA</li>
+                        <li>Portail client</li>
+                        <li>Module Offres/Factures complet</li>
+                        <li>Checklists dynamiques complexes</li>
+                        <li>Signature client digitale</li>
+                        <li>Génération PDF</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline overview -->
+        <section>
+            <div class="section-title">Vue d'ensemble</div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="num">J1-2</div>
+                    <div class="label">Setup + Auth</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="num">J3-5</div>
+                    <div class="label">Connexion données</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="num">J6</div>
+                    <div class="label">Photos</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="num">J7-8</div>
+                    <div class="label">PWA + Rôles</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="num">J9-10</div>
+                    <div class="label">Polish + Deploy</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Planning détaillé -->
+        <section>
+            <div class="section-title">Planning Jour par Jour</div>
+
+            <!-- Jour 1 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <h3>Setup Infrastructure</h3>
+                    <div class="day-num">J1</div>
+                </div>
+                <div class="day-content">
+                    <h4>Matin</h4>
+                    <ul class="task-list">
+                        <li>Créer projet Supabase</li>
+                        <li>Configurer le projet (région Europe)</li>
+                        <li>Activer l'authentification email/password</li>
+                        <li>Créer les variables d'environnement</li>
+                    </ul>
+                    <h4>Après-midi</h4>
+                    <ul class="task-list">
+                        <li>Créer le schéma de base de données</li>
+                        <li>Insérer les données de démo</li>
+                        <li>Tester les requêtes SQL dans Supabase Studio</li>
+                        <li>Configurer les RLS policies basiques</li>
+                    </ul>
+                    <div class="livrable">Base de données PostgreSQL fonctionnelle avec données</div>
+                </div>
+            </div>
+
+            <!-- Jour 2 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <h3>Authentification</h3>
+                    <div class="day-num">J2</div>
+                </div>
+                <div class="day-content">
+                    <h4>Matin</h4>
+                    <ul class="task-list">
+                        <li>Installer @supabase/supabase-js dans le projet React</li>
+                        <li>Créer le client Supabase (src/lib/supabase.ts)</li>
+                        <li>Créer le contexte d'authentification (AuthContext)</li>
+                        <li>Créer la page de login (/login)</li>
+                    </ul>
+                    <h4>Après-midi</h4>
+                    <ul class="task-list">
+                        <li>Implémenter la logique login/logout</li>
+                        <li>Protéger les routes (PrivateRoute component)</li>
+                        <li>Créer 2-3 utilisateurs de test</li>
+                        <li>Gérer la session persistante</li>
+                    </ul>
+                    <div class="livrable">Authentification fonctionnelle</div>
+                </div>
+            </div>
+
+            <!-- Jour 3 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <h3>Connexion Données - Clients & Équipements</h3>
+                    <div class="day-num">J3</div>
+                </div>
+                <div class="day-content">
+                    <h4>Matin</h4>
+                    <ul class="task-list">
+                        <li>Créer les hooks Supabase (useClients, useAssets)</li>
+                        <li>Remplacer mockData par appels Supabase dans Clients.tsx</li>
+                        <li>Remplacer mockData par appels Supabase dans Equipements.tsx</li>
+                        <li>Ajouter états de chargement</li>
+                    </ul>
+                    <h4>Après-midi</h4>
+                    <ul class="task-list">
+                        <li>Ajouter gestion d'erreurs</li>
+                        <li>Implémenter la recherche côté serveur</li>
+                        <li>Ajouter pagination si nécessaire</li>
+                        <li>Tester avec données réelles</li>
+                    </ul>
+                    <div class="livrable">Pages Clients et Équipements connectées à la DB</div>
+                </div>
+            </div>
+
+            <!-- Jour 4 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <h3>Connexion Données - Interventions (Lecture)</h3>
+                    <div class="day-num">J4</div>
+                </div>
+                <div class="day-content">
+                    <h4>Matin</h4>
+                    <ul class="task-list">
+                        <li>Créer le hook useInterventions</li>
+                        <li>Connecter Dashboard.tsx à Supabase</li>
+                        <li>Adapter les calculs KPIs</li>
+                        <li>Connecter InterventionTable à données réelles</li>
+                    </ul>
+                    <h4>Après-midi</h4>
+                    <ul class="task-list">
+                        <li>Connecter InterventionDetailPanel</li>
+                        <li>Charger les relations (client, asset, technicien)</li>
+                        <li>Adapter la carte aux données réelles</li>
+                        <li>Tester les filtres et recherche</li>
+                    </ul>
+                    <div class="livrable">Dashboard et Carte avec données réelles</div>
+                </div>
+            </div>
+
+            <!-- Jour 5 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <h3>Interventions (Écriture)</h3>
+                    <div class="day-num">J5</div>
+                </div>
+                <div class="day-content">
+                    <h4>Matin</h4>
+                    <ul class="task-list">
+                        <li>Connecter QuickCreateModal à Supabase (INSERT)</li>
+                        <li>Implémenter la mise à jour de statut (UPDATE)</li>
+                        <li>Implémenter l'affectation technicien</li>
+                        <li>Implémenter les toggles logistique</li>
+                    </ul>
+                    <h4>Après-midi</h4>
+                    <ul class="task-list">
+                        <li>Ajouter le realtime Supabase</li>
+                        <li>Optimistic updates pour UX fluide</li>
+                        <li>Validation des données côté client</li>
+                        <li>Tester tous les flows CRUD</li>
+                    </ul>
+                    <div class="livrable">CRUD interventions complet et fonctionnel</div>
+                </div>
+            </div>
+
+            <!-- Jour 6 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <h3>Upload Photos</h3>
+                    <div class="day-num">J6</div>
+                </div>
+                <div class="day-content">
+                    <h4>Matin</h4>
+                    <ul class="task-list">
+                        <li>Configurer Supabase Storage (bucket "interventions")</li>
+                        <li>Créer le composant PhotoUpload</li>
+                        <li>Implémenter l'upload depuis le navigateur</li>
+                        <li>Gérer la compression d'image côté client</li>
+                    </ul>
+                    <h4>Après-midi</h4>
+                    <ul class="task-list">
+                        <li>Lier les photos aux interventions</li>
+                        <li>Afficher les photos dans InterventionDetailPanel</li>
+                        <li>Permettre la suppression</li>
+                        <li>Tester sur mobile (appareil photo)</li>
+                    </ul>
+                    <div class="livrable">Upload et affichage photos fonctionnel</div>
+                </div>
+            </div>
+
+            <!-- Jour 7 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <h3>PWA - Application Installable</h3>
+                    <div class="day-num">J7</div>
+                </div>
+                <div class="day-content">
+                    <h4>Matin</h4>
+                    <ul class="task-list">
+                        <li>Créer le manifest.json</li>
+                        <li>Créer les icônes PWA (192x192, 512x512)</li>
+                        <li>Configurer le service worker (vite-plugin-pwa)</li>
+                        <li>Configurer le caching des assets statiques</li>
+                    </ul>
+                    <h4>Après-midi</h4>
+                    <ul class="task-list">
+                        <li>Implémenter le cache des données</li>
+                        <li>Ajouter le prompt "Installer l'application"</li>
+                        <li>Tester l'installation sur Android</li>
+                        <li>Ajouter indicateur online/offline</li>
+                    </ul>
+                    <div class="livrable">Application installable sur téléphone Android</div>
+                </div>
+            </div>
+
+            <!-- Jour 8 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <h3>Rôles & Permissions + Vue Technicien</h3>
+                    <div class="day-num">J8</div>
+                </div>
+                <div class="day-content">
+                    <h4>Matin</h4>
+                    <ul class="task-list">
+                        <li>Ajouter la colonne 'role' à la table users</li>
+                        <li>Configurer les RLS policies par rôle</li>
+                        <li>Créer le hook useRole</li>
+                        <li>Adapter le menu selon le rôle</li>
+                    </ul>
+                    <h4>Après-midi</h4>
+                    <ul class="task-list">
+                        <li>Créer la vue simplifiée technicien</li>
+                        <li>Filtrer automatiquement par technicien connecté</li>
+                        <li>Bouton "Démarrer" / "Terminer" intervention</li>
+                        <li>Enregistrer horodatage début/fin</li>
+                    </ul>
+                    <div class="livrable">2 vues distinctes (Admin vs Technicien)</div>
+                </div>
+            </div>
+
+            <!-- Jour 9 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <h3>Notifications Email + Polish</h3>
+                    <div class="day-num">J9</div>
+                </div>
+                <div class="day-content">
+                    <h4>Matin</h4>
+                    <ul class="task-list">
+                        <li>Créer une Edge Function Supabase pour emails</li>
+                        <li>Trigger sur nouvelle affectation technicien</li>
+                        <li>Template email simple</li>
+                        <li>Tester l'envoi</li>
+                    </ul>
+                    <h4>Après-midi</h4>
+                    <ul class="task-list">
+                        <li>Corriger les bugs identifiés</li>
+                        <li>Améliorer les messages d'erreur</li>
+                        <li>Ajouter les toasts de confirmation</li>
+                        <li>Vérifier le responsive mobile</li>
+                    </ul>
+                    <div class="livrable">Application polie et notifications basiques</div>
+                </div>
+            </div>
+
+            <!-- Jour 10 -->
+            <div class="day-card">
+                <div class="day-header">
+                    <h3>Déploiement & Documentation</h3>
+                    <div class="day-num">J10</div>
+                </div>
+                <div class="day-content">
+                    <h4>Matin</h4>
+                    <ul class="task-list">
+                        <li>Configurer Vercel/Netlify</li>
+                        <li>Connecter le repo Git</li>
+                        <li>Configurer les variables d'environnement prod</li>
+                        <li>Déployer en production</li>
+                    </ul>
+                    <h4>Après-midi</h4>
+                    <ul class="task-list">
+                        <li>Rédiger le guide utilisateur rapide</li>
+                        <li>Documenter les accès (URLs, logins test)</li>
+                        <li>Créer les comptes utilisateurs réels</li>
+                        <li>Former rapidement Clément (30 min visio)</li>
+                    </ul>
+                    <div class="livrable">Application en production accessible</div>
+                </div>
+            </div>
+
+        </section>
+
+    </div>
+
+    <footer>
+        <p>AEMI MVP - Février 2026</p>
+    </footer>
+
+</body>
+</html>
