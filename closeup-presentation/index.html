@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Closeup x [Votre Agence] - Partenariat Closing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brutal-black': '#0a0a0a',
+                        'brutal-white': '#fafafa',
+                        'brutal-yellow': '#facc15',
+                        'brutal-blue': '#3b82f6',
+                        'brutal-red': '#ef4444',
+                        'brutal-green': '#22c55e',
+                        'brutal-purple': '#a855f7',
+                        'brutal-orange': '#f97316',
+                        'brutal-pink': '#ec4899',
+                        'brutal-cyan': '#06b6d4',
+                    },
+                    fontFamily: {
+                        'grotesk': ['Space Grotesk', 'sans-serif'],
+                        'mono': ['Space Mono', 'monospace'],
+                    },
+                    boxShadow: {
+                        'brutal': '4px 4px 0px 0px #0a0a0a',
+                        'brutal-lg': '8px 8px 0px 0px #0a0a0a',
+                        'brutal-xl': '12px 12px 0px 0px #0a0a0a',
+                        'brutal-hover': '6px 6px 0px 0px #0a0a0a',
+                        'brutal-white': '4px 4px 0px 0px #fafafa',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Space Grotesk', sans-serif; }
+        .font-mono { font-family: 'Space Mono', monospace; }
+
+        /* Animations */
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+        @keyframes pulse-border { 0%, 100% { border-color: #facc15; } 50% { border-color: #3b82f6; } }
+        @keyframes glitch { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(-2px, -2px); } 60% { transform: translate(2px, 2px); } 80% { transform: translate(2px, -2px); } 100% { transform: translate(0); } }
+        @keyframes typewriter { from { width: 0; } to { width: 100%; } }
+        @keyframes blink { 50% { border-color: transparent; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes bounce-in { 0% { transform: scale(0); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        @keyframes slide-up { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes rotate-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes gradient-shift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .animate-pulse-border { animation: pulse-border 2s ease-in-out infinite; }
+        .animate-glitch:hover { animation: glitch 0.3s ease-in-out; }
+        .animate-shake:hover { animation: shake 0.5s ease-in-out; }
+        .animate-bounce-in { animation: bounce-in 0.6s ease-out; }
+        .animate-slide-up { animation: slide-up 0.8s ease-out; }
+        .animate-rotate-slow { animation: rotate-slow 20s linear infinite; }
+        .animate-gradient { background-size: 200% 200%; animation: gradient-shift 3s ease infinite; }
+
+        /* Scroll animations */
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.8s ease; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Hover effects */
+        .hover-lift { transition: all 0.3s ease; }
+        .hover-lift:hover { transform: translateY(-5px) translateX(-2px); box-shadow: 8px 8px 0px 0px #0a0a0a; }
+
+        .card-brutal { border: 3px solid #0a0a0a; transition: all 0.3s ease; }
+        .card-brutal:hover { transform: translate(-4px, -4px); box-shadow: 8px 8px 0px 0px #0a0a0a; }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #facc15; border: 2px solid #0a0a0a; }
+        ::-webkit-scrollbar-thumb:hover { background: #3b82f6; }
+
+        /* Easter egg cursor */
+        .easter-cursor { cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ctext y='28' font-size='28'%3E🚀%3C/text%3E%3C/svg%3E"), auto; }
+
+        /* Marquee */
+        .marquee { overflow: hidden; }
+        .marquee-content { display: flex; animation: marquee 30s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Gradient text */
+        .gradient-text { background: linear-gradient(90deg, #facc15, #3b82f6, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-size: 300% 300%; animation: gradient-shift 4s ease infinite; }
+
+        /* Code block style */
+        .code-block { background: #1a1a1a; border-left: 4px solid #facc15; }
+
+        /* Noise texture overlay */
+        .noise::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Number counter animation */
+        .counter { display: inline-block; }
+    </style>
+</head>
+<body class="bg-brutal-black text-brutal-white overflow-x-hidden">
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-brutal-black border-b-4 border-brutal-yellow">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-brutal-yellow border-3 border-brutal-white flex items-center justify-center font-bold text-brutal-black animate-glitch">CU</div>
+                <span class="font-bold text-xl">CLOSEUP</span>
+            </div>
+            <div class="hidden md:flex gap-6 font-mono text-sm">
+                <a href="#contexte" class="hover:text-brutal-yellow transition-colors">Contexte</a>
+                <a href="#acquisition" class="hover:text-brutal-yellow transition-colors">Acquisition</a>
+                <a href="#outils" class="hover:text-brutal-yellow transition-colors">Outils</a>
+                <a href="#clients" class="hover:text-brutal-yellow transition-colors">Clients</a>
+                <a href="#timeline" class="hover:text-brutal-yellow transition-colors">Timeline</a>
+            </div>
+            <div class="px-4 py-2 bg-brutal-yellow text-brutal-black font-bold border-2 border-brutal-black shadow-brutal hover-lift cursor-pointer">
+                CONTACT
+            </div>
+        </div>
+    </nav>
+
+    <!-- SECTION 1: Hero -->
+    <section class="min-h-screen relative flex items-center justify-center pt-20 noise">
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute top-20 left-10 w-32 h-32 bg-brutal-yellow opacity-20 rotate-12 animate-float"></div>
+            <div class="absolute bottom-20 right-10 w-48 h-48 bg-brutal-blue opacity-20 -rotate-12 animate-float" style="animation-delay: 1s;"></div>
+            <div class="absolute top-1/2 left-1/4 w-24 h-24 bg-brutal-purple opacity-20 rotate-45 animate-float" style="animation-delay: 2s;"></div>
+        </div>
+        <div class="max-w-6xl mx-auto px-4 text-center relative z-10">
+            <div class="inline-block px-4 py-2 bg-brutal-yellow text-brutal-black font-mono text-sm mb-6 border-2 border-brutal-black shadow-brutal animate-bounce-in">
+                PARTENARIAT STRATÉGIQUE 2025
+            </div>
+            <h1 class="text-5xl md:text-8xl font-bold mb-6 leading-tight">
+                <span class="gradient-text">CLOSEUP</span>
+                <span class="block text-brutal-yellow">×</span>
+                <span class="block">[VOTRE AGENCE]</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-10 font-mono">
+                Automatisation d'acquisition de leads + Closing =
+                <span class="text-brutal-green font-bold">Croissance Exponentielle</span>
+            </p>
+            <div class="flex flex-col md:flex-row gap-4 justify-center">
+                <a href="#contexte" class="px-8 py-4 bg-brutal-yellow text-brutal-black font-bold text-lg border-4 border-brutal-black shadow-brutal-lg hover-lift">
+                    DÉCOUVRIR LE PROJET →
+                </a>
+                <a href="#acquisition" class="px-8 py-4 bg-transparent text-brutal-white font-bold text-lg border-4 border-brutal-white hover:bg-brutal-white hover:text-brutal-black transition-all">
+                    VOIR LES STRATÉGIES
+                </a>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+            <svg class="w-8 h-8 text-brutal-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- SECTION 2: Marquee -->
+    <section class="py-4 bg-brutal-yellow border-y-4 border-brutal-black overflow-hidden">
+        <div class="marquee">
+            <div class="marquee-content">
+                <span class="text-brutal-black font-bold text-2xl mx-8">AUTOMATISATION</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">•</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">CLOSING</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">•</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">LEADS QUALIFIÉS</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">•</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">IA</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">•</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">CROISSANCE</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">•</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">AUTOMATISATION</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">•</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">CLOSING</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">•</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">LEADS QUALIFIÉS</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">•</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">IA</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">•</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">CROISSANCE</span>
+                <span class="text-brutal-black font-bold text-2xl mx-8">•</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 3: Contexte Actuel -->
+    <section id="contexte" class="py-24 relative">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="reveal">
+                <span class="font-mono text-brutal-yellow text-sm">01 / CONTEXTE</span>
+                <h2 class="text-4xl md:text-6xl font-bold mt-2 mb-8">SITUATION ACTUELLE</h2>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 mt-12">
+                <div class="card-brutal bg-brutal-black p-8 reveal">
+                    <div class="w-16 h-16 bg-brutal-red flex items-center justify-center mb-6 border-3 border-brutal-white">
+                        <span class="text-3xl">⚠️</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">LE PROBLÈME</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-red font-bold">→</span>
+                            <span>Actuellement ~30 calls/mois uniquement via posts LinkedIn</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-red font-bold">→</span>
+                            <span>Certains prospects stratégiques (écoles, grands comptes) nécessitent une gestion personnalisée</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-red font-bold">→</span>
+                            <span>Phase de restructuration interne : recrutement de devs, entretiens en cours</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-red font-bold">→</span>
+                            <span>Gestion actuelle à 2 personnes avec une charge client importante</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-brutal bg-brutal-black p-8 reveal" style="animation-delay: 0.2s;">
+                    <div class="w-16 h-16 bg-brutal-green flex items-center justify-center mb-6 border-3 border-brutal-white">
+                        <span class="text-3xl">🎯</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">L'OBJECTIF</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-green font-bold">→</span>
+                            <span>Mettre en place des systèmes d'acquisition automatisés pour générer des leads tièdes/chauds</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-green font-bold">→</span>
+                            <span>Permettre à Closeup de gérer le closing avec des prospects pré-qualifiés</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-green font-bold">→</span>
+                            <span>Créer une relation WIN-WIN avec transparence totale</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-green font-bold">→</span>
+                            <span>Automatiser au maximum pour réduire la charge opérationnelle</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: Statistiques Actuelles -->
+    <section class="py-24 bg-brutal-yellow text-brutal-black border-y-4 border-brutal-black relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-0 w-full h-full" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 50px, #000 50px, #000 51px), repeating-linear-gradient(90deg, transparent, transparent 50px, #000 50px, #000 51px);"></div>
+        </div>
+        <div class="max-w-6xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-16 reveal">
+                <span class="font-mono text-brutal-black/60 text-sm">02 / ÉTAT DES LIEUX</span>
+                <h2 class="text-4xl md:text-6xl font-bold mt-2">CHIFFRES ACTUELS</h2>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="bg-brutal-black text-brutal-white p-6 border-4 border-brutal-black shadow-brutal-lg text-center reveal">
+                    <div class="text-5xl md:text-6xl font-bold mb-2 counter" data-target="30">30</div>
+                    <div class="font-mono text-sm text-gray-400">CALLS / MOIS</div>
+                    <div class="text-brutal-yellow text-xs mt-2">via LinkedIn uniquement</div>
+                </div>
+                <div class="bg-brutal-black text-brutal-white p-6 border-4 border-brutal-black shadow-brutal-lg text-center reveal" style="animation-delay: 0.1s;">
+                    <div class="text-5xl md:text-6xl font-bold mb-2 counter" data-target="2">2</div>
+                    <div class="font-mono text-sm text-gray-400">PERSONNES</div>
+                    <div class="text-brutal-yellow text-xs mt-2">gestion actuelle</div>
+                </div>
+                <div class="bg-brutal-black text-brutal-white p-6 border-4 border-brutal-black shadow-brutal-lg text-center reveal" style="animation-delay: 0.2s;">
+                    <div class="text-5xl md:text-6xl font-bold mb-2">70M+</div>
+                    <div class="font-mono text-sm text-gray-400">CA CLIENTS</div>
+                    <div class="text-brutal-yellow text-xs mt-2">accompagnés</div>
+                </div>
+                <div class="bg-brutal-black text-brutal-white p-6 border-4 border-brutal-black shadow-brutal-lg text-center reveal" style="animation-delay: 0.3s;">
+                    <div class="text-5xl md:text-6xl font-bold mb-2">∞</div>
+                    <div class="font-mono text-sm text-gray-400">POTENTIEL</div>
+                    <div class="text-brutal-yellow text-xs mt-2">avec automatisation</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 5: Ce qu'on apporte -->
+    <section class="py-24 relative">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="text-center mb-16 reveal">
+                <span class="font-mono text-brutal-yellow text-sm">03 / PROPOSITION DE VALEUR</span>
+                <h2 class="text-4xl md:text-6xl font-bold mt-2">CE QU'ON VOUS APPORTE</h2>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card-brutal bg-gradient-to-b from-brutal-yellow/10 to-transparent p-8 reveal">
+                    <div class="text-6xl mb-6">🔥</div>
+                    <h3 class="text-2xl font-bold mb-4 text-brutal-yellow">LEADS TIÈDES/CHAUDS</h3>
+                    <p class="text-gray-400 mb-4">Des prospects pré-qualifiés, intéressés par nos services, prêts à être closés.</p>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center gap-2"><span class="text-brutal-green">✓</span> Segmentation précise</li>
+                        <li class="flex items-center gap-2"><span class="text-brutal-green">✓</span> Intent signal détecté</li>
+                        <li class="flex items-center gap-2"><span class="text-brutal-green">✓</span> Premier contact établi</li>
+                    </ul>
+                </div>
+
+                <div class="card-brutal bg-gradient-to-b from-brutal-blue/10 to-transparent p-8 reveal" style="animation-delay: 0.1s;">
+                    <div class="text-6xl mb-6">⚡</div>
+                    <h3 class="text-2xl font-bold mb-4 text-brutal-blue">OUTILS AUTOMATISÉS</h3>
+                    <p class="text-gray-400 mb-4">Tout est automatisé pour vous simplifier la vie au maximum.</p>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center gap-2"><span class="text-brutal-green">✓</span> Dashboard Notion complet</li>
+                        <li class="flex items-center gap-2"><span class="text-brutal-green">✓</span> Génération de devis auto</li>
+                        <li class="flex items-center gap-2"><span class="text-brutal-green">✓</span> Transcription calls</li>
+                    </ul>
+                </div>
+
+                <div class="card-brutal bg-gradient-to-b from-brutal-purple/10 to-transparent p-8 reveal" style="animation-delay: 0.2s;">
+                    <div class="text-6xl mb-6">🎪</div>
+                    <h3 class="text-2xl font-bold mb-4 text-brutal-purple">LIBERTÉ TOTALE</h3>
+                    <p class="text-gray-400 mb-4">Vendez ce que vous voulez. Tout est vendable dans tous les marchés.</p>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-center gap-2"><span class="text-brutal-green">✓</span> Catalogue d'offres large</li>
+                        <li class="flex items-center gap-2"><span class="text-brutal-green">✓</span> Pricing flexible 5K-20K</li>
+                        <li class="flex items-center gap-2"><span class="text-brutal-green">✓</span> Présentation auto R2</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 6: Titre Acquisition -->
+    <section class="py-16 bg-brutal-blue text-brutal-black border-y-4 border-brutal-black">
+        <div class="max-w-6xl mx-auto px-4 text-center">
+            <h2 class="text-4xl md:text-7xl font-bold animate-glitch">
+                🚀 STRATÉGIES D'ACQUISITION
+            </h2>
+            <p class="text-xl mt-4 font-mono opacity-80">
+                Systèmes automatisés pour générer des leads qualifiés en continu
+            </p>
+        </div>
+    </section>
+
+    <!-- SECTION 7: Stratégie 1 - Cold Email -->
+    <section id="acquisition" class="py-24 relative">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <span class="w-16 h-16 bg-brutal-yellow text-brutal-black flex items-center justify-center text-2xl font-bold border-4 border-brutal-black">01</span>
+                    <div>
+                        <span class="font-mono text-brutal-yellow text-sm">STRATÉGIE #1</span>
+                        <h2 class="text-3xl md:text-5xl font-bold">COLD EMAIL MASSIF AUTOMATISÉ</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 mt-12">
+                <div class="reveal">
+                    <h3 class="text-2xl font-bold mb-6 text-brutal-yellow">📧 INFRASTRUCTURE EMAIL</h3>
+
+                    <div class="code-block p-6 mb-6 font-mono text-sm">
+                        <div class="text-brutal-yellow mb-2">// Configuration technique</div>
+                        <div class="text-gray-400">
+                            <p>comptes_gmail: <span class="text-brutal-green">30</span></p>
+                            <p>emails_par_jour_par_compte: <span class="text-brutal-green">30</span></p>
+                            <p>total_emails_jour: <span class="text-brutal-green">900</span></p>
+                            <p>total_emails_mois: <span class="text-brutal-green">27,000</span></p>
+                            <p>taux_ouverture_cible: <span class="text-brutal-green">45%</span></p>
+                            <p>taux_réponse_cible: <span class="text-brutal-green">8-12%</span></p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="card-brutal p-4 bg-brutal-black">
+                            <h4 class="font-bold text-brutal-cyan mb-2">1. Setup des domaines</h4>
+                            <p class="text-sm text-gray-400">30 domaines différents (ex: agence-ia.fr, automation-pro.com, etc.) avec configuration SPF, DKIM, DMARC pour maximiser la délivrabilité.</p>
+                        </div>
+                        <div class="card-brutal p-4 bg-brutal-black">
+                            <h4 class="font-bold text-brutal-cyan mb-2">2. Warm-up des comptes</h4>
+                            <p class="text-sm text-gray-400">Utilisation de Warmbox/Instantly pour chauffer les comptes pendant 2-3 semaines avant envoi massif. Score de réputation > 95%.</p>
+                        </div>
+                        <div class="card-brutal p-4 bg-brutal-black">
+                            <h4 class="font-bold text-brutal-cyan mb-2">3. Rotation intelligente</h4>
+                            <p class="text-sm text-gray-400">Rotation automatique des comptes d'envoi, des signatures, des objets de mail pour éviter les patterns détectables.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal" style="animation-delay: 0.2s;">
+                    <h3 class="text-2xl font-bold mb-6 text-brutal-yellow">🎯 CIBLAGE & SÉQUENCES</h3>
+
+                    <div class="bg-gradient-to-r from-brutal-purple/20 to-brutal-blue/20 p-6 border-2 border-brutal-purple mb-6">
+                        <h4 class="font-bold text-brutal-purple mb-4">Séquence type (7 emails sur 21 jours)</h4>
+                        <div class="space-y-3 font-mono text-sm">
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-brutal-purple text-white flex items-center justify-center text-xs">J1</span>
+                                <span>Email initial - Accroche personnalisée</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-brutal-purple/80 text-white flex items-center justify-center text-xs">J3</span>
+                                <span>Follow-up 1 - Valeur ajoutée (case study)</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-brutal-purple/60 text-white flex items-center justify-center text-xs">J7</span>
+                                <span>Follow-up 2 - Question ouverte</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-brutal-purple/50 text-white flex items-center justify-center text-xs">J10</span>
+                                <span>Follow-up 3 - Social proof</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-brutal-purple/40 text-white flex items-center justify-center text-xs">J14</span>
+                                <span>Follow-up 4 - Urgence soft</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-brutal-purple/30 text-white flex items-center justify-center text-xs">J18</span>
+                                <span>Follow-up 5 - Dernière tentative</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <span class="w-8 h-8 bg-brutal-purple/20 text-white flex items-center justify-center text-xs">J21</span>
+                                <span>Break-up email</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-brutal p-4 bg-brutal-black">
+                        <h4 class="font-bold text-brutal-orange mb-2">🔍 Sources de données prospects</h4>
+                        <ul class="text-sm text-gray-400 space-y-2">
+                            <li>• <strong>Apollo.io</strong> - Base de données B2B (emails vérifiés)</li>
+                            <li>• <strong>LinkedIn Sales Navigator</strong> - Export via Phantombuster</li>
+                            <li>• <strong>Societeinfo.com</strong> - Données entreprises FR</li>
+                            <li>• <strong>Dropcontact</strong> - Enrichissement et vérification</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Schéma technique -->
+            <div class="mt-12 p-8 bg-brutal-black border-4 border-brutal-yellow reveal">
+                <h3 class="text-xl font-bold mb-6 text-center text-brutal-yellow">ARCHITECTURE TECHNIQUE - FLOW COMPLET</h3>
+                <div class="flex flex-wrap justify-center items-center gap-4 font-mono text-sm">
+                    <div class="px-4 py-2 bg-brutal-blue text-white border-2 border-white">Apollo/LinkedIn</div>
+                    <span class="text-brutal-yellow text-2xl">→</span>
+                    <div class="px-4 py-2 bg-brutal-purple text-white border-2 border-white">Dropcontact</div>
+                    <span class="text-brutal-yellow text-2xl">→</span>
+                    <div class="px-4 py-2 bg-brutal-green text-black border-2 border-white">Instantly/Lemlist</div>
+                    <span class="text-brutal-yellow text-2xl">→</span>
+                    <div class="px-4 py-2 bg-brutal-orange text-black border-2 border-white">Zapier/Make</div>
+                    <span class="text-brutal-yellow text-2xl">→</span>
+                    <div class="px-4 py-2 bg-brutal-yellow text-black border-2 border-black font-bold">CALENDLY</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 8: Stratégie 2 - LinkedIn Automation -->
+    <section class="py-24 bg-gradient-to-b from-brutal-black to-blue-950 relative">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <span class="w-16 h-16 bg-brutal-blue text-brutal-white flex items-center justify-center text-2xl font-bold border-4 border-brutal-white">02</span>
+                    <div>
+                        <span class="font-mono text-brutal-blue text-sm">STRATÉGIE #2</span>
+                        <h2 class="text-3xl md:text-5xl font-bold">LINKEDIN AUTOMATION AVANCÉE</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-6 mt-12">
+                <div class="card-brutal bg-brutal-black p-6 reveal">
+                    <div class="text-4xl mb-4">👥</div>
+                    <h4 class="text-xl font-bold mb-3 text-brutal-blue">Multi-compte LinkedIn</h4>
+                    <p class="text-gray-400 text-sm mb-4">Configuration de 5-10 profils LinkedIn optimisés avec Phantombuster pour automatiser:</p>
+                    <ul class="text-sm space-y-2">
+                        <li class="flex items-center gap-2"><span class="text-brutal-blue">•</span> Connexions ciblées (100/jour/compte)</li>
+                        <li class="flex items-center gap-2"><span class="text-brutal-blue">•</span> Messages personnalisés</li>
+                        <li class="flex items-center gap-2"><span class="text-brutal-blue">•</span> Visite de profils (warm-up)</li>
+                        <li class="flex items-center gap-2"><span class="text-brutal-blue">•</span> Engagement automatique</li>
+                    </ul>
+                </div>
+
+                <div class="card-brutal bg-brutal-black p-6 reveal" style="animation-delay: 0.1s;">
+                    <div class="text-4xl mb-4">🤖</div>
+                    <h4 class="text-xl font-bold mb-3 text-brutal-blue">Séquence de messages</h4>
+                    <div class="code-block p-4 text-xs font-mono">
+                        <p class="text-brutal-yellow">// Séquence LinkedIn</p>
+                        <p class="text-gray-400 mt-2">J0: Demande connexion + note perso</p>
+                        <p class="text-gray-400">J2: Message valeur (si accepté)</p>
+                        <p class="text-gray-400">J5: Question d'engagement</p>
+                        <p class="text-gray-400">J8: Proposition call</p>
+                        <p class="text-gray-400">J12: Relance finale</p>
+                    </div>
+                </div>
+
+                <div class="card-brutal bg-brutal-black p-6 reveal" style="animation-delay: 0.2s;">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h4 class="text-xl font-bold mb-3 text-brutal-blue">Metrics attendus</h4>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Taux d'acceptation</span>
+                            <span class="text-brutal-green font-bold">35-45%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 h-2"><div class="bg-brutal-green h-2" style="width: 40%"></div></div>
+
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Taux de réponse</span>
+                            <span class="text-brutal-green font-bold">15-25%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 h-2"><div class="bg-brutal-green h-2" style="width: 20%"></div></div>
+
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">Conversion call</span>
+                            <span class="text-brutal-green font-bold">8-12%</span>
+                        </div>
+                        <div class="w-full bg-gray-700 h-2"><div class="bg-brutal-green h-2" style="width: 10%"></div></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 p-6 border-2 border-brutal-blue bg-brutal-blue/10 reveal">
+                <h4 class="font-bold text-brutal-blue mb-4">💡 OUTILS UTILISÉS</h4>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center font-mono text-sm">
+                    <div class="p-3 bg-brutal-black border border-gray-700">Phantombuster</div>
+                    <div class="p-3 bg-brutal-black border border-gray-700">Dripify</div>
+                    <div class="p-3 bg-brutal-black border border-gray-700">Expandi</div>
+                    <div class="p-3 bg-brutal-black border border-gray-700">Sales Navigator</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 9: Stratégie 3 - Scraping Intelligence -->
+    <section class="py-24 relative">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <span class="w-16 h-16 bg-brutal-purple text-brutal-white flex items-center justify-center text-2xl font-bold border-4 border-brutal-white">03</span>
+                    <div>
+                        <span class="font-mono text-brutal-purple text-sm">STRATÉGIE #3</span>
+                        <h2 class="text-3xl md:text-5xl font-bold">SCRAPING & INTENT DATA</h2>
+                    </div>
+                </div>
+            </div>
+
+            <p class="text-xl text-gray-400 mb-12 reveal">
+                Identifier les prospects qui ont un <span class="text-brutal-purple font-bold">besoin immédiat</span> en analysant leurs comportements et signaux d'intention.
+            </p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="reveal">
+                    <h3 class="text-2xl font-bold mb-6 text-brutal-purple">🕷️ SOURCES DE SCRAPING</h3>
+
+                    <div class="space-y-4">
+                        <div class="card-brutal p-5 bg-brutal-black">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-2xl">💼</span>
+                                <h4 class="font-bold">Indeed / Welcome to the Jungle</h4>
+                            </div>
+                            <p class="text-sm text-gray-400">Scraping des offres d'emploi contenant "automatisation", "IA", "développeur", "digital".</p>
+                            <p class="text-xs text-brutal-purple mt-2">Signal: Entreprise en croissance qui recrute = budget dispo</p>
+                        </div>
+
+                        <div class="card-brutal p-5 bg-brutal-black">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-2xl">📰</span>
+                                <h4 class="font-bold">Levées de fonds (Maddyness, Les Echos)</h4>
+                            </div>
+                            <p class="text-sm text-gray-400">Scraping des startups ayant levé des fonds récemment.</p>
+                            <p class="text-xs text-brutal-purple mt-2">Signal: Cash frais = capacité d'investissement immédiate</p>
+                        </div>
+
+                        <div class="card-brutal p-5 bg-brutal-black">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-2xl">🏢</span>
+                                <h4 class="font-bold">Societe.com / Pappers</h4>
+                            </div>
+                            <p class="text-sm text-gray-400">Nouvelles immatriculations, augmentations de capital, changements de dirigeants.</p>
+                            <p class="text-xs text-brutal-purple mt-2">Signal: Moments de transition = ouverture au changement</p>
+                        </div>
+
+                        <div class="card-brutal p-5 bg-brutal-black">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-2xl">⭐</span>
+                                <h4 class="font-bold">Avis Google / Trustpilot</h4>
+                            </div>
+                            <p class="text-sm text-gray-400">Entreprises avec mauvais avis liés au service client / temps de réponse.</p>
+                            <p class="text-xs text-brutal-purple mt-2">Signal: Pain point clair = besoin d'automatisation service client</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal" style="animation-delay: 0.2s;">
+                    <h3 class="text-2xl font-bold mb-6 text-brutal-purple">🧠 INTENT SIGNALS</h3>
+
+                    <div class="bg-gradient-to-br from-brutal-purple/20 to-brutal-pink/20 p-6 border-2 border-brutal-purple mb-6">
+                        <h4 class="font-bold mb-4">Signaux d'intention à tracker</h4>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 bg-brutal-black/50 rounded">
+                                <span class="text-sm">Visite page tarifs concurrent</span>
+                                <span class="px-2 py-1 bg-brutal-red text-xs font-bold">HOT 🔥</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-brutal-black/50 rounded">
+                                <span class="text-sm">Recherche "automatisation [secteur]"</span>
+                                <span class="px-2 py-1 bg-brutal-orange text-xs font-bold">WARM</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-brutal-black/50 rounded">
+                                <span class="text-sm">Téléchargement livre blanc IA</span>
+                                <span class="px-2 py-1 bg-brutal-orange text-xs font-bold">WARM</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-brutal-black/50 rounded">
+                                <span class="text-sm">Poste LinkedIn sur problème process</span>
+                                <span class="px-2 py-1 bg-brutal-yellow text-black text-xs font-bold">TIÈDE</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="code-block p-4 font-mono text-xs">
+                        <p class="text-brutal-purple">// Script Puppeteer - Scraping Indeed</p>
+                        <p class="text-gray-500 mt-2">const puppeteer = require('puppeteer');</p>
+                        <p class="text-gray-500">const browser = await puppeteer.launch();</p>
+                        <p class="text-gray-500">const page = await browser.newPage();</p>
+                        <p class="text-gray-500">await page.goto('https://indeed.fr/jobs?q=automatisation');</p>
+                        <p class="text-gray-500">// Extract company names, emails...</p>
+                        <p class="text-gray-500">// Enrich with Dropcontact API</p>
+                        <p class="text-gray-500">// Push to Instantly campaign</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 10: Stratégie 4 - Content + Retargeting -->
+    <section class="py-24 bg-gradient-to-b from-brutal-black to-orange-950 relative">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="reveal">
+                <div class="flex items-center gap-4 mb-8">
+                    <span class="w-16 h-16 bg-brutal-orange text-brutal-black flex items-center justify-center text-2xl font-bold border-4 border-brutal-black">04</span>
+                    <div>
+                        <span class="font-mono text-brutal-orange text-sm">STRATÉGIE #4</span>
+                        <h2 class="text-3xl md:text-5xl font-bold">CONTENT FACTORY + RETARGETING</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 mt-12">
+                <div class="reveal">
+                    <h3 class="text-2xl font-bold mb-6 text-brutal-orange">📝 CONTENT AUTOMATISÉ</h3>
+                    <p class="text-gray-400 mb-6">Production massive de contenu via IA pour attirer du trafic organique qualifié.</p>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4 p-4 bg-brutal-black border-l-4 border-brutal-orange">
+                            <span class="text-3xl">📹</span>
+                            <div>
+                                <h4 class="font-bold">Vidéos courtes (Reels/TikTok/Shorts)</h4>
+                                <p class="text-sm text-gray-400">Script GPT-4 → Voix Eleven Labs → Montage auto Opus Clip → Planification Buffer</p>
+                                <p class="text-xs text-brutal-orange mt-1">Volume: 3 vidéos/jour/plateforme</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 bg-brutal-black border-l-4 border-brutal-orange">
+                            <span class="text-3xl">✍️</span>
+                            <div>
+                                <h4 class="font-bold">Posts LinkedIn</h4>
+                                <p class="text-sm text-gray-400">Hook + Story + CTA → Planification auto via Taplio/Shield</p>
+                                <p class="text-xs text-brutal-orange mt-1">Volume: 2 posts/jour</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-4 p-4 bg-brutal-black border-l-4 border-brutal-orange">
+                            <span class="text-3xl">📧</span>
+                            <div>
+                                <h4 class="font-bold">Newsletter</h4>
+                                <p class="text-sm text-gray-400">Contenu généré → Beehiiv → Séquence nurturing vers call</p>
+                                <p class="text-xs text-brutal-orange mt-1">Volume: 2 emails/semaine</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal" style="animation-delay: 0.2s;">
+                    <h3 class="text-2xl font-bold mb-6 text-brutal-orange">🎯 RETARGETING PIXEL</h3>
+
+                    <div class="bg-brutal-black border-4 border-brutal-orange p-6 mb-6">
+                        <h4 class="font-bold text-brutal-orange mb-4">Setup retargeting complet</h4>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-blue-600 flex items-center justify-center rounded">f</div>
+                                <span>Meta Pixel sur toutes les landing pages</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-blue-500 flex items-center justify-center rounded">in</div>
+                                <span>LinkedIn Insight Tag</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 bg-red-500 flex items-center justify-center rounded">G</div>
+                                <span>Google Tag Manager + GA4</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 bg-gradient-to-r from-brutal-orange/20 to-brutal-red/20 border border-brutal-orange">
+                        <h4 class="font-bold mb-3">🔄 Audiences de retargeting</h4>
+                        <ul class="text-sm space-y-2 text-gray-300">
+                            <li>• Visiteurs site web (7j, 30j, 90j)</li>
+                            <li>• Viewers vidéo > 50%</li>
+                            <li>• Engageurs LinkedIn</li>
+                            <li>• Ouvreurs emails</li>
+                            <li>• Lookalike 1% clients existants</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
