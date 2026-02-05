@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposition — Automatisation Rapport Quotidien | Bonaparte × Baptiste Fort</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'mono': ['JetBrains Mono', 'monospace'],
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        'brutal-black': '#1a1a1a',
+                        'brutal-white': '#fafafa',
+                        'brutal-yellow': '#FFE500',
+                        'brutal-blue': '#0066FF',
+                        'brutal-pink': '#FF3366',
+                        'brutal-green': '#00CC88',
+                        'brutal-purple': '#7C3AED',
+                        'brutal-orange': '#FF6B00',
+                        'brutal-gold': '#C9A227',
+                    },
+                    boxShadow: {
+                        'brutal': '4px 4px 0px 0px #1a1a1a',
+                        'brutal-md': '6px 6px 0px 0px #1a1a1a',
+                        'brutal-lg': '8px 8px 0px 0px #1a1a1a',
+                        'brutal-xl': '12px 12px 0px 0px #1a1a1a',
+                        'brutal-hover': '2px 2px 0px 0px #1a1a1a',
+                        'brutal-white': '4px 4px 0px 0px #fafafa',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', system-ui, sans-serif; }
+
+        .brutal-border { border: 3px solid #1a1a1a; }
+        .brutal-border-2 { border: 2px solid #1a1a1a; }
+        .brutal-border-4 { border: 4px solid #1a1a1a; }
+
+        .brutal-btn {
+            transition: all 0.1s ease;
+        }
+        .brutal-btn:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #1a1a1a;
+        }
+        .brutal-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px 0px #1a1a1a;
+        }
+
+        .brutal-card {
+            transition: all 0.15s ease;
+        }
+        .brutal-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 10px 10px 0px 0px #1a1a1a;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-3deg); }
+            75% { transform: rotate(3deg); }
+        }
+        @keyframes pulse-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .animate-marquee { animation: marquee 40s linear infinite; }
+        .animate-wiggle { animation: wiggle 2s ease-in-out infinite; }
+        .animate-pulse-scale { animation: pulse-scale 2s ease-in-out infinite; }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #C9A227, #FFE500, #C9A227);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gold-shimmer {
+            background: linear-gradient(90deg, #C9A227 0%, #FFE500 25%, #C9A227 50%, #FFE500 75%, #C9A227 100%);
+            background-size: 200% 100%;
+            animation: shimmer 3s linear infinite;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        .stagger-6 { transition-delay: 0.6s; }
+
+        .noise-bg {
+            position: relative;
+        }
+        .noise-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(26, 26, 26, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(26, 26, 26, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: #fafafa; border-left: 3px solid #1a1a1a; }
+        ::-webkit-scrollbar-thumb { background: #1a1a1a; border: 2px solid #fafafa; }
+        ::-webkit-scrollbar-thumb:hover { background: #C9A227; }
+
+        .ticker-wrap {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .ticker {
+            display: inline-block;
+            animation: marquee 40s linear infinite;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #C9A227, #FFE500, #C9A227);
+            z-index: 10001;
+            transition: width 0.1s ease;
+        }
+
+        .tool-card {
+            transition: all 0.2s ease;
+        }
+        .tool-card:hover {
+            transform: translateY(-4px) rotate(-1deg);
+        }
+
+        .pricing-card {
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .pricing-card:hover {
+            transform: translateY(-8px) rotate(-0.5deg);
+        }
+
+        .report-preview {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+        }
+
+        @media (max-width: 768px) {
+            .brutal-border { border-width: 2px; }
+            .brutal-border-4 { border-width: 3px; }
+            .shadow-brutal-lg { box-shadow: 4px 4px 0px 0px #1a1a1a; }
+        }
+
+        /* Easter egg - Konami code hint */
+        .easter-egg {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        .easter-egg.show {
+            opacity: 1;
+        }
+
+        /* Custom cursor on buttons */
+        .brutal-btn {
+            cursor: pointer;
+        }
+        .brutal-btn:hover {
+            cursor: pointer;
+        }
+
+        /* Glowing effect on hover for gold elements */
+        .glow-gold:hover {
+            box-shadow: 0 0 20px rgba(201, 162, 39, 0.5), 4px 4px 0px 0px #1a1a1a;
+        }
+    </style>
+</head>
+<body class="bg-brutal-white text-brutal-black overflow-x-hidden">
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Easter Egg -->
+    <div class="easter-egg brutal-border-2 bg-brutal-gold text-brutal-black px-4 py-2 font-mono text-xs" id="easterEgg">
+        BONAPARTE MODE ACTIVATED
+    </div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 left-0 right-0 z-[9999] bg-brutal-white/95 backdrop-blur-sm brutal-border-2 border-t-0 border-l-0 border-r-0" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 lg:h-20">
+                <a href="#" class="flex items-center gap-2 group">
+                    <div class="w-8 h-8 lg:w-10 lg:h-10 bg-brutal-gold brutal-border-2 shadow-brutal flex items-center justify-center group-hover:bg-brutal-yellow transition-colors">
+                        <span class="text-brutal-black font-black text-lg lg:text-xl">B</span>
+                    </div>
+                    <span class="font-black text-lg lg:text-xl tracking-tight">Baptiste Fort</span>
+                </a>
+
+                <div class="hidden lg:flex items-center gap-1">
+                    <a href="#probleme" class="px-4 py-2 font-semibold text-sm hover:bg-brutal-gold brutal-btn rounded-none transition-colors">Probleme</a>
+                    <a href="#solution" class="px-4 py-2 font-semibold text-sm hover:bg-brutal-gold brutal-btn rounded-none transition-colors">Solution</a>
+                    <a href="#rapport" class="px-4 py-2 font-semibold text-sm hover:bg-brutal-gold brutal-btn rounded-none transition-colors">Rapport</a>
+                    <a href="#technique" class="px-4 py-2 font-semibold text-sm hover:bg-brutal-gold brutal-btn rounded-none transition-colors">Technique</a>
+                    <a href="#outils" class="px-4 py-2 font-semibold text-sm hover:bg-brutal-gold brutal-btn rounded-none transition-colors">Outils</a>
+                    <a href="#planning" class="px-4 py-2 font-semibold text-sm hover:bg-brutal-gold brutal-btn rounded-none transition-colors">Planning</a>
+                    <a href="#tarif" class="px-4 py-2 font-semibold text-sm hover:bg-brutal-gold brutal-btn rounded-none transition-colors">Tarif</a>
+                </div>
+
+                <a href="#tarif" class="px-4 py-2 lg:px-6 font-bold text-sm brutal-border-2 shadow-brutal brutal-btn bg-brutal-gold text-brutal-black glow-gold">
+                    1050EUR
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===================== HERO ===================== -->
+    <section class="min-h-screen pt-20 lg:pt-24 relative noise-bg grid-bg">
+        <div class="ticker-wrap brutal-border-2 border-l-0 border-r-0 bg-brutal-black py-2">
+            <div class="ticker">
+                <span class="inline-block mx-8 font-bold text-sm text-brutal-gold">BONAPARTE</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">Rapport Quotidien Automatise</span>
+                <span class="inline-block mx-8 font-bold text-sm text-brutal-gold">Pipedrive + Claude + N8N</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">PDF professionnel chaque matin</span>
+                <span class="inline-block mx-8 font-bold text-sm text-brutal-gold">100% automatise</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">1050EUR forfait</span>
+                <span class="inline-block mx-8 font-bold text-sm text-brutal-gold">BONAPARTE</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">Rapport Quotidien Automatise</span>
+                <span class="inline-block mx-8 font-bold text-sm text-brutal-gold">Pipedrive + Claude + N8N</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">PDF professionnel chaque matin</span>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+            <div class="max-w-4xl">
+                <div class="reveal inline-flex items-center gap-2 bg-brutal-white brutal-border-2 shadow-brutal px-4 py-2 mb-8">
+                    <span class="w-2 h-2 bg-brutal-green rounded-full animate-pulse"></span>
+                    <span class="font-mono text-xs font-bold">Proposition pour Bonaparte</span>
+                </div>
+
+                <h1 class="reveal stagger-1 text-5xl sm:text-6xl lg:text-7xl font-black leading-[0.9] tracking-tight mb-8">
+                    Ton rapport CRM<br>
+                    <span class="gradient-text">chaque matin</span><br>
+                    a 7h<span class="text-brutal-gold">.</span>
+                </h1>
+
+                <p class="reveal stagger-2 text-xl text-gray-700 max-w-2xl leading-relaxed mb-8">
+                    Tous les matins, un <strong>PDF elegant</strong> dans ta boite mail. Deals gagnes, notes ajoutees, activites, alertes. En 5 minutes, tu sais <strong>tout</strong> ce qui s'est passe hier.
+                </p>
+
+                <div class="reveal stagger-3 flex flex-wrap gap-4 mb-12">
+                    <a href="#rapport" class="px-8 py-4 bg-brutal-gold text-brutal-black font-black text-lg brutal-border-4 shadow-brutal-lg brutal-btn glow-gold">
+                        Voir le rapport exemple
+                    </a>
+                    <a href="#tarif" class="px-8 py-4 bg-brutal-black text-white font-black text-lg brutal-border-4 shadow-brutal-lg brutal-btn">
+                        1050EUR tout compris
+                    </a>
+                </div>
+
+                <div class="reveal stagger-4 flex flex-wrap gap-4">
+                    <div class="brutal-border-2 bg-white px-4 py-3 shadow-brutal">
+                        <div class="text-2xl font-black">7h00</div>
+                        <div class="text-xs font-mono text-gray-500">chaque matin</div>
+                    </div>
+                    <div class="brutal-border-2 bg-brutal-green text-white px-4 py-3 shadow-brutal">
+                        <div class="text-2xl font-black">100%</div>
+                        <div class="text-xs font-mono">automatise</div>
+                    </div>
+                    <div class="brutal-border-2 bg-brutal-gold text-brutal-black px-4 py-3 shadow-brutal">
+                        <div class="text-2xl font-black">5 min</div>
+                        <div class="text-xs font-mono">pour tout savoir</div>
+                    </div>
+                    <div class="brutal-border-2 bg-white px-4 py-3 shadow-brutal">
+                        <div class="text-2xl font-black">PDF</div>
+                        <div class="text-xs font-mono text-gray-500">style Bonaparte</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating elements decoration -->
+        <div class="absolute right-10 top-1/3 hidden xl:block animate-float">
+            <div class="brutal-border-4 bg-brutal-gold p-4 shadow-brutal-lg rotate-6">
+                <div class="text-4xl">16 666 EUR</div>
+                <div class="text-sm font-mono">CA du jour</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: PROBLEME AUJOURD'HUI ===================== -->
+    <section class="py-24 bg-brutal-black text-white relative noise-bg" id="probleme">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal">
+                <div class="inline-block bg-brutal-pink text-white brutal-border-4 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Le probleme aujourd'hui
+                </div>
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-8">
+                    Tu perds du temps<br>
+                    <span class="text-brutal-pink">a checker Pipedrive.</span>
+                </h2>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8 mt-12">
+                <div class="brutal-border-4 bg-white text-brutal-black p-8 reveal stagger-1">
+                    <h3 class="text-2xl font-black mb-6 flex items-center gap-3">
+                        <span class="text-3xl">😓</span>
+                        Ce que tu fais aujourd'hui
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3 p-3 bg-pink-50 brutal-border-2">
+                            <span class="font-mono font-bold text-brutal-pink">1.</span>
+                            <p class="text-sm">Tu te connectes a Pipedrive</p>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-pink-50 brutal-border-2">
+                            <span class="font-mono font-bold text-brutal-pink">2.</span>
+                            <p class="text-sm">Tu vas dans les deals, tu checkes les mouvements</p>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-pink-50 brutal-border-2">
+                            <span class="font-mono font-bold text-brutal-pink">3.</span>
+                            <p class="text-sm">Tu regardes les activites terminees</p>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-pink-50 brutal-border-2">
+                            <span class="font-mono font-bold text-brutal-pink">4.</span>
+                            <p class="text-sm">Tu lis les notes ajoutees une par une</p>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-pink-50 brutal-border-2">
+                            <span class="font-mono font-bold text-brutal-pink">5.</span>
+                            <p class="text-sm">Tu verifies les emails envoyes/recus</p>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-pink-50 brutal-border-2">
+                            <span class="font-mono font-bold text-brutal-pink">6.</span>
+                            <p class="text-sm">Tu regardes qui a fait quoi...</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t-2 border-dashed border-gray-200">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-xs text-gray-400">Temps perdu chaque jour</span>
+                            <span class="font-mono text-lg font-black text-brutal-pink">30-45 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="brutal-border-4 bg-brutal-gold text-brutal-black p-8 reveal stagger-2">
+                    <h3 class="text-2xl font-black mb-6 flex items-center gap-3">
+                        <span class="text-3xl">☕</span>
+                        Ce que tu feras demain
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3 p-3 bg-white/50 brutal-border-2">
+                            <span class="font-mono font-bold">1.</span>
+                            <p class="text-sm">Tu ouvres ton cafe</p>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-white/50 brutal-border-2">
+                            <span class="font-mono font-bold">2.</span>
+                            <p class="text-sm">Tu ouvres le <strong>PDF Bonaparte</strong> recu a 7h</p>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-white/50 brutal-border-2">
+                            <span class="font-mono font-bold">3.</span>
+                            <p class="text-sm">Tu lis : CA, notes, activites, alertes</p>
+                        </div>
+                        <div class="flex items-start gap-3 p-3 bg-white/50 brutal-border-2">
+                            <span class="font-mono font-bold">4.</span>
+                            <p class="text-sm"><strong>C'est tout.</strong> Tu sais tout.</p>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t-2 border-dashed border-brutal-black/30">
+                        <div class="flex items-center justify-between">
+                            <span class="font-mono text-xs">Temps necessaire</span>
+                            <span class="font-mono text-lg font-black">5 min (le temps du cafe)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pain points -->
+            <div class="mt-16 grid sm:grid-cols-3 gap-6">
+                <div class="brutal-border-4 bg-brutal-pink/20 p-6 reveal stagger-3">
+                    <div class="text-4xl mb-4">😤</div>
+                    <h4 class="font-black text-lg mb-2">C'est long</h4>
+                    <p class="text-sm text-gray-300">30-45 min chaque jour a cliquer partout pour avoir une vision globale</p>
+                </div>
+                <div class="brutal-border-4 bg-brutal-pink/20 p-6 reveal stagger-4">
+                    <div class="text-4xl mb-4">🤦</div>
+                    <h4 class="font-black text-lg mb-2">On rate des infos</h4>
+                    <p class="text-sm text-gray-300">Une note importante, un deal qui avance, un document manquant...</p>
+                </div>
+                <div class="brutal-border-4 bg-brutal-pink/20 p-6 reveal stagger-5">
+                    <div class="text-4xl mb-4">📊</div>
+                    <h4 class="font-black text-lg mb-2">Pas de vision consolidee</h4>
+                    <p class="text-sm text-gray-300">Impossible de voir d'un coup d'oeil l'activite de toute l'equipe</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: LA SOLUTION ===================== -->
+    <section class="py-24 relative grid-bg" id="solution">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal">
+                <div class="inline-block bg-brutal-green text-white brutal-border-4 shadow-brutal px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    La solution
+                </div>
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-6">
+                    Un rapport automatique<br>
+                    <span class="text-brutal-green">chaque matin.</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl">
+                    Tous les matins a <strong>7h00</strong>, un email arrive dans ta boite avec un <strong>PDF elegant aux couleurs Bonaparte</strong>. Tout ce qui s'est passe hier, resume et organise.
+                </p>
+            </div>
+
+            <div class="mt-16 grid lg:grid-cols-2 gap-8">
+                <!-- Comment ca marche -->
+                <div class="brutal-border-4 bg-white p-8 reveal stagger-1">
+                    <h3 class="text-2xl font-black mb-6 flex items-center gap-3">
+                        <span class="text-3xl">⚡</span>
+                        Comment ca marche ?
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4 p-4 bg-green-50 brutal-border-2">
+                            <div class="w-10 h-10 bg-brutal-green brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">1</div>
+                            <div>
+                                <p class="font-bold">6h55 - Declenchement automatique</p>
+                                <p class="text-sm text-gray-600 mt-1">N8N lance le workflow chaque matin</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 bg-green-50 brutal-border-2">
+                            <div class="w-10 h-10 bg-brutal-green brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">2</div>
+                            <div>
+                                <p class="font-bold">Recuperation des donnees Pipedrive</p>
+                                <p class="text-sm text-gray-600 mt-1">Deals, notes, activites, contacts de la veille</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 bg-green-50 brutal-border-2">
+                            <div class="w-10 h-10 bg-brutal-green brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">3</div>
+                            <div>
+                                <p class="font-bold">Claude genere le rapport</p>
+                                <p class="text-sm text-gray-600 mt-1">L'IA structure et met en forme les donnees</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 bg-green-50 brutal-border-2">
+                            <div class="w-10 h-10 bg-brutal-green brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">4</div>
+                            <div>
+                                <p class="font-bold">Conversion en PDF elegant</p>
+                                <p class="text-sm text-gray-600 mt-1">Design Bonaparte : noir, or, professionnel</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 bg-brutal-green text-white brutal-border-2">
+                            <div class="w-10 h-10 bg-white brutal-border-2 flex items-center justify-center text-brutal-green font-black flex-shrink-0">5</div>
+                            <div>
+                                <p class="font-bold">7h00 - Email envoye</p>
+                                <p class="text-sm text-green-100 mt-1">Le PDF arrive dans ta boite mail</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ce que contient le rapport -->
+                <div class="brutal-border-4 bg-brutal-black text-white p-8 reveal stagger-2">
+                    <h3 class="text-2xl font-black mb-6 flex items-center gap-3">
+                        <span class="text-3xl">📋</span>
+                        Ce que contient le rapport
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="brutal-border-2 border-brutal-gold bg-brutal-gold/10 p-4">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">🏆</span>
+                                <div>
+                                    <p class="font-black text-brutal-gold">CA du jour</p>
+                                    <p class="text-sm text-gray-400">Deals gagnes avec details (client, valeur, responsable)</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="brutal-border-2 border-white/20 p-4">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📝</span>
+                                <div>
+                                    <p class="font-black">Notes ajoutees</p>
+                                    <p class="text-sm text-gray-400">Contenu integral de chaque note avec contexte</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="brutal-border-2 border-white/20 p-4">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">✅</span>
+                                <div>
+                                    <p class="font-black">Activites</p>
+                                    <p class="text-sm text-gray-400">Terminees hier + a venir cette semaine</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="brutal-border-2 border-white/20 p-4">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">📈</span>
+                                <div>
+                                    <p class="font-black">Deals mis a jour</p>
+                                    <p class="text-sm text-gray-400">Mouvements de pipeline, emails recus</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="brutal-border-2 border-brutal-pink bg-brutal-pink/10 p-4">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">⚠️</span>
+                                <div>
+                                    <p class="font-black text-brutal-pink">Alertes</p>
+                                    <p class="text-sm text-gray-400">Documents manquants, diagnostics expires, blocages</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="brutal-border-2 border-white/20 p-4">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">👥</span>
+                                <div>
+                                    <p class="font-black">Activite par utilisateur</p>
+                                    <p class="text-sm text-gray-400">Qui a fait quoi ? Vision management</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: EXEMPLE RAPPORT ===================== -->
+    <section class="py-24 bg-brutal-black text-white relative noise-bg" id="rapport">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal">
+                <div class="inline-block bg-brutal-gold text-brutal-black brutal-border-4 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Exemple concret
+                </div>
+                <h2 class="text-4xl sm:text-5xl font-black leading-tight mb-6">
+                    Le rapport du<br>
+                    <span class="text-brutal-gold">4 fevrier 2026.</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl">
+                    Voici exactement ce qu'Oliver aurait recu le 5 fevrier au matin. Donnees reelles de Pipedrive.
+                </p>
+            </div>
+
+            <!-- Rapport Preview -->
+            <div class="mt-12 reveal">
+                <div class="report-preview brutal-border-4 border-brutal-gold p-8 lg:p-12">
+                    <!-- Header -->
+                    <div class="text-center border-b-2 border-brutal-gold pb-8 mb-8">
+                        <div class="text-4xl lg:text-5xl font-black text-brutal-gold tracking-widest mb-2">BONAPARTE</div>
+                        <div class="text-lg text-gray-400">Rapport du 04/02/2026 - Activite CRM</div>
+                    </div>
+
+                    <!-- KPIs Grid -->
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
+                        <div class="bg-brutal-black/50 border-l-4 border-brutal-gold p-4 text-center">
+                            <div class="text-3xl lg:text-4xl font-black text-brutal-gold">16 666 EUR</div>
+                            <div class="text-xs text-gray-500 mt-1">CA du jour</div>
+                        </div>
+                        <div class="bg-brutal-black/50 border-l-4 border-brutal-gold p-4 text-center">
+                            <div class="text-3xl lg:text-4xl font-black text-brutal-gold">23</div>
+                            <div class="text-xs text-gray-500 mt-1">Deals mis a jour</div>
+                        </div>
+                        <div class="bg-brutal-black/50 border-l-4 border-brutal-gold p-4 text-center">
+                            <div class="text-3xl lg:text-4xl font-black text-brutal-gold">4</div>
+                            <div class="text-xs text-gray-500 mt-1">Notes ajoutees</div>
+                        </div>
+                        <div class="bg-brutal-black/50 border-l-4 border-brutal-gold p-4 text-center">
+                            <div class="text-3xl lg:text-4xl font-black text-brutal-gold">5</div>
+                            <div class="text-xs text-gray-500 mt-1">Activites</div>
+                        </div>
+                    </div>
+
+                    <!-- CA du jour -->
+                    <div class="mb-10">
+                        <h3 class="text-xl font-black text-brutal-gold border-b border-gray-700 pb-2 mb-4">🏆 CA DU JOUR</h3>
+                        <div class="bg-gradient-to-r from-green-900/30 to-transparent border-2 border-green-600 p-6 rounded">
+                            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+                                <div>
+                                    <div class="text-xl font-black">Mandat 2695 CST CHARPENTIER</div>
+                                    <div class="text-sm text-gray-400 mt-1">Client: Benoit MATON | Responsable: DESCOSSE | Cloture a 16h44</div>
+                                </div>
+                                <div class="text-3xl font-black text-green-500">16 666 EUR</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="mb-10">
+                        <h3 class="text-xl font-black text-brutal-gold border-b border-gray-700 pb-2 mb-4">📝 NOTES AJOUTEES (4)</h3>
+                        <div class="space-y-4">
+                            <div class="bg-brutal-black/50 border-l-4 border-brutal-gold p-4">
+                                <div class="text-xs text-brutal-gold mb-2">Marie a 13h12 | Deal: Mandat 3100 (EDIFICI) | Contact: Alban FOUQUOU</div>
+                                <p class="text-sm italic text-gray-300">"Bonjour, Je viens d'apporter au dossier les statuts de la societe, la collaboratrice du promoteur doit m'envoyer les DDT des son retour de conge maladie. Ce bien est un bien dans un immeuble classe et donc en renovation complete et totale, les DDT seront donc amenes a changer. J'ai rendez-vous demain avec lui pour parler d'autres biens a commercialiser et j'aimerais que ce bien soit mis en ligne d'ici la."</p>
+                            </div>
+                            <div class="bg-brutal-black/50 border-l-4 border-brutal-gold p-4">
+                                <div class="text-xs text-brutal-gold mb-2">Marie a 15h39 | Deal: Mandat 2260 (BIANUCCI) | Contact: Alban FOUQUOU</div>
+                                <p class="text-sm italic text-gray-300">"MB03/02 Diag plus a jour. Reponse AF04/02: De nouveaux diagnostics ne sont pas prevus pour le moment, ils seront actualises lorsque nous aurons une offre, pour le dossier notaire."</p>
+                            </div>
+                            <div class="bg-brutal-black/50 border-l-4 border-brutal-gold p-4">
+                                <div class="text-xs text-brutal-gold mb-2">Marie a 14h55 | Deal: Mandat 3100 (EDIFICI) | Contact: Alban FOUQUOU</div>
+                                <p class="text-sm italic text-gray-300">"Demande de titre de propriete ou delegation a jour MB05/02"</p>
+                            </div>
+                            <div class="bg-brutal-black/50 border-l-4 border-brutal-gold p-4">
+                                <div class="text-xs text-brutal-gold mb-2">Marie a 13h19 | Deal: Mandat 3261 (BRUNET/GREGOIRE) | Contact: Sebastien MOINEAU</div>
+                                <p class="text-sm italic text-gray-300">"Anciennement Mandat 2139"</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alertes -->
+                    <div class="mb-10">
+                        <h3 class="text-xl font-black text-brutal-pink border-b border-gray-700 pb-2 mb-4">⚠️ ALERTES</h3>
+                        <div class="space-y-3">
+                            <div class="bg-red-900/20 border-l-4 border-brutal-pink p-4">
+                                <p class="text-sm"><strong>Diagnostics expires</strong> - Mandat 2260 (BIANUCCI) : AF confirme que les diagnostics ne seront actualises qu'a reception d'une offre</p>
+                            </div>
+                            <div class="bg-red-900/20 border-l-4 border-brutal-pink p-4">
+                                <p class="text-sm"><strong>Documents manquants</strong> - Mandat 3100 (EDIFICI) : En attente DDT (conge maladie promoteur) + Titre de propriete demande</p>
+                            </div>
+                            <div class="bg-orange-900/20 border-l-4 border-brutal-orange p-4">
+                                <p class="text-sm"><strong>Liaison mandats</strong> - Mandat 3261 lie a l'ancien Mandat 2139</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activites -->
+                    <div class="mb-10">
+                        <h3 class="text-xl font-black text-brutal-gold border-b border-gray-700 pb-2 mb-4">📅 ACTIVITES A VENIR</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <thead>
+                                    <tr class="text-left border-b border-gray-700">
+                                        <th class="pb-2 text-brutal-gold">Type</th>
+                                        <th class="pb-2 text-brutal-gold">Sujet</th>
+                                        <th class="pb-2 text-brutal-gold">Date</th>
+                                        <th class="pb-2 text-brutal-gold">Assignee</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-800">
+                                    <tr>
+                                        <td class="py-2">📞 Appel</td>
+                                        <td class="py-2">Relance Diagnostics a jour</td>
+                                        <td class="py-2">06/02/2026</td>
+                                        <td class="py-2">Marie</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2">📧 Email</td>
+                                        <td class="py-2">Relance Diagnostics a jour</td>
+                                        <td class="py-2">06/02/2026</td>
+                                        <td class="py-2">Marie</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="py-2">🤝 Reunion</td>
+                                        <td class="py-2">Utopia</td>
+                                        <td class="py-2">12/02/2026 12:30</td>
+                                        <td class="py-2">Cynthia</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Activite par utilisateur -->
+                    <div>
+                        <h3 class="text-xl font-black text-brutal-gold border-b border-gray-700 pb-2 mb-4">👥 ACTIVITE PAR UTILISATEUR</h3>
+                        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-brutal-black/50 border border-gray-700 p-4">
+                                <div class="font-black">Marie</div>
+                                <div class="text-xs text-gray-400 mt-1">4 notes, 2 activites creees</div>
+                            </div>
+                            <div class="bg-brutal-black/50 border border-gray-700 p-4">
+                                <div class="font-black">DESCOSSE</div>
+                                <div class="text-xs text-gray-400 mt-1">1 deal cloture (16 666 EUR)</div>
+                            </div>
+                            <div class="bg-brutal-black/50 border border-gray-700 p-4">
+                                <div class="font-black">Manon MATON</div>
+                                <div class="text-xs text-gray-400 mt-1">1 deal mis a jour</div>
+                            </div>
+                            <div class="bg-brutal-black/50 border border-gray-700 p-4">
+                                <div class="font-black">Cynthia</div>
+                                <div class="text-xs text-gray-400 mt-1">1 reunion planifiee</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="mt-12 pt-6 border-t border-gray-700 text-center text-xs text-gray-500">
+                        Rapport genere automatiquement a 07:00 | BONAPARTE - Reseau Immobilier Haut de Gamme
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: ARCHITECTURE TECHNIQUE ===================== -->
+    <section class="py-24 relative grid-bg" id="technique">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal">
+                <div class="inline-block bg-brutal-blue text-white brutal-border-4 shadow-brutal px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Architecture technique
+                </div>
+                <h2 class="text-4xl sm:text-5xl font-black leading-tight mb-6">
+                    Comment ca marche<br>
+                    <span class="text-brutal-blue">sous le capot ?</span>
+                </h2>
+            </div>
+
+            <!-- Schema -->
+            <div class="mt-12 brutal-border-4 bg-white p-8 reveal overflow-x-auto">
+                <h3 class="text-xl font-black mb-8 text-center">Schema du systeme</h3>
+                <div class="min-w-[600px] font-mono text-sm">
+                    <pre class="bg-gray-100 p-6 brutal-border-2 overflow-x-auto text-xs lg:text-sm">
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│  PIPEDRIVE  │────>│     N8N     │────>│   CLAUDE    │────>│    EMAIL    │
+│    API      │     │  (workflow) │     │  (Anthropic)│     │   (SMTP)    │
+└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
+       │                   │                   │                   │
+       │                   │                   │                   │
+   Donnees CRM        Orchestration       Generation          Envoi PDF
+   (deals, notes,     automatique         rapport +           chaque matin
+   activites...)      tous les jours      mise en forme       a 7h00
+
+
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                            WORKFLOW N8N DETAILLE                             │
+├──────────────────────────────────────────────────────────────────────────────┤
+│                                                                              │
+│  ⏰ TRIGGER : Cron (tous les jours a 6h55)                                   │
+│       │                                                                      │
+│       ▼                                                                      │
+│  📥 HTTP Request : GET /deals (deals gagnes hier)                            │
+│       │                                                                      │
+│       ▼                                                                      │
+│  📥 HTTP Request : GET /recents (notes, activites, personnes)                │
+│       │                                                                      │
+│       ▼                                                                      │
+│  🔀 Merge + Transform : Consolidation des donnees JSON                       │
+│       │                                                                      │
+│       ▼                                                                      │
+│  🤖 Claude API : Generation du rapport HTML structure                        │
+│       │                                                                      │
+│       ▼                                                                      │
+│  📄 HTML to PDF : Conversion avec Puppeteer                                  │
+│       │                                                                      │
+│       ▼                                                                      │
+│  📧 Send Email : Envoi avec piece jointe PDF                                 │
+│                                                                              │
+└──────────────────────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </div>
+
+            <!-- API Pipedrive -->
+            <div class="mt-8 grid lg:grid-cols-2 gap-8">
+                <div class="brutal-border-4 bg-white p-8 reveal stagger-1">
+                    <h3 class="text-xl font-black mb-6 flex items-center gap-3">
+                        <span class="text-2xl">🔌</span>
+                        API Pipedrive - Endpoints utilises
+                    </h3>
+                    <div class="space-y-3 font-mono text-sm">
+                        <div class="bg-gray-100 p-3 brutal-border-2">
+                            <code class="text-brutal-blue">GET /deals/timeline</code>
+                            <p class="text-xs text-gray-500 mt-1">Deals gagnes (CA du jour)</p>
+                        </div>
+                        <div class="bg-gray-100 p-3 brutal-border-2">
+                            <code class="text-brutal-blue">GET /recents?items=note</code>
+                            <p class="text-xs text-gray-500 mt-1">Notes ajoutees hier</p>
+                        </div>
+                        <div class="bg-gray-100 p-3 brutal-border-2">
+                            <code class="text-brutal-blue">GET /recents?items=activity</code>
+                            <p class="text-xs text-gray-500 mt-1">Activites creees/terminees</p>
+                        </div>
+                        <div class="bg-gray-100 p-3 brutal-border-2">
+                            <code class="text-brutal-blue">GET /recents?items=deal</code>
+                            <p class="text-xs text-gray-500 mt-1">Deals modifies</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="brutal-border-4 bg-brutal-purple text-white p-8 reveal stagger-2">
+                    <h3 class="text-xl font-black mb-6 flex items-center gap-3">
+                        <span class="text-2xl">🤖</span>
+                        Claude - Generation intelligente
+                    </h3>
+                    <p class="text-purple-100 mb-4">
+                        Claude recoit les donnees brutes JSON et genere un rapport HTML structure avec :
+                    </p>
+                    <ul class="space-y-2 text-sm">
+                        <li class="flex items-start gap-2">
+                            <span class="text-brutal-yellow font-bold">→</span>
+                            <span>Extraction des <strong>informations cles</strong></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-brutal-yellow font-bold">→</span>
+                            <span>Detection automatique des <strong>alertes</strong></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-brutal-yellow font-bold">→</span>
+                            <span>Mise en forme <strong>style Bonaparte</strong></span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <span class="text-brutal-yellow font-bold">→</span>
+                            <span>Groupement par <strong>utilisateur</strong></span>
+                        </li>
+                    </ul>
+                    <div class="mt-6 brutal-border-2 border-white bg-white/10 p-3">
+                        <p class="text-xs font-mono">Cout : ~0.02-0.05 EUR par rapport</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: OUTILS & COUTS ===================== -->
+    <section class="py-24 bg-brutal-black text-white relative noise-bg" id="outils">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal">
+                <div class="inline-block bg-brutal-orange text-white brutal-border-4 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Outils & Couts
+                </div>
+                <h2 class="text-4xl sm:text-5xl font-black leading-tight mb-6">
+                    La stack technique<br>
+                    <span class="text-brutal-orange">et les couts recurrents.</span>
+                </h2>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+                <!-- N8N -->
+                <div class="tool-card brutal-border-4 bg-white text-brutal-black p-6 reveal stagger-1">
+                    <div class="w-14 h-14 bg-brutal-green brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-2xl">⚡</span>
+                    </div>
+                    <h3 class="text-xl font-black mb-2">N8N</h3>
+                    <p class="text-gray-600 text-sm mb-4">Le cerveau qui orchestre tout. Declenche le workflow chaque matin et coordonne les APIs.</p>
+                    <div class="brutal-border-2 bg-green-50 p-3">
+                        <span class="font-mono text-sm font-bold text-brutal-green">Cloud : ~20 EUR/mois</span>
+                    </div>
+                </div>
+
+                <!-- Pipedrive -->
+                <div class="tool-card brutal-border-4 bg-white text-brutal-black p-6 reveal stagger-2">
+                    <div class="w-14 h-14 bg-brutal-blue brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-2xl">📊</span>
+                    </div>
+                    <h3 class="text-xl font-black mb-2">Pipedrive API</h3>
+                    <p class="text-gray-600 text-sm mb-4">Votre CRM existant. L'API est incluse dans votre abonnement actuel.</p>
+                    <div class="brutal-border-2 bg-green-50 p-3">
+                        <span class="font-mono text-sm font-bold text-brutal-green">Cout : inclus</span>
+                    </div>
+                </div>
+
+                <!-- Claude -->
+                <div class="tool-card brutal-border-4 bg-brutal-purple text-white p-6 reveal stagger-3">
+                    <div class="w-14 h-14 bg-white brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-2xl">🤖</span>
+                    </div>
+                    <h3 class="text-xl font-black mb-2">Claude (Anthropic)</h3>
+                    <p class="text-purple-100 text-sm mb-4">Genere le rapport HTML structure a partir des donnees brutes Pipedrive.</p>
+                    <div class="brutal-border-2 border-white bg-white/20 p-3">
+                        <span class="font-mono text-sm font-bold">~0.02-0.05 EUR/rapport</span>
+                    </div>
+                </div>
+
+                <!-- Puppeteer -->
+                <div class="tool-card brutal-border-4 bg-white text-brutal-black p-6 reveal stagger-4">
+                    <div class="w-14 h-14 bg-brutal-pink brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-2xl">📄</span>
+                    </div>
+                    <h3 class="text-xl font-black mb-2">HTML to PDF</h3>
+                    <p class="text-gray-600 text-sm mb-4">Conversion du rapport HTML en PDF elegant, format A4, pret a imprimer.</p>
+                    <div class="brutal-border-2 bg-green-50 p-3">
+                        <span class="font-mono text-sm font-bold text-brutal-green">Cout : inclus N8N</span>
+                    </div>
+                </div>
+
+                <!-- SMTP -->
+                <div class="tool-card brutal-border-4 bg-white text-brutal-black p-6 reveal stagger-5">
+                    <div class="w-14 h-14 bg-brutal-gold brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-2xl">📧</span>
+                    </div>
+                    <h3 class="text-xl font-black mb-2">Email (SMTP)</h3>
+                    <p class="text-gray-600 text-sm mb-4">Envoi du rapport PDF en piece jointe. Peut utiliser votre serveur mail existant.</p>
+                    <div class="brutal-border-2 bg-green-50 p-3">
+                        <span class="font-mono text-sm font-bold text-brutal-green">Cout : votre SMTP</span>
+                    </div>
+                </div>
+
+                <!-- Hosting -->
+                <div class="tool-card brutal-border-4 bg-brutal-black text-white p-6 reveal stagger-6 border-brutal-gold">
+                    <div class="w-14 h-14 bg-brutal-gold brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-2xl">☁️</span>
+                    </div>
+                    <h3 class="text-xl font-black mb-2">Hebergement</h3>
+                    <p class="text-gray-400 text-sm mb-4">N8N Cloud ou votre propre serveur si vous preferez l'auto-hebergement.</p>
+                    <div class="brutal-border-2 border-brutal-gold bg-brutal-gold/20 p-3">
+                        <span class="font-mono text-sm font-bold text-brutal-gold">Option au choix</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recap couts -->
+            <div class="mt-16 brutal-border-4 bg-white text-brutal-black p-8 reveal">
+                <h3 class="text-xl font-black mb-6">💰 Recapitulatif des couts mensuels</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="text-left border-b-4 border-brutal-black">
+                                <th class="pb-4 font-black">Service</th>
+                                <th class="pb-4 font-black">Type</th>
+                                <th class="pb-4 font-black text-right">Cout</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y-2 divide-gray-200">
+                            <tr>
+                                <td class="py-4 font-bold">N8N Cloud</td>
+                                <td class="py-4 text-gray-500">Abonnement mensuel</td>
+                                <td class="py-4 text-right font-mono font-bold">~20 EUR/mois</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 font-bold">Claude (Anthropic)</td>
+                                <td class="py-4 text-gray-500">Par rapport (30/mois)</td>
+                                <td class="py-4 text-right font-mono font-bold">~1-1.5 EUR/mois</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 font-bold">Pipedrive API</td>
+                                <td class="py-4 text-gray-500">Deja inclus</td>
+                                <td class="py-4 text-right font-mono font-bold text-brutal-green">0 EUR</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 font-bold">SMTP Email</td>
+                                <td class="py-4 text-gray-500">Votre serveur</td>
+                                <td class="py-4 text-right font-mono font-bold text-brutal-green">0 EUR</td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="border-t-4 border-brutal-black">
+                            <tr>
+                                <td colspan="2" class="pt-4 font-black text-lg">Total mensuel estime</td>
+                                <td class="pt-4 text-right font-mono font-black text-lg text-brutal-gold">~21-25 EUR/mois</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="mt-6 brutal-border-2 bg-brutal-gold/10 p-4">
+                    <p class="text-sm">
+                        <strong>💡 A noter :</strong> Si vous avez deja un serveur ou un VPS, N8N peut etre auto-heberge gratuitement. Le cout mensuel tombe alors a ~1-2 EUR/mois (juste Claude).
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: SECURITE ===================== -->
+    <section class="py-24 relative grid-bg" id="securite">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal">
+                <div class="inline-block bg-brutal-green text-white brutal-border-4 shadow-brutal px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Securite
+                </div>
+                <h2 class="text-4xl sm:text-5xl font-black leading-tight mb-6">
+                    Vos donnees sont<br>
+                    <span class="text-brutal-green">en securite.</span>
+                </h2>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8 mt-12">
+                <div class="brutal-border-4 bg-white p-8 reveal stagger-1">
+                    <div class="w-14 h-14 bg-brutal-green brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-2xl">🔐</span>
+                    </div>
+                    <h3 class="text-xl font-black mb-4">API officielle Pipedrive</h3>
+                    <p class="text-gray-600 text-sm">
+                        On utilise uniquement l'API officielle de Pipedrive avec votre cle API. Aucun scraping, aucun hack.
+                    </p>
+                </div>
+
+                <div class="brutal-border-4 bg-white p-8 reveal stagger-2">
+                    <div class="w-14 h-14 bg-brutal-green brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-2xl">🔑</span>
+                    </div>
+                    <h3 class="text-xl font-black mb-4">Cles en variables d'env</h3>
+                    <p class="text-gray-600 text-sm">
+                        Toutes les cles API sont stockees de maniere securisee dans les variables d'environnement de N8N. Jamais en dur dans le code.
+                    </p>
+                </div>
+
+                <div class="brutal-border-4 bg-white p-8 reveal stagger-3">
+                    <div class="w-14 h-14 bg-brutal-green brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-2xl">📋</span>
+                    </div>
+                    <h3 class="text-xl font-black mb-4">Permissions minimales</h3>
+                    <p class="text-gray-600 text-sm">
+                        La cle API n'a besoin que des permissions de lecture. Aucune modification de vos donnees Pipedrive.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: PLANNING ===================== -->
+    <section class="py-24 bg-brutal-black text-white relative noise-bg" id="planning">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal">
+                <div class="inline-block bg-brutal-purple text-white brutal-border-4 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Planning
+                </div>
+                <h2 class="text-4xl sm:text-5xl font-black leading-tight mb-6">
+                    4 jours de dev.<br>
+                    <span class="text-brutal-purple">Livraison rapide.</span>
+                </h2>
+            </div>
+
+            <div class="grid lg:grid-cols-5 gap-6 mt-12">
+                <div class="pricing-card brutal-border-4 shadow-brutal-lg bg-white text-brutal-black p-6 reveal stagger-1">
+                    <div class="w-12 h-12 bg-brutal-blue brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-xl font-black text-white">1</span>
+                    </div>
+                    <div class="text-xs font-mono text-gray-400 mb-2">JOUR 1</div>
+                    <h3 class="text-lg font-black mb-4">Setup</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li>→ Config N8N</li>
+                        <li>→ Connexion Pipedrive</li>
+                        <li>→ Test API</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card brutal-border-4 shadow-brutal-lg bg-white text-brutal-black p-6 reveal stagger-2">
+                    <div class="w-12 h-12 bg-brutal-purple brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-xl font-black text-white">2</span>
+                    </div>
+                    <div class="text-xs font-mono text-gray-400 mb-2">JOUR 2</div>
+                    <h3 class="text-lg font-black mb-4">Workflow</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li>→ Recuperation donnees</li>
+                        <li>→ Transformation JSON</li>
+                        <li>→ Integration Claude</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card brutal-border-4 shadow-brutal-lg bg-white text-brutal-black p-6 reveal stagger-3">
+                    <div class="w-12 h-12 bg-brutal-gold brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-xl font-black">3</span>
+                    </div>
+                    <div class="text-xs font-mono text-gray-400 mb-2">JOUR 3</div>
+                    <h3 class="text-lg font-black mb-4">Template</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li>→ Design HTML Bonaparte</li>
+                        <li>→ Conversion PDF</li>
+                        <li>→ Style noir & or</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card brutal-border-4 shadow-brutal-lg bg-white text-brutal-black p-6 reveal stagger-4">
+                    <div class="w-12 h-12 bg-brutal-orange brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-xl font-black text-white">4</span>
+                    </div>
+                    <div class="text-xs font-mono text-gray-400 mb-2">JOUR 4</div>
+                    <h3 class="text-lg font-black mb-4">Email & Tests</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li>→ Config SMTP</li>
+                        <li>→ Tests complets</li>
+                        <li>→ Ajustements</li>
+                    </ul>
+                </div>
+
+                <div class="pricing-card brutal-border-4 shadow-brutal-xl bg-brutal-green text-white p-6 relative reveal stagger-5">
+                    <div class="absolute -top-3 -right-3">
+                        <div class="bg-brutal-yellow text-brutal-black brutal-border-2 px-3 py-1 font-black text-xs animate-wiggle">
+                            LIVRAISON
+                        </div>
+                    </div>
+                    <div class="w-12 h-12 bg-white brutal-border-4 flex items-center justify-center mb-4">
+                        <span class="text-xl font-black text-brutal-green">✓</span>
+                    </div>
+                    <div class="text-xs font-mono text-green-200 mb-2">JOUR 5</div>
+                    <h3 class="text-lg font-black mb-4">Demo</h3>
+                    <ul class="space-y-2 text-sm text-green-100">
+                        <li>→ Call de demo</li>
+                        <li>→ Documentation</li>
+                        <li>→ C'est en prod !</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: TARIF ===================== -->
+    <section class="py-24 relative grid-bg" id="tarif">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal">
+                <div class="inline-block bg-brutal-gold text-brutal-black brutal-border-4 shadow-brutal px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Tarif
+                </div>
+
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-8">
+                    Un forfait.<br>
+                    <span class="text-brutal-gold">Pas de surprise.</span>
+                </h2>
+
+                <div class="inline-block brutal-border-4 shadow-brutal-xl bg-brutal-gold text-brutal-black p-12 mb-12 animate-pulse-scale glow-gold">
+                    <div class="text-7xl lg:text-8xl font-black">1050EUR</div>
+                    <div class="text-xl font-bold mt-2">TTC</div>
+                </div>
+
+                <div class="brutal-border-4 bg-white text-brutal-black p-8 text-left">
+                    <h3 class="text-xl font-black mb-6 flex items-center gap-3">
+                        <span class="text-brutal-green">✓</span>
+                        Tout est inclus
+                    </h3>
+                    <div class="grid sm:grid-cols-2 gap-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-brutal-green font-bold">✓</span>
+                            <span class="text-sm">Workflow N8N complet</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-brutal-green font-bold">✓</span>
+                            <span class="text-sm">Integration Pipedrive API</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-brutal-green font-bold">✓</span>
+                            <span class="text-sm">Generation par Claude</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-brutal-green font-bold">✓</span>
+                            <span class="text-sm">Template PDF Bonaparte</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-brutal-green font-bold">✓</span>
+                            <span class="text-sm">Configuration email</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-brutal-green font-bold">✓</span>
+                            <span class="text-sm">Call de demo (30-45 min)</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-brutal-green font-bold">✓</span>
+                            <span class="text-sm">Documentation complete</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-brutal-green font-bold">✓</span>
+                            <span class="text-sm">Cron automatique 7h</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t-2 border-dashed border-gray-200 text-sm text-gray-500 space-y-2">
+                        <p>✓ Paiement a la livraison (ou 30% avant / 70% apres)</p>
+                        <p>✓ Petites modifs incluses pendant 7 jours</p>
+                        <p>✓ Support par message pendant 14 jours</p>
+                    </div>
+                </div>
+
+                <!-- Evolutions futures -->
+                <div class="mt-8 brutal-border-4 bg-brutal-black text-white p-8 text-left reveal">
+                    <h3 class="text-xl font-black mb-6 flex items-center gap-3">
+                        <span class="text-brutal-gold">🚀</span>
+                        Evolutions possibles (en option)
+                    </h3>
+                    <div class="grid sm:grid-cols-2 gap-4 text-sm">
+                        <div class="brutal-border-2 border-gray-700 p-4">
+                            <p class="font-bold text-brutal-gold">Rapport hebdo</p>
+                            <p class="text-gray-400 mt-1">Resume de la semaine en plus du quotidien</p>
+                        </div>
+                        <div class="brutal-border-2 border-gray-700 p-4">
+                            <p class="font-bold text-brutal-gold">Alertes temps reel</p>
+                            <p class="text-gray-400 mt-1">Notification Slack/Teams pour deals gagnes</p>
+                        </div>
+                        <div class="brutal-border-2 border-gray-700 p-4">
+                            <p class="font-bold text-brutal-gold">Dashboard web</p>
+                            <p class="text-gray-400 mt-1">Interface web en complement du PDF</p>
+                        </div>
+                        <div class="brutal-border-2 border-gray-700 p-4">
+                            <p class="font-bold text-brutal-gold">Rapports personnalises</p>
+                            <p class="text-gray-400 mt-1">Un rapport different par agent</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: NEXT STEPS ===================== -->
+    <section class="py-24 bg-brutal-black text-white relative noise-bg">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center reveal">
+                <div class="inline-block bg-brutal-green text-white brutal-border-4 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Et maintenant ?
+                </div>
+                <h2 class="text-4xl sm:text-5xl font-black leading-tight mb-12">
+                    Comment on avance ?
+                </h2>
+            </div>
+
+            <div class="space-y-6">
+                <div class="brutal-card brutal-border-4 shadow-brutal-lg bg-white text-brutal-black p-6 reveal stagger-1">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-brutal-blue brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">1</div>
+                        <div>
+                            <h4 class="font-black">Tu valides cette proposition</h4>
+                            <p class="text-sm text-gray-500">On discute si t'as des questions.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="brutal-card brutal-border-4 shadow-brutal-lg bg-white text-brutal-black p-6 reveal stagger-2">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-brutal-purple brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">2</div>
+                        <div>
+                            <h4 class="font-black">Tu m'envoies les acces</h4>
+                            <p class="text-sm text-gray-500">Cle API Pipedrive + infos SMTP + acces N8N si deja existant</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="brutal-card brutal-border-4 shadow-brutal-lg bg-white text-brutal-black p-6 reveal stagger-3">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-brutal-orange brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">3</div>
+                        <div>
+                            <h4 class="font-black">Je developpe (4 jours)</h4>
+                            <p class="text-sm text-gray-500">Je te tiens au courant de l'avancement.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="brutal-card brutal-border-4 shadow-brutal-lg bg-brutal-gold text-brutal-black p-6 reveal stagger-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-brutal-black brutal-border-2 flex items-center justify-center text-brutal-gold font-black flex-shrink-0">4</div>
+                        <div>
+                            <h4 class="font-black">Demo + Livraison</h4>
+                            <p class="text-sm">Call de 30-45 min pour te montrer le systeme. Le lendemain matin, tu recois ton premier rapport !</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 text-center reveal">
+                <div class="inline-flex items-center gap-4 px-8 py-4 bg-brutal-gold brutal-border-4 shadow-brutal text-brutal-black">
+                    <span class="text-3xl">👋</span>
+                    <div class="text-left">
+                        <div class="font-black text-lg">Hate de bosser avec vous !</div>
+                        <div class="text-sm">Baptiste</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: BENEFICES ===================== -->
+    <section class="py-24 relative grid-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal text-center mb-16">
+                <h2 class="text-4xl sm:text-5xl font-black leading-tight">
+                    Avant / Apres
+                </h2>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <div class="brutal-border-4 bg-brutal-pink/10 border-brutal-pink p-8 reveal stagger-1">
+                    <h3 class="text-2xl font-black mb-6 text-brutal-pink">❌ Avant</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-pink font-bold">•</span>
+                            <span>30 min par jour pour checker Pipedrive</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-pink font-bold">•</span>
+                            <span>Risque de rater des infos importantes</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-pink font-bold">•</span>
+                            <span>Pas de vision consolidee de l'equipe</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-pink font-bold">•</span>
+                            <span>Manuel et fastidieux</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="brutal-border-4 bg-brutal-green/10 border-brutal-green p-8 reveal stagger-2">
+                    <h3 class="text-2xl font-black mb-6 text-brutal-green">✓ Apres</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-green font-bold">✓</span>
+                            <span>5 min pour lire le rapport (avec le cafe)</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-green font-bold">✓</span>
+                            <span>Tout est centralise et organise</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-green font-bold">✓</span>
+                            <span>KPIs clairs chaque matin</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-brutal-green font-bold">✓</span>
+                            <span>100% automatise</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="bg-brutal-black text-white brutal-border-4 border-b-0 border-l-0 border-r-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-brutal-gold brutal-border-2 flex items-center justify-center">
+                        <span class="text-brutal-black font-black text-xl">B</span>
+                    </div>
+                    <div>
+                        <span class="font-black text-lg">Baptiste Fort</span>
+                        <div class="text-xs text-gray-500">Automatisation & IA</div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm text-gray-500">Proposition pour <strong class="text-brutal-gold">Bonaparte</strong> • Fevrier 2026</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-sm text-gray-500">Fait avec</span>
+                    <span class="text-brutal-gold animate-pulse text-lg">♥</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Scroll reveal
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, observerOptions);
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Progress bar
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Easter egg - Konami code
+        let konamiCode = [];
+        const konamiSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+
+        document.addEventListener('keydown', (e) => {
+            konamiCode.push(e.key);
+            konamiCode = konamiCode.slice(-10);
+
+            if (konamiCode.join(',') === konamiSequence.join(',')) {
+                document.getElementById('easterEgg').classList.add('show');
+                document.body.style.background = 'linear-gradient(135deg, #1a1a1a, #C9A227)';
+                setTimeout(() => {
+                    document.getElementById('easterEgg').classList.remove('show');
+                    document.body.style.background = '';
+                }, 3000);
+            }
+        });
+
+        // Micro-interaction: Cards tilt on mouse move
+        document.querySelectorAll('.brutal-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translate(-2px, -2px)`;
+            });
+
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+
+        // Click counter on price (easter egg)
+        let priceClicks = 0;
+        document.querySelector('.animate-pulse-scale').addEventListener('click', () => {
+            priceClicks++;
+            if (priceClicks === 5) {
+                alert('Bon ok, je peux faire un petit geste 😉');
+                priceClicks = 0;
+            }
+        });
+    </script>
+</body>
+</html>
