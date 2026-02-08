@@ -1,0 +1,1829 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport de Test — Oliver v3.0 | Baptiste Fort × Glass Group</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'mono': ['JetBrains Mono', 'monospace'],
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        'brutal-black': '#1a1a1a',
+                        'brutal-white': '#fafafa',
+                        'brutal-yellow': '#FFE500',
+                        'brutal-blue': '#0066FF',
+                        'brutal-pink': '#FF3366',
+                        'brutal-green': '#00CC88',
+                        'brutal-purple': '#7C3AED',
+                        'brutal-orange': '#FF6B00',
+                        'brutal-cyan': '#06B6D4',
+                    },
+                    boxShadow: {
+                        'brutal': '4px 4px 0px 0px #1a1a1a',
+                        'brutal-md': '6px 6px 0px 0px #1a1a1a',
+                        'brutal-lg': '8px 8px 0px 0px #1a1a1a',
+                        'brutal-xl': '12px 12px 0px 0px #1a1a1a',
+                        'brutal-hover': '2px 2px 0px 0px #1a1a1a',
+                        'brutal-white': '4px 4px 0px 0px #fafafa',
+                        'brutal-green': '6px 6px 0px 0px #00CC88',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', system-ui, sans-serif; }
+
+        .brutal-border { border: 3px solid #1a1a1a; }
+        .brutal-border-2 { border: 2px solid #1a1a1a; }
+        .brutal-border-4 { border: 4px solid #1a1a1a; }
+
+        .brutal-btn {
+            transition: all 0.1s ease;
+        }
+        .brutal-btn:hover {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px 0px #1a1a1a;
+        }
+        .brutal-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0px 0px 0px 0px #1a1a1a;
+        }
+
+        .brutal-card {
+            transition: all 0.15s ease;
+        }
+        .brutal-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 10px 10px 0px 0px #1a1a1a;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-3deg); }
+            75% { transform: rotate(3deg); }
+        }
+        @keyframes pulse-scale {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink-caret {
+            0%, 100% { border-color: transparent; }
+            50% { border-color: #00CC88; }
+        }
+        @keyframes count-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes scan-line {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+        @keyframes success-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 204, 136, 0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(0, 204, 136, 0); }
+        }
+        @keyframes slide-in-left {
+            from { opacity: 0; transform: translateX(-60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slide-in-right {
+            from { opacity: 0; transform: translateX(60px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fill-bar {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+        @keyframes rotate-slow {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes bounce-in {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .animate-float { animation: float 3s ease-in-out infinite; }
+        .animate-marquee { animation: marquee 35s linear infinite; }
+        .animate-wiggle { animation: wiggle 2s ease-in-out infinite; }
+        .animate-pulse-scale { animation: pulse-scale 2s ease-in-out infinite; }
+        .animate-success-pulse { animation: success-pulse 2s ease-in-out infinite; }
+        .animate-rotate-slow { animation: rotate-slow 20s linear infinite; }
+        .animate-shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #00CC88, #0066FF, #7C3AED);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 4s ease infinite;
+        }
+        @keyframes gradient-shift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .gradient-text-fire {
+            background: linear-gradient(135deg, #FF3366, #FF6B00, #FFE500);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease infinite;
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-left.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal-right.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .reveal-scale {
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .reveal-scale.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        .stagger-6 { transition-delay: 0.6s; }
+        .stagger-7 { transition-delay: 0.7s; }
+        .stagger-8 { transition-delay: 0.8s; }
+        .stagger-9 { transition-delay: 0.9s; }
+
+        .noise-bg {
+            position: relative;
+        }
+        .noise-bg::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(26, 26, 26, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(26, 26, 26, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        .dot-bg {
+            background-image: radial-gradient(circle, rgba(26,26,26,0.08) 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: #fafafa; border-left: 3px solid #1a1a1a; }
+        ::-webkit-scrollbar-thumb { background: #1a1a1a; border: 2px solid #fafafa; }
+        ::-webkit-scrollbar-thumb:hover { background: #00CC88; }
+
+        .ticker-wrap {
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .ticker {
+            display: inline-block;
+            animation: marquee 35s linear infinite;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00CC88, #0066FF, #7C3AED);
+            z-index: 10001;
+            transition: width 0.1s ease;
+        }
+
+        .scenario-card {
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .scenario-card:hover {
+            transform: translateY(-4px) rotate(-0.5deg);
+        }
+
+        .correction-card {
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+        .correction-card:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 10px 10px 0px 0px #1a1a1a;
+        }
+
+        .chat-bubble {
+            position: relative;
+            transition: all 0.2s ease;
+        }
+        .chat-bubble:hover {
+            transform: scale(1.02);
+        }
+        .chat-bubble-client::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 20px;
+            width: 0; height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #f3f4f6;
+        }
+        .chat-bubble-oliver::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            right: 20px;
+            width: 0; height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #00CC88;
+        }
+
+        .status-dot {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: #00CC88;
+            animation: success-pulse 2s ease-in-out infinite;
+        }
+
+        /* Easter egg - Konami hint */
+        .easter-egg-hint {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            font-size: 10px;
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(26,26,26,0.15);
+            font-family: 'JetBrains Mono', monospace;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .easter-egg-hint.show {
+            opacity: 1;
+        }
+
+        /* Matrix rain easter egg */
+        .matrix-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 99999;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .matrix-canvas.active {
+            opacity: 1;
+        }
+
+        /* Confetti container */
+        .confetti-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 99998;
+        }
+        .confetti {
+            position: absolute;
+            width: 10px; height: 10px;
+            top: -10px;
+            animation: confetti-fall linear forwards;
+        }
+        @keyframes confetti-fall {
+            to {
+                top: 110vh;
+                transform: rotate(720deg);
+            }
+        }
+
+        /* Secret terminal */
+        .terminal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 100000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .terminal-overlay.active {
+            display: flex;
+        }
+        .terminal-box {
+            width: 90%;
+            max-width: 700px;
+            background: #0a0a0a;
+            border: 3px solid #00CC88;
+            padding: 24px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #00CC88;
+            font-size: 14px;
+            line-height: 1.8;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .terminal-box .cursor {
+            display: inline-block;
+            width: 8px; height: 16px;
+            background: #00CC88;
+            animation: blink-caret 0.8s step-end infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
+        /* Tooltip on hover */
+        .tooltip-trigger {
+            position: relative;
+        }
+        .tooltip-trigger .tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+            background: #1a1a1a;
+            color: white;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.2s ease;
+            border: 2px solid #00CC88;
+        }
+        .tooltip-trigger:hover .tooltip {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        /* Custom check animation */
+        .check-animate {
+            stroke-dasharray: 100;
+            stroke-dashoffset: 100;
+            transition: stroke-dashoffset 0.6s ease;
+        }
+        .check-animate.drawn {
+            stroke-dashoffset: 0;
+        }
+
+        @media (max-width: 768px) {
+            .brutal-border { border-width: 2px; }
+            .brutal-border-4 { border-width: 3px; }
+            .shadow-brutal-lg { box-shadow: 4px 4px 0px 0px #1a1a1a; }
+        }
+
+        /* Magnetic button effect */
+        .magnetic-btn {
+            transition: transform 0.2s ease;
+        }
+
+        /* Click ripple */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 204, 136, 0.3);
+            transform: scale(0);
+            animation: ripple-out 0.6s ease-out;
+            pointer-events: none;
+        }
+        @keyframes ripple-out {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Tilt effect */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease;
+        }
+    </style>
+</head>
+<body class="bg-brutal-white text-brutal-black overflow-x-hidden">
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Confetti container -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <!-- Matrix Canvas (Easter Egg) -->
+    <canvas class="matrix-canvas" id="matrixCanvas"></canvas>
+
+    <!-- Terminal Easter Egg -->
+    <div class="terminal-overlay" id="terminalOverlay">
+        <div class="terminal-box" id="terminalBox">
+            <div style="color: #FFE500; margin-bottom: 16px;">[ OLIVER v3.0 — DIAGNOSTIC INTERNE ]</div>
+            <div>> Chargement des modules IA.............. <span style="color:#00CC88">OK</span></div>
+            <div>> Connexion base clients................. <span style="color:#00CC88">OK</span></div>
+            <div>> Analyse sentiments..................... <span style="color:#00CC88">OK</span></div>
+            <div>> Module escalade........................ <span style="color:#00CC88">OK</span></div>
+            <div>> Multilingue (FR/EN/ES/DE).............. <span style="color:#00CC88">OK</span></div>
+            <div>> Assurance montage : GRATUIT............ <span style="color:#00CC88">CORRIGE</span></div>
+            <div>> Assurance transport : Colissimo+30%.... <span style="color:#00CC88">CORRIGE</span></div>
+            <div>> Verification livreur................... <span style="color:#00CC88">ACTIVE</span></div>
+            <div>> Rappel assurance habitation............ <span style="color:#00CC88">ACTIVE</span></div>
+            <div>> Dimensions : escalade mail............. <span style="color:#00CC88">ACTIVE</span></div>
+            <div>> Boutons suggestions : SUPPRIMES........ <span style="color:#00CC88">FAIT</span></div>
+            <div style="margin-top: 16px; color: #FFE500;">> STATUS : TOUS LES SYSTEMES OPERATIONNELS</div>
+            <div style="margin-top: 8px;">> Tests : <span style="color:#00CC88; font-weight:bold;">270/270 (100%)</span></div>
+            <div style="margin-top: 8px;">> Erreurs : <span style="color:#00CC88; font-weight:bold;">0</span></div>
+            <div style="margin-top: 16px; color: #666;">Appuie sur Echap ou clique pour fermer<span class="cursor"></span></div>
+        </div>
+    </div>
+
+    <!-- Easter egg hint -->
+    <div class="easter-egg-hint" id="easterEggHint"></div>
+
+    <!-- NAVIGATION -->
+    <nav class="fixed top-0 left-0 right-0 z-[9999] bg-brutal-white/95 backdrop-blur-sm brutal-border-2 border-t-0 border-l-0 border-r-0" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 lg:h-20">
+                <a href="#" class="flex items-center gap-2 group">
+                    <div class="w-8 h-8 lg:w-10 lg:h-10 bg-brutal-green brutal-border-2 shadow-brutal flex items-center justify-center group-hover:bg-brutal-yellow transition-colors">
+                        <span class="text-brutal-white font-black text-lg lg:text-xl group-hover:text-brutal-black transition-colors">O</span>
+                    </div>
+                    <span class="font-black text-lg lg:text-xl tracking-tight">Oliver <span class="text-brutal-green">v3.0</span></span>
+                </a>
+
+                <div class="hidden lg:flex items-center gap-1">
+                    <a href="#resultats" class="px-4 py-2 font-semibold text-sm hover:bg-brutal-green hover:text-white brutal-btn rounded-none transition-colors">Resultats</a>
+                    <a href="#scenarios" class="px-4 py-2 font-semibold text-sm hover:bg-brutal-green hover:text-white brutal-btn rounded-none transition-colors">Scenarios</a>
+                    <a href="#corrections" class="px-4 py-2 font-semibold text-sm hover:bg-brutal-green hover:text-white brutal-btn rounded-none transition-colors">Corrections</a>
+                    <a href="#conversations" class="px-4 py-2 font-semibold text-sm hover:bg-brutal-green hover:text-white brutal-btn rounded-none transition-colors">Conversations</a>
+                    <a href="#surveillance" class="px-4 py-2 font-semibold text-sm hover:bg-brutal-green hover:text-white brutal-btn rounded-none transition-colors">Surveillance</a>
+                    <a href="#next" class="px-4 py-2 font-semibold text-sm hover:bg-brutal-green hover:text-white brutal-btn rounded-none transition-colors">Suite</a>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <div class="status-dot hidden sm:block"></div>
+                    <span class="px-4 py-2 lg:px-6 font-bold text-sm brutal-border-2 shadow-brutal brutal-btn bg-brutal-green text-white font-mono">
+                        100%
+                    </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===================== HERO ===================== -->
+    <section class="min-h-screen pt-20 lg:pt-24 relative noise-bg grid-bg flex flex-col">
+        <div class="ticker-wrap brutal-border-2 border-l-0 border-r-0 bg-brutal-green py-2">
+            <div class="ticker">
+                <span class="inline-block mx-8 font-bold text-sm text-white">&#x2713; 9/9 conversations reussies</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">&#x2713; 270 echanges - 0 erreur</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">&#x2713; 11 corrections validees</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">&#x2713; Multilingue FR/EN</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">&#x2713; Temps moyen ~6.5s</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">&#x2713; Assurance montage : GRATUIT</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">&#x2713; 9/9 conversations reussies</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">&#x2713; 270 echanges - 0 erreur</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">&#x2713; 11 corrections validees</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">&#x2713; Multilingue FR/EN</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">&#x2713; Temps moyen ~6.5s</span>
+                <span class="inline-block mx-8 font-bold text-sm text-white">&#x2713; Assurance montage : GRATUIT</span>
+            </div>
+        </div>
+
+        <div class="flex-1 flex items-center">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 w-full">
+                <div class="max-w-5xl">
+                    <div class="reveal inline-flex items-center gap-2 bg-brutal-white brutal-border-2 shadow-brutal px-4 py-2 mb-8">
+                        <span class="status-dot"></span>
+                        <span class="font-mono text-xs font-bold">Rapport de test — Oliver v3.0</span>
+                    </div>
+
+                    <h1 class="reveal stagger-1 text-5xl sm:text-6xl lg:text-8xl font-black leading-[0.9] tracking-tight mb-8">
+                        Salut Fabien<span class="text-brutal-green">.</span><br>
+                        <span class="gradient-text">270 echanges.</span><br>
+                        Zero bug<span class="text-brutal-pink">.</span>
+                    </h1>
+
+                    <p class="reveal stagger-2 text-xl lg:text-2xl text-gray-600 max-w-3xl leading-relaxed mb-10">
+                        J'ai lance les tests automatiques sur Oliver apres nos modifications. <strong>9 conversations completes</strong>, 30 echanges chacune. Voila les resultats.
+                    </p>
+
+                    <div class="reveal stagger-3 flex flex-wrap gap-4 mb-12">
+                        <a href="#resultats" class="magnetic-btn px-8 py-4 bg-brutal-green text-white font-black text-lg brutal-border-4 shadow-brutal-lg brutal-btn relative overflow-hidden">
+                            <span class="relative z-10">Voir les resultats</span>
+                        </a>
+                        <a href="#corrections" class="magnetic-btn px-8 py-4 bg-brutal-yellow font-black text-lg brutal-border-4 shadow-brutal-lg brutal-btn">
+                            Les 11 corrections
+                        </a>
+                    </div>
+
+                    <div class="reveal stagger-4 flex flex-wrap gap-4">
+                        <div class="tooltip-trigger brutal-border-2 bg-white px-5 py-4 shadow-brutal">
+                            <div class="text-3xl font-black counter" data-target="270">0</div>
+                            <div class="text-xs font-mono text-gray-500">echanges testes</div>
+                            <div class="tooltip">30 echanges x 9 conversations</div>
+                        </div>
+                        <div class="tooltip-trigger brutal-border-2 bg-brutal-green text-white px-5 py-4 shadow-brutal animate-success-pulse">
+                            <div class="text-3xl font-black">100%</div>
+                            <div class="text-xs font-mono">de reussite</div>
+                            <div class="tooltip">0 erreur sur 270 echanges</div>
+                        </div>
+                        <div class="tooltip-trigger brutal-border-2 bg-brutal-blue text-white px-5 py-4 shadow-brutal">
+                            <div class="text-3xl font-black">~6.5s</div>
+                            <div class="text-xs font-mono">par reponse</div>
+                            <div class="tooltip">Sera plus rapide sur plan payant</div>
+                        </div>
+                        <div class="tooltip-trigger brutal-border-2 bg-brutal-purple text-white px-5 py-4 shadow-brutal">
+                            <div class="text-3xl font-black">~30min</div>
+                            <div class="text-xs font-mono">duree totale</div>
+                            <div class="tooltip">Test complet automatique</div>
+                        </div>
+                        <div class="tooltip-trigger brutal-border-2 bg-white px-5 py-4 shadow-brutal">
+                            <div class="text-3xl font-black counter" data-target="11">0</div>
+                            <div class="text-xs font-mono text-gray-500">corrections</div>
+                            <div class="tooltip">Toutes validees par les tests</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: RESULTATS GLOBAUX ===================== -->
+    <section class="py-24 lg:py-32 bg-brutal-black text-white relative noise-bg" id="resultats">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal">
+                <div class="inline-block bg-brutal-green text-white brutal-border-4 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Resultats globaux
+                </div>
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-4">
+                    Tout est au vert<span class="text-brutal-green">.</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl">
+                    Oliver repond a 100% des sollicitations sans aucun bug ni plantage.
+                </p>
+            </div>
+
+            <!-- Big Stats Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-16">
+                <div class="reveal-scale stagger-1 brutal-border-4 bg-brutal-green text-white p-8 text-center relative overflow-hidden">
+                    <div class="animate-shimmer absolute inset-0"></div>
+                    <div class="relative z-10">
+                        <div class="text-5xl lg:text-6xl font-black mb-2 counter" data-target="9">0</div>
+                        <div class="text-sm font-mono opacity-80">sur 9</div>
+                        <div class="text-sm font-bold mt-2">Conversations reussies</div>
+                    </div>
+                </div>
+                <div class="reveal-scale stagger-2 brutal-border-4 bg-white text-brutal-black p-8 text-center">
+                    <div class="text-5xl lg:text-6xl font-black mb-2 counter" data-target="270">0</div>
+                    <div class="text-sm font-mono text-gray-400">total</div>
+                    <div class="text-sm font-bold mt-2">Echanges testes</div>
+                </div>
+                <div class="reveal-scale stagger-3 brutal-border-4 bg-brutal-green text-white p-8 text-center">
+                    <div class="text-5xl lg:text-6xl font-black mb-2">0</div>
+                    <div class="text-sm font-mono opacity-80">zero</div>
+                    <div class="text-sm font-bold mt-2">Erreurs</div>
+                </div>
+                <div class="reveal-scale stagger-4 brutal-border-4 bg-brutal-yellow text-brutal-black p-8 text-center">
+                    <div class="text-5xl lg:text-6xl font-black mb-2">6.5<span class="text-3xl">s</span></div>
+                    <div class="text-sm font-mono text-gray-500">moyenne</div>
+                    <div class="text-sm font-bold mt-2">Temps par reponse</div>
+                </div>
+            </div>
+
+            <!-- Success bar visualization -->
+            <div class="mt-16 reveal">
+                <div class="brutal-border-4 bg-white text-brutal-black p-8">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-xl font-black">Taux de reussite par scenario</h3>
+                        <span class="px-3 py-1 bg-brutal-green text-white brutal-border-2 font-mono text-sm font-bold">100% GLOBAL</span>
+                    </div>
+                    <div class="space-y-4" id="successBars">
+                        <div class="bar-item" data-label="Casse transport + assurance" data-value="100" data-time="6.4s">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold">Casse transport + assurance</span>
+                                <span class="font-mono text-sm text-brutal-green font-bold">30/30</span>
+                            </div>
+                            <div class="h-8 brutal-border-2 bg-gray-100 relative overflow-hidden">
+                                <div class="success-bar h-full bg-brutal-green transition-all duration-1000 ease-out flex items-center px-3" style="width: 0%">
+                                    <span class="text-xs font-mono text-white font-bold">6.4s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold">Casse transport sans assurance</span>
+                                <span class="font-mono text-sm text-brutal-green font-bold">30/30</span>
+                            </div>
+                            <div class="h-8 brutal-border-2 bg-gray-100 relative overflow-hidden">
+                                <div class="success-bar h-full bg-brutal-green transition-all duration-1000 ease-out flex items-center px-3" style="width: 0%">
+                                    <span class="text-xs font-mono text-white font-bold">6.6s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold">Casse montage + assurance</span>
+                                <span class="font-mono text-sm text-brutal-green font-bold">30/30</span>
+                            </div>
+                            <div class="h-8 brutal-border-2 bg-gray-100 relative overflow-hidden">
+                                <div class="success-bar h-full bg-brutal-green transition-all duration-1000 ease-out flex items-center px-3" style="width: 0%">
+                                    <span class="text-xs font-mono text-white font-bold">7.0s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold">Casse montage sans assurance</span>
+                                <span class="font-mono text-sm text-brutal-green font-bold">30/30</span>
+                            </div>
+                            <div class="h-8 brutal-border-2 bg-gray-100 relative overflow-hidden">
+                                <div class="success-bar h-full bg-brutal-green transition-all duration-1000 ease-out flex items-center px-3" style="width: 0%">
+                                    <span class="text-xs font-mono text-white font-bold">6.6s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold">Probleme de dimensions</span>
+                                <span class="font-mono text-sm text-brutal-green font-bold">30/30</span>
+                            </div>
+                            <div class="h-8 brutal-border-2 bg-gray-100 relative overflow-hidden">
+                                <div class="success-bar h-full bg-brutal-blue transition-all duration-1000 ease-out flex items-center px-3" style="width: 0%">
+                                    <span class="text-xs font-mono text-white font-bold">6.2s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold">Suivi de commande</span>
+                                <span class="font-mono text-sm text-brutal-green font-bold">30/30</span>
+                            </div>
+                            <div class="h-8 brutal-border-2 bg-gray-100 relative overflow-hidden">
+                                <div class="success-bar h-full bg-brutal-blue transition-all duration-1000 ease-out flex items-center px-3" style="width: 0%">
+                                    <span class="text-xs font-mono text-white font-bold">6.9s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold">Client frustre (escalade)</span>
+                                <span class="font-mono text-sm text-brutal-green font-bold">30/30</span>
+                            </div>
+                            <div class="h-8 brutal-border-2 bg-gray-100 relative overflow-hidden">
+                                <div class="success-bar h-full bg-brutal-orange transition-all duration-1000 ease-out flex items-center px-3" style="width: 0%">
+                                    <span class="text-xs font-mono text-white font-bold">7.2s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold">Question produit simple</span>
+                                <span class="font-mono text-sm text-brutal-green font-bold">30/30</span>
+                            </div>
+                            <div class="h-8 brutal-border-2 bg-gray-100 relative overflow-hidden">
+                                <div class="success-bar h-full bg-brutal-purple transition-all duration-1000 ease-out flex items-center px-3" style="width: 0%">
+                                    <span class="text-xs font-mono text-white font-bold">6.1s</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bar-item">
+                            <div class="flex items-center justify-between mb-1">
+                                <span class="text-sm font-bold flex items-center gap-2">Client anglophone <span class="px-2 py-0.5 bg-brutal-cyan text-white text-xs brutal-border-2 font-mono">EN</span></span>
+                                <span class="font-mono text-sm text-brutal-green font-bold">30/30</span>
+                            </div>
+                            <div class="h-8 brutal-border-2 bg-gray-100 relative overflow-hidden">
+                                <div class="success-bar h-full bg-brutal-cyan transition-all duration-1000 ease-out flex items-center px-3" style="width: 0%">
+                                    <span class="text-xs font-mono text-white font-bold">6.3s</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: 9 SCENARIOS ===================== -->
+    <section class="py-24 lg:py-32 relative dot-bg" id="scenarios">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal">
+                <div class="inline-block bg-brutal-blue text-white brutal-border-4 shadow-brutal px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Les 9 scenarios
+                </div>
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-4">
+                    Teste dans tous<br>
+                    <span class="text-brutal-blue">les cas de figure.</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mb-16">
+                    Chaque scenario simule un vrai client avec 30 echanges, du premier message a la resolution.
+                </p>
+            </div>
+
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Scenario 1 -->
+                <div class="scenario-card brutal-border-4 shadow-brutal-lg bg-white p-6 reveal stagger-1">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-brutal-green brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">1</div>
+                        <div class="px-3 py-1 bg-green-50 brutal-border-2 border-brutal-green">
+                            <span class="font-mono text-xs font-bold text-brutal-green">30/30</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-black mb-2">Casse transport<br>+ assurance</h3>
+                    <p class="text-sm text-gray-500 mb-4">Client avec vitre cassee a la livraison, couvert par l'assurance transport.</p>
+                    <div class="flex items-center justify-between pt-4 border-t-2 border-dashed border-gray-200">
+                        <span class="text-xs font-mono text-gray-400">Temps moyen</span>
+                        <span class="font-mono font-bold text-brutal-green">6.4s</span>
+                    </div>
+                </div>
+
+                <!-- Scenario 2 -->
+                <div class="scenario-card brutal-border-4 shadow-brutal-lg bg-white p-6 reveal stagger-2">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-brutal-orange brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">2</div>
+                        <div class="px-3 py-1 bg-green-50 brutal-border-2 border-brutal-green">
+                            <span class="font-mono text-xs font-bold text-brutal-green">30/30</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-black mb-2">Casse transport<br>sans assurance</h3>
+                    <p class="text-sm text-gray-500 mb-4">Client sans assurance, orientation Colissimo + remise 30%.</p>
+                    <div class="flex items-center justify-between pt-4 border-t-2 border-dashed border-gray-200">
+                        <span class="text-xs font-mono text-gray-400">Temps moyen</span>
+                        <span class="font-mono font-bold text-brutal-green">6.6s</span>
+                    </div>
+                </div>
+
+                <!-- Scenario 3 -->
+                <div class="scenario-card brutal-border-4 shadow-brutal-lg bg-white p-6 reveal stagger-3">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-brutal-green brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">3</div>
+                        <div class="px-3 py-1 bg-green-50 brutal-border-2 border-brutal-green">
+                            <span class="font-mono text-xs font-bold text-brutal-green">30/30</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-black mb-2">Casse montage<br>+ assurance</h3>
+                    <p class="text-sm text-gray-500 mb-4">Remplacement gratuit + rappel "une seule fois par commande".</p>
+                    <div class="flex items-center justify-between pt-4 border-t-2 border-dashed border-gray-200">
+                        <span class="text-xs font-mono text-gray-400">Temps moyen</span>
+                        <span class="font-mono font-bold text-brutal-green">7.0s</span>
+                    </div>
+                </div>
+
+                <!-- Scenario 4 -->
+                <div class="scenario-card brutal-border-4 shadow-brutal-lg bg-white p-6 reveal stagger-4">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-brutal-orange brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">4</div>
+                        <div class="px-3 py-1 bg-green-50 brutal-border-2 border-brutal-green">
+                            <span class="font-mono text-xs font-bold text-brutal-green">30/30</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-black mb-2">Casse montage<br>sans assurance</h3>
+                    <p class="text-sm text-gray-500 mb-4">Pas de couverture, orientation assurance habitation.</p>
+                    <div class="flex items-center justify-between pt-4 border-t-2 border-dashed border-gray-200">
+                        <span class="text-xs font-mono text-gray-400">Temps moyen</span>
+                        <span class="font-mono font-bold text-brutal-green">6.6s</span>
+                    </div>
+                </div>
+
+                <!-- Scenario 5 -->
+                <div class="scenario-card brutal-border-4 shadow-brutal-lg bg-white p-6 reveal stagger-5">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-brutal-blue brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">5</div>
+                        <div class="px-3 py-1 bg-green-50 brutal-border-2 border-brutal-green">
+                            <span class="font-mono text-xs font-bold text-brutal-green">30/30</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-black mb-2">Probleme de<br>dimensions</h3>
+                    <p class="text-sm text-gray-500 mb-4">Ecart de mesure, escalade systematique par mail.</p>
+                    <div class="flex items-center justify-between pt-4 border-t-2 border-dashed border-gray-200">
+                        <span class="text-xs font-mono text-gray-400">Temps moyen</span>
+                        <span class="font-mono font-bold text-brutal-green">6.2s</span>
+                    </div>
+                </div>
+
+                <!-- Scenario 6 -->
+                <div class="scenario-card brutal-border-4 shadow-brutal-lg bg-white p-6 reveal stagger-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-brutal-blue brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">6</div>
+                        <div class="px-3 py-1 bg-green-50 brutal-border-2 border-brutal-green">
+                            <span class="font-mono text-xs font-bold text-brutal-green">30/30</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-black mb-2">Suivi de<br>commande</h3>
+                    <p class="text-sm text-gray-500 mb-4">Client qui veut suivre sa commande en cours.</p>
+                    <div class="flex items-center justify-between pt-4 border-t-2 border-dashed border-gray-200">
+                        <span class="text-xs font-mono text-gray-400">Temps moyen</span>
+                        <span class="font-mono font-bold text-brutal-green">6.9s</span>
+                    </div>
+                </div>
+
+                <!-- Scenario 7 -->
+                <div class="scenario-card brutal-border-4 shadow-brutal-lg bg-brutal-pink text-white p-6 reveal stagger-7">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-white brutal-border-2 flex items-center justify-center text-brutal-pink font-black flex-shrink-0">7</div>
+                        <div class="px-3 py-1 bg-white/20 brutal-border-2 border-white">
+                            <span class="font-mono text-xs font-bold">30/30</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-black mb-2">Client tres<br>frustre</h3>
+                    <p class="text-sm text-pink-100 mb-4">"SCANDALE", "avocat", majuscules. Oliver gere l'escalade.</p>
+                    <div class="flex items-center justify-between pt-4 border-t-2 border-dashed border-white/30">
+                        <span class="text-xs font-mono text-pink-200">Temps moyen</span>
+                        <span class="font-mono font-bold">7.2s</span>
+                    </div>
+                </div>
+
+                <!-- Scenario 8 -->
+                <div class="scenario-card brutal-border-4 shadow-brutal-lg bg-white p-6 reveal stagger-8">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-brutal-purple brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">8</div>
+                        <div class="px-3 py-1 bg-green-50 brutal-border-2 border-brutal-green">
+                            <span class="font-mono text-xs font-bold text-brutal-green">30/30</span>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-black mb-2">Question<br>produit simple</h3>
+                    <p class="text-sm text-gray-500 mb-4">Epaisseur, conseil, info produit. Reponse directe.</p>
+                    <div class="flex items-center justify-between pt-4 border-t-2 border-dashed border-gray-200">
+                        <span class="text-xs font-mono text-gray-400">Temps moyen</span>
+                        <span class="font-mono font-bold text-brutal-green">6.1s</span>
+                    </div>
+                </div>
+
+                <!-- Scenario 9 -->
+                <div class="scenario-card brutal-border-4 shadow-brutal-lg bg-brutal-cyan text-white p-6 reveal stagger-9">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-12 h-12 bg-white brutal-border-2 flex items-center justify-center text-brutal-cyan font-black flex-shrink-0">9</div>
+                        <div class="px-3 py-1 bg-white/20 brutal-border-2 border-white">
+                            <span class="font-mono text-xs font-bold">30/30</span>
+                        </div>
+                        <div class="px-2 py-1 bg-white text-brutal-cyan brutal-border-2 text-xs font-bold font-mono">EN</div>
+                    </div>
+                    <h3 class="text-lg font-black mb-2">Client<br>anglophone</h3>
+                    <p class="text-sm text-cyan-100 mb-4">Memes regles metier, parfaitement traduites en anglais.</p>
+                    <div class="flex items-center justify-between pt-4 border-t-2 border-dashed border-white/30">
+                        <span class="text-xs font-mono text-cyan-200">Temps moyen</span>
+                        <span class="font-mono font-bold">6.3s</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: LES 11 CORRECTIONS ===================== -->
+    <section class="py-24 lg:py-32 bg-brutal-black text-white relative noise-bg" id="corrections">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal">
+                <div class="inline-block bg-brutal-yellow text-brutal-black brutal-border-4 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Recap du call
+                </div>
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-4">
+                    11 corrections<span class="text-brutal-green">.</span><br>
+                    <span class="text-brutal-yellow">Toutes validees.</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-3xl mb-16">
+                    Chaque point qu'on avait discute lors de notre call a ete implemente et verifie par les tests automatiques.
+                </p>
+            </div>
+
+            <!-- Correction 1 -->
+            <div class="correction-card brutal-border-4 bg-white text-brutal-black p-8 mb-6 reveal">
+                <div class="flex items-start gap-6">
+                    <div class="w-14 h-14 bg-brutal-green brutal-border-4 flex items-center justify-center flex-shrink-0">
+                        <span class="text-white font-black text-xl">1</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-3 mb-3">
+                            <h3 class="text-xl font-black">Boutons de suggestions supprimes</h3>
+                            <span class="px-3 py-1 bg-brutal-green text-white brutal-border-2 text-xs font-bold font-mono">FAIT</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Plus de boutons "Casse livraison / Casse montage / Suivi". Le client arrive directement sur le chat et discute avec Oliver sans suggestions de problemes.</p>
+                        <div class="brutal-border-2 bg-green-50 p-4">
+                            <p class="text-sm font-bold text-brutal-green">Ca donnait le baton pour se faire battre. C'est supprime.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Correction 2 -->
+            <div class="correction-card brutal-border-4 bg-white text-brutal-black p-8 mb-6 reveal">
+                <div class="flex items-start gap-6">
+                    <div class="w-14 h-14 bg-brutal-blue brutal-border-4 flex items-center justify-center flex-shrink-0">
+                        <span class="text-white font-black text-xl">2</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-3 mb-3">
+                            <h3 class="text-xl font-black">Oliver est plus directif et ferme</h3>
+                            <span class="px-3 py-1 bg-brutal-green text-white brutal-border-2 text-xs font-bold font-mono">CORRIGE</span>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                            <div class="brutal-border-2 border-brutal-pink bg-pink-50 p-4">
+                                <div class="text-xs font-mono font-bold text-brutal-pink mb-2">AVANT</div>
+                                <p class="text-sm text-gray-600">Oliver etait trop gentil, il acceptait tout.</p>
+                            </div>
+                            <div class="brutal-border-2 border-brutal-green bg-green-50 p-4">
+                                <div class="text-xs font-mono font-bold text-brutal-green mb-2">MAINTENANT</div>
+                                <p class="text-sm text-gray-600">Il suspecte d'abord une erreur du client, puis rassure.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Correction 3 -->
+            <div class="correction-card brutal-border-4 bg-white text-brutal-black p-8 mb-6 reveal">
+                <div class="flex items-start gap-6">
+                    <div class="w-14 h-14 bg-brutal-purple brutal-border-4 flex items-center justify-center flex-shrink-0">
+                        <span class="text-white font-black text-xl">3</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-3 mb-3">
+                            <h3 class="text-xl font-black">Reponses plus courtes et concises</h3>
+                            <span class="px-3 py-1 bg-brutal-green text-white brutal-border-2 text-xs font-bold font-mono">CORRIGE</span>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                            <div class="brutal-border-2 border-brutal-pink bg-pink-50 p-4">
+                                <div class="text-xs font-mono font-bold text-brutal-pink mb-2">AVANT</div>
+                                <p class="text-sm text-gray-600">Paves de 4-5 phrases avec des listes.</p>
+                            </div>
+                            <div class="brutal-border-2 border-brutal-green bg-green-50 p-4">
+                                <div class="text-xs font-mono font-bold text-brutal-green mb-2">MAINTENANT</div>
+                                <p class="text-sm text-gray-600">1 a 2 phrases max. Droit au but.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Correction 4 -->
+            <div class="correction-card brutal-border-4 bg-brutal-green text-white p-8 mb-6 reveal">
+                <div class="flex items-start gap-6">
+                    <div class="w-14 h-14 bg-white brutal-border-4 flex items-center justify-center flex-shrink-0">
+                        <span class="text-brutal-green font-black text-xl">4</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-3 mb-3">
+                            <h3 class="text-xl font-black">Assurance montage : remplacement GRATUIT</h3>
+                            <span class="px-3 py-1 bg-white text-brutal-green brutal-border-2 text-xs font-bold font-mono">CORRIGE</span>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <div class="brutal-border-2 border-white bg-white/10 p-4">
+                                <div class="text-xs font-mono font-bold text-green-200 mb-2">AVANT</div>
+                                <p class="text-sm text-green-100">"Remplacement a 50% du prix"</p>
+                            </div>
+                            <div class="brutal-border-2 border-white bg-white/20 p-4">
+                                <div class="text-xs font-mono font-bold text-brutal-yellow mb-2">MAINTENANT</div>
+                                <p class="text-sm font-bold">"Remplacement gratuit"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Correction 5 -->
+            <div class="correction-card brutal-border-4 bg-white text-brutal-black p-8 mb-6 reveal">
+                <div class="flex items-start gap-6">
+                    <div class="w-14 h-14 bg-brutal-yellow brutal-border-4 flex items-center justify-center flex-shrink-0">
+                        <span class="text-brutal-black font-black text-xl">5</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-3 mb-3">
+                            <h3 class="text-xl font-black">Rappel : une seule fois par commande</h3>
+                            <span class="px-3 py-1 bg-brutal-green text-white brutal-border-2 text-xs font-bold font-mono">AJOUTE</span>
+                        </div>
+                        <p class="text-gray-600">Oliver previent que le remplacement assurance est valable <strong>une seule fois</strong> par commande. Le client sait que c'est un one-shot.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Correction 6 -->
+            <div class="correction-card brutal-border-4 bg-white text-brutal-black p-8 mb-6 reveal">
+                <div class="flex items-start gap-6">
+                    <div class="w-14 h-14 bg-brutal-cyan brutal-border-4 flex items-center justify-center flex-shrink-0">
+                        <span class="text-white font-black text-xl">6</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-3 mb-3">
+                            <h3 class="text-xl font-black">Rappel assurance habitation</h3>
+                            <span class="px-3 py-1 bg-brutal-green text-white brutal-border-2 text-xs font-bold font-mono">AJOUTE</span>
+                        </div>
+                        <p class="text-gray-600 mb-3">Oliver rappelle au client que son <strong>assurance habitation</strong> peut le couvrir. Il le fait aussi de maniere proactive quand le client n'en parle pas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Correction 7 -->
+            <div class="correction-card brutal-border-4 bg-white text-brutal-black p-8 mb-6 reveal">
+                <div class="flex items-start gap-6">
+                    <div class="w-14 h-14 bg-brutal-orange brutal-border-4 flex items-center justify-center flex-shrink-0">
+                        <span class="text-white font-black text-xl">7</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-3 mb-3">
+                            <h3 class="text-xl font-black">Verification en presence du livreur</h3>
+                            <span class="px-3 py-1 bg-brutal-green text-white brutal-border-2 text-xs font-bold font-mono">AJOUTE</span>
+                        </div>
+                        <p class="text-gray-600">A chaque casse transport, Oliver rappelle qu'il fallait verifier <strong>en presence du livreur</strong>. Fonctionne aussi en anglais.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Correction 8 -->
+            <div class="correction-card brutal-border-4 bg-brutal-orange text-white p-8 mb-6 reveal">
+                <div class="flex items-start gap-6">
+                    <div class="w-14 h-14 bg-white brutal-border-4 flex items-center justify-center flex-shrink-0">
+                        <span class="text-brutal-orange font-black text-xl">8</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-3 mb-3">
+                            <h3 class="text-xl font-black">Sans assurance : Colissimo + remise 30%</h3>
+                            <span class="px-3 py-1 bg-white text-brutal-orange brutal-border-2 text-xs font-bold font-mono">CORRIGE</span>
+                        </div>
+                        <p class="text-orange-100">Oliver oriente vers <strong>Colissimo</strong> pour la reclamation ET propose une <strong>remise de 30%</strong> sur la prochaine commande.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Correction 9 -->
+            <div class="correction-card brutal-border-4 bg-white text-brutal-black p-8 mb-6 reveal">
+                <div class="flex items-start gap-6">
+                    <div class="w-14 h-14 bg-brutal-blue brutal-border-4 flex items-center justify-center flex-shrink-0">
+                        <span class="text-white font-black text-xl">9</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-3 mb-3">
+                            <h3 class="text-xl font-black">Dimensions : escalade par mail</h3>
+                            <span class="px-3 py-1 bg-brutal-green text-white brutal-border-2 text-xs font-bold font-mono">CORRIGE</span>
+                        </div>
+                        <p class="text-gray-600">Oliver ne promet rien sur les dimensions. Il redirige systematiquement vers <strong>contactglassgroup@gmail.com</strong> avec le numero de commande et les mesures constatees.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Correction 10 -->
+            <div class="correction-card brutal-border-4 bg-brutal-pink text-white p-8 mb-6 reveal">
+                <div class="flex items-start gap-6">
+                    <div class="w-14 h-14 bg-white brutal-border-4 flex items-center justify-center flex-shrink-0">
+                        <span class="text-brutal-pink font-black text-lg">10</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-3 mb-3">
+                            <h3 class="text-xl font-black">Gestion des clients frustres</h3>
+                            <span class="px-3 py-1 bg-white text-brutal-pink brutal-border-2 text-xs font-bold font-mono">CORRIGE</span>
+                        </div>
+                        <p class="text-pink-100">Oliver reste ferme, ne panique pas, et oriente vers le mail quand ca devient trop complexe. "Monsieur, calmez-vous. Je suis la pour resoudre votre probleme."</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Correction 11 -->
+            <div class="correction-card brutal-border-4 bg-brutal-cyan text-white p-8 reveal">
+                <div class="flex items-start gap-6">
+                    <div class="w-14 h-14 bg-white brutal-border-4 flex items-center justify-center flex-shrink-0">
+                        <span class="text-brutal-cyan font-black text-lg">11</span>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex flex-wrap items-center gap-3 mb-3">
+                            <h3 class="text-xl font-black">Multilingue operationnel</h3>
+                            <span class="px-3 py-1 bg-white text-brutal-cyan brutal-border-2 text-xs font-bold font-mono">VALIDE</span>
+                        </div>
+                        <p class="text-cyan-100">Oliver repond parfaitement en anglais avec les memes regles metier. "Did you check the glass condition <strong>in the presence of the delivery driver</strong>?"</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: CONVERSATIONS EXEMPLES ===================== -->
+    <section class="py-24 lg:py-32 relative grid-bg" id="conversations">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal">
+                <div class="inline-block bg-brutal-purple text-white brutal-border-4 shadow-brutal px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Exemples concrets
+                </div>
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-4">
+                    Comment Oliver<br>
+                    <span class="text-brutal-purple">repond vraiment.</span>
+                </h2>
+                <p class="text-xl text-gray-600 max-w-2xl mb-16">
+                    Voici des extraits reels des conversations de test. Tu peux voir le ton, la fermete, et les regles metier en action.
+                </p>
+            </div>
+
+            <!-- Conversation: Casse transport -->
+            <div class="mb-12 reveal">
+                <div class="inline-block bg-brutal-green text-white brutal-border-2 px-3 py-1 font-mono text-xs font-bold mb-6">SCENARIO 1 — Casse transport</div>
+                <div class="space-y-6 max-w-3xl">
+                    <div class="reveal-left stagger-1">
+                        <div class="text-xs font-mono text-gray-400 mb-2 ml-2">Client</div>
+                        <div class="chat-bubble chat-bubble-client brutal-border-2 bg-gray-100 p-4 inline-block max-w-lg">
+                            <p class="text-sm">"Ma vitre est arrivee cassee ce matin"</p>
+                        </div>
+                    </div>
+                    <div class="reveal-right stagger-2 text-right">
+                        <div class="text-xs font-mono text-gray-400 mb-2 mr-2">Oliver</div>
+                        <div class="chat-bubble chat-bubble-oliver brutal-border-2 bg-brutal-green text-white p-4 inline-block max-w-lg text-left">
+                            <p class="text-sm">"Avez-vous verifie l'etat de la vitre <strong>en presence du livreur</strong> et avez-vous souscrit a l'<strong>assurance transport</strong> ?"</p>
+                        </div>
+                    </div>
+                    <div class="reveal-left stagger-3">
+                        <div class="text-xs font-mono text-gray-400 mb-2 ml-2">Client</div>
+                        <div class="chat-bubble chat-bubble-client brutal-border-2 bg-gray-100 p-4 inline-block max-w-lg">
+                            <p class="text-sm">"Non je n'ai pas verifie devant le livreur"</p>
+                        </div>
+                    </div>
+                    <div class="reveal-right stagger-4 text-right">
+                        <div class="text-xs font-mono text-gray-400 mb-2 mr-2">Oliver</div>
+                        <div class="chat-bubble chat-bubble-oliver brutal-border-2 bg-brutal-green text-white p-4 inline-block max-w-lg text-left">
+                            <p class="text-sm">"C'est dommage, il fallait <strong>absolument verifier en presence du livreur</strong> pour faciliter les reclamations."</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 brutal-border-2 bg-brutal-yellow p-3 max-w-3xl">
+                    <p class="text-xs font-bold">Il met la pression, puis rassure ensuite. Exactement ce qu'on voulait.</p>
+                </div>
+            </div>
+
+            <!-- Conversation: Assurance montage -->
+            <div class="mb-12 reveal">
+                <div class="inline-block bg-brutal-green text-white brutal-border-2 px-3 py-1 font-mono text-xs font-bold mb-6">SCENARIO 3 — Casse montage + assurance</div>
+                <div class="space-y-6 max-w-3xl">
+                    <div class="reveal-left stagger-1">
+                        <div class="text-xs font-mono text-gray-400 mb-2 ml-2">Client</div>
+                        <div class="chat-bubble chat-bubble-client brutal-border-2 bg-gray-100 p-4 inline-block max-w-lg">
+                            <p class="text-sm">"D'accord donc le remplacement est gratuit ?"</p>
+                        </div>
+                    </div>
+                    <div class="reveal-right stagger-2 text-right">
+                        <div class="text-xs font-mono text-gray-400 mb-2 mr-2">Oliver</div>
+                        <div class="chat-bubble chat-bubble-oliver brutal-border-2 bg-brutal-green text-white p-4 inline-block max-w-lg text-left">
+                            <p class="text-sm">"Oui, avec votre assurance montage le <strong>remplacement sera gratuit</strong>. Mais j'ai absolument besoin de vos photos du verre casse."</p>
+                        </div>
+                    </div>
+                    <div class="reveal-left stagger-3">
+                        <div class="text-xs font-mono text-gray-400 mb-2 ml-2">Client</div>
+                        <div class="chat-bubble chat-bubble-client brutal-border-2 bg-gray-100 p-4 inline-block max-w-lg">
+                            <p class="text-sm">"Et si je la casse encore au montage ?"</p>
+                        </div>
+                    </div>
+                    <div class="reveal-right stagger-4 text-right">
+                        <div class="text-xs font-mono text-gray-400 mb-2 mr-2">Oliver</div>
+                        <div class="chat-bubble chat-bubble-oliver brutal-border-2 bg-brutal-green text-white p-4 inline-block max-w-lg text-left">
+                            <p class="text-sm">"Si vous cassez le remplacement, <strong>vous ne pourrez plus beneficier de l'assurance montage</strong> car elle est valable <strong>une seule fois par commande</strong>."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Conversation: Client frustré -->
+            <div class="mb-12 reveal">
+                <div class="inline-block bg-brutal-pink text-white brutal-border-2 px-3 py-1 font-mono text-xs font-bold mb-6">SCENARIO 7 — Client frustre</div>
+                <div class="space-y-6 max-w-3xl">
+                    <div class="reveal-left stagger-1">
+                        <div class="text-xs font-mono text-gray-400 mb-2 ml-2">Client</div>
+                        <div class="chat-bubble chat-bubble-client brutal-border-2 bg-pink-50 border-brutal-pink p-4 inline-block max-w-lg">
+                            <p class="text-sm font-bold text-brutal-pink">"C'EST INADMISSIBLE !!! CA FAIT 3 SEMAINES QUE J'ATTENDS"</p>
+                        </div>
+                    </div>
+                    <div class="reveal-right stagger-2 text-right">
+                        <div class="text-xs font-mono text-gray-400 mb-2 mr-2">Oliver</div>
+                        <div class="chat-bubble chat-bubble-oliver brutal-border-2 bg-brutal-green text-white p-4 inline-block max-w-lg text-left">
+                            <p class="text-sm">"Je comprends votre mecontentement. Pouvez-vous me dire precisement ce qui s'est passe ?"</p>
+                        </div>
+                    </div>
+                    <div class="reveal-left stagger-3">
+                        <div class="text-xs font-mono text-gray-400 mb-2 ml-2">Client</div>
+                        <div class="chat-bubble chat-bubble-client brutal-border-2 bg-pink-50 border-brutal-pink p-4 inline-block max-w-lg">
+                            <p class="text-sm font-bold text-brutal-pink">"Je vais contacter mon avocat"</p>
+                        </div>
+                    </div>
+                    <div class="reveal-right stagger-4 text-right">
+                        <div class="text-xs font-mono text-gray-400 mb-2 mr-2">Oliver</div>
+                        <div class="chat-bubble chat-bubble-oliver brutal-border-2 bg-brutal-green text-white p-4 inline-block max-w-lg text-left">
+                            <p class="text-sm">"<strong>Monsieur, calmez-vous.</strong> Je suis la pour resoudre votre probleme maintenant."</p>
+                        </div>
+                    </div>
+                    <div class="reveal-left stagger-5">
+                        <div class="text-xs font-mono text-gray-400 mb-2 ml-2">Client</div>
+                        <div class="chat-bubble chat-bubble-client brutal-border-2 bg-pink-50 border-brutal-pink p-4 inline-block max-w-lg">
+                            <p class="text-sm font-bold text-brutal-pink">"Je veux parler a un responsable IMMEDIATEMENT"</p>
+                        </div>
+                    </div>
+                    <div class="reveal-right stagger-6 text-right">
+                        <div class="text-xs font-mono text-gray-400 mb-2 mr-2">Oliver</div>
+                        <div class="chat-bubble chat-bubble-oliver brutal-border-2 bg-brutal-green text-white p-4 inline-block max-w-lg text-left">
+                            <p class="text-sm">"<strong>Tres bien, je vais escalader votre dossier.</strong> Ecrivez a <strong>contactglassgroup@gmail.com</strong> pour une prise en charge personnalisee."</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 brutal-border-2 bg-brutal-yellow p-3 max-w-3xl">
+                    <p class="text-xs font-bold">Ferme, pas de panique, escalade propre vers le mail.</p>
+                </div>
+            </div>
+
+            <!-- Conversation: Question produit -->
+            <div class="mb-12 reveal">
+                <div class="inline-block bg-brutal-purple text-white brutal-border-2 px-3 py-1 font-mono text-xs font-bold mb-6">SCENARIO 8 — Question produit</div>
+                <div class="space-y-6 max-w-3xl">
+                    <div class="reveal-left stagger-1">
+                        <div class="text-xs font-mono text-gray-400 mb-2 ml-2">Client</div>
+                        <div class="chat-bubble chat-bubble-client brutal-border-2 bg-gray-100 p-4 inline-block max-w-lg">
+                            <p class="text-sm">"Quelle epaisseur me conseillez-vous ?"</p>
+                        </div>
+                    </div>
+                    <div class="reveal-right stagger-2 text-right">
+                        <div class="text-xs font-mono text-gray-400 mb-2 mr-2">Oliver</div>
+                        <div class="chat-bubble chat-bubble-oliver brutal-border-2 bg-brutal-green text-white p-4 inline-block max-w-lg text-left">
+                            <p class="text-sm">"Pour un insert, je recommande le <strong>5mm</strong> — c'est plus resistant aux chocs thermiques."</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 brutal-border-2 bg-green-50 border-brutal-green p-3 max-w-3xl">
+                    <p class="text-xs font-bold text-brutal-green">Pas de blabla, juste l'info utile. 1 phrase.</p>
+                </div>
+            </div>
+
+            <!-- Conversation: English -->
+            <div class="reveal">
+                <div class="inline-block bg-brutal-cyan text-white brutal-border-2 px-3 py-1 font-mono text-xs font-bold mb-6">SCENARIO 9 — Client anglophone</div>
+                <div class="space-y-6 max-w-3xl">
+                    <div class="reveal-left stagger-1">
+                        <div class="text-xs font-mono text-gray-400 mb-2 ml-2">Client</div>
+                        <div class="chat-bubble chat-bubble-client brutal-border-2 bg-cyan-50 border-brutal-cyan p-4 inline-block max-w-lg">
+                            <p class="text-sm italic">"My glass arrived broken this morning"</p>
+                        </div>
+                    </div>
+                    <div class="reveal-right stagger-2 text-right">
+                        <div class="text-xs font-mono text-gray-400 mb-2 mr-2">Oliver</div>
+                        <div class="chat-bubble chat-bubble-oliver brutal-border-2 bg-brutal-green text-white p-4 inline-block max-w-lg text-left">
+                            <p class="text-sm">"Did you check the glass condition <strong>in the presence of the delivery driver</strong> when you received it?"</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 brutal-border-2 bg-cyan-50 border-brutal-cyan p-3 max-w-3xl">
+                    <p class="text-xs font-bold text-brutal-cyan">Memes regles metier, parfaitement en anglais.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: POINTS A SURVEILLER ===================== -->
+    <section class="py-24 lg:py-32 bg-brutal-black text-white relative noise-bg" id="surveillance">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="reveal">
+                <div class="inline-block bg-brutal-orange text-white brutal-border-4 px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Points a surveiller
+                </div>
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-4">
+                    Quelques observations<span class="text-brutal-orange">.</span>
+                </h2>
+                <p class="text-xl text-gray-400 max-w-2xl mb-16">
+                    Rien de bloquant, mais des points a garder en tete pour les prochaines iterations.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="brutal-card brutal-border-4 bg-white text-brutal-black p-8 reveal stagger-1">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-brutal-yellow brutal-border-2 flex items-center justify-center flex-shrink-0 text-xl">
+                            1
+                        </div>
+                        <div>
+                            <h3 class="font-black text-lg mb-2">Insistance sur les photos</h3>
+                            <p class="text-sm text-gray-600">Quand le client dit qu'il va envoyer des photos mais ne le fait pas, Oliver le rappelle a <strong>chaque message</strong>. C'est bien mais parfois repetitif.</p>
+                            <div class="mt-3 px-3 py-1 bg-brutal-yellow/20 brutal-border-2 border-brutal-yellow inline-block">
+                                <span class="text-xs font-mono font-bold text-brutal-orange">A AJUSTER</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="brutal-card brutal-border-4 bg-white text-brutal-black p-8 reveal stagger-2">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-brutal-blue brutal-border-2 flex items-center justify-center flex-shrink-0 text-white text-xl font-bold">
+                            2
+                        </div>
+                        <div>
+                            <h3 class="font-black text-lg mb-2">Temps de reponse (~6.5s)</h3>
+                            <p class="text-sm text-gray-600">C'est le free tier. Ca sera <strong>beaucoup plus rapide</strong> sur un plan payant. Pas d'inquietude.</p>
+                            <div class="mt-3 px-3 py-1 bg-blue-50 brutal-border-2 border-brutal-blue inline-block">
+                                <span class="text-xs font-mono font-bold text-brutal-blue">NORMAL</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="brutal-card brutal-border-4 bg-white text-brutal-black p-8 reveal stagger-3">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-brutal-green brutal-border-2 flex items-center justify-center flex-shrink-0 text-white text-xl font-bold">
+                            3
+                        </div>
+                        <div>
+                            <h3 class="font-black text-lg mb-2">Dimensions : zero promesse</h3>
+                            <p class="text-sm text-gray-600">Oliver redirige <strong>systematiquement</strong> vers l'equipe par mail, il ne s'engage jamais sur les problemes de dimensions.</p>
+                            <div class="mt-3 px-3 py-1 bg-green-50 brutal-border-2 border-brutal-green inline-block">
+                                <span class="text-xs font-mono font-bold text-brutal-green">PARFAIT</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="brutal-card brutal-border-4 bg-white text-brutal-black p-8 reveal stagger-4">
+                    <div class="flex items-start gap-4">
+                        <div class="w-12 h-12 bg-brutal-yellow brutal-border-2 flex items-center justify-center flex-shrink-0 text-xl">
+                            4
+                        </div>
+                        <div>
+                            <h3 class="font-black text-lg mb-2">Rappel "une seule fois"</h3>
+                            <p class="text-sm text-gray-600">Oliver le mentionne bien mais <strong>parfois un peu tard</strong> dans la conversation. On pourra ajuster le timing.</p>
+                            <div class="mt-3 px-3 py-1 bg-brutal-yellow/20 brutal-border-2 border-brutal-yellow inline-block">
+                                <span class="text-xs font-mono font-bold text-brutal-orange">A AJUSTER</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== SECTION: PROCHAINES ETAPES ===================== -->
+    <section class="py-24 lg:py-32 relative grid-bg" id="next">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center reveal">
+                <div class="inline-block bg-brutal-green text-white brutal-border-4 shadow-brutal px-4 py-2 font-mono text-sm font-bold uppercase tracking-wider mb-8">
+                    Prochaines etapes
+                </div>
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-black leading-tight mb-4">
+                    La suite du<br>
+                    <span class="text-brutal-green">programme.</span>
+                </h2>
+            </div>
+
+            <div class="space-y-6 mt-16">
+                <div class="brutal-card brutal-border-4 shadow-brutal-lg bg-white p-6 reveal stagger-1">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-brutal-blue brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">1</div>
+                        <div class="flex-1">
+                            <h4 class="font-black">Integration Colissimo</h4>
+                            <p class="text-sm text-gray-500">En attente de leur reponse pour connecter le suivi de colis.</p>
+                        </div>
+                        <span class="px-3 py-1 bg-brutal-yellow brutal-border-2 text-xs font-bold font-mono hidden sm:block">EN ATTENTE</span>
+                    </div>
+                </div>
+
+                <div class="brutal-card brutal-border-4 shadow-brutal-lg bg-white p-6 reveal stagger-2">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-brutal-purple brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">2</div>
+                        <div class="flex-1">
+                            <h4 class="font-black">Acces PrestaShop</h4>
+                            <p class="text-sm text-gray-500">Pour matcher les assurances clients directement dans Oliver.</p>
+                        </div>
+                        <span class="px-3 py-1 bg-brutal-orange text-white brutal-border-2 text-xs font-bold font-mono hidden sm:block">A FAIRE</span>
+                    </div>
+                </div>
+
+                <div class="brutal-card brutal-border-4 shadow-brutal-lg bg-white p-6 reveal stagger-3">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-brutal-cyan brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">3</div>
+                        <div class="flex-1">
+                            <h4 class="font-black">Plus de langues</h4>
+                            <p class="text-sm text-gray-500">Quand tu auras la liste des langues prioritaires.</p>
+                        </div>
+                        <span class="px-3 py-1 bg-gray-200 brutal-border-2 text-xs font-bold font-mono hidden sm:block">PLUS TARD</span>
+                    </div>
+                </div>
+
+                <div class="brutal-card brutal-border-4 shadow-brutal-lg bg-white p-6 reveal stagger-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-brutal-green brutal-border-2 flex items-center justify-center text-white font-black flex-shrink-0">4</div>
+                        <div class="flex-1">
+                            <h4 class="font-black">Ajustements terrain</h4>
+                            <p class="text-sm text-gray-500">Peaufiner le comportement apres retour terrain en periode creuse.</p>
+                        </div>
+                        <span class="px-3 py-1 bg-gray-200 brutal-border-2 text-xs font-bold font-mono hidden sm:block">PLUS TARD</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-16 text-center reveal">
+                <div class="inline-flex items-center gap-4 px-8 py-6 bg-brutal-green text-white brutal-border-4 shadow-brutal-xl animate-pulse-scale">
+                    <div class="text-left">
+                        <div class="font-black text-2xl">A mardi prochain !</div>
+                        <div class="text-sm text-green-100 mt-1">Pour le prochain point.</div>
+                        <div class="font-bold mt-2">— Baptiste</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===================== FOOTER ===================== -->
+    <footer class="bg-brutal-black text-white brutal-border-4 border-b-0 border-l-0 border-r-0">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-brutal-green brutal-border-2 flex items-center justify-center" id="logoEasterEgg" title="Clique 5 fois...">
+                        <span class="text-white font-black text-xl">O</span>
+                    </div>
+                    <div>
+                        <span class="font-black text-lg">Oliver v3.0</span>
+                        <div class="text-xs text-gray-500">Rapport de test</div>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <p class="text-sm text-gray-500">Rapport pour <strong class="text-white">Fabien</strong> — <strong class="text-white">Glass Group</strong> — Fevrier 2026</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-sm text-gray-500">Baptiste Fort</span>
+                    <span class="text-brutal-green animate-pulse text-lg">&#x2713;</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // ==================== SCROLL REVEAL ====================
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, observerOptions);
+        document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => observer.observe(el));
+
+        // ==================== PROGRESS BAR ====================
+        window.addEventListener('scroll', () => {
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = (scrollTop / docHeight) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        });
+
+        // ==================== SMOOTH SCROLL ====================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // ==================== COUNTER ANIMATION ====================
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const el = entry.target;
+                    const target = parseInt(el.dataset.target);
+                    const duration = 2000;
+                    const start = performance.now();
+                    const animate = (now) => {
+                        const elapsed = now - start;
+                        const progress = Math.min(elapsed / duration, 1);
+                        const eased = 1 - Math.pow(1 - progress, 3);
+                        el.textContent = Math.round(eased * target);
+                        if (progress < 1) requestAnimationFrame(animate);
+                    };
+                    requestAnimationFrame(animate);
+                    counterObserver.unobserve(el);
+                }
+            });
+        }, { threshold: 0.5 });
+        document.querySelectorAll('.counter').forEach(el => counterObserver.observe(el));
+
+        // ==================== SUCCESS BARS ANIMATION ====================
+        const barObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bars = entry.target.querySelectorAll('.success-bar');
+                    bars.forEach((bar, i) => {
+                        setTimeout(() => {
+                            bar.style.width = '100%';
+                        }, i * 120);
+                    });
+                    barObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+        const successBars = document.getElementById('successBars');
+        if (successBars) barObserver.observe(successBars);
+
+        // ==================== CLICK RIPPLE EFFECT ====================
+        document.querySelectorAll('.brutal-btn, .brutal-card, .correction-card, .scenario-card').forEach(el => {
+            el.style.position = 'relative';
+            el.style.overflow = 'hidden';
+            el.addEventListener('click', function(e) {
+                const ripple = document.createElement('span');
+                ripple.classList.add('ripple');
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // ==================== TILT EFFECT ON STAT CARDS ====================
+        document.querySelectorAll('.tooltip-trigger').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                card.style.transform = `perspective(500px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = '';
+            });
+        });
+
+        // ==================== MAGNETIC BUTTON EFFECT ====================
+        document.querySelectorAll('.magnetic-btn').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+            });
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = '';
+            });
+        });
+
+        // ==================== EASTER EGG 1: LOGO CLICK (5x) ====================
+        let logoClicks = 0;
+        const logoEl = document.getElementById('logoEasterEgg');
+        if (logoEl) {
+            logoEl.style.cursor = 'pointer';
+            logoEl.addEventListener('click', () => {
+                logoClicks++;
+                if (logoClicks >= 5) {
+                    logoClicks = 0;
+                    showTerminal();
+                }
+            });
+        }
+
+        function showTerminal() {
+            const overlay = document.getElementById('terminalOverlay');
+            overlay.classList.add('active');
+            overlay.addEventListener('click', () => overlay.classList.remove('active'));
+            document.addEventListener('keydown', function closeTerminal(e) {
+                if (e.key === 'Escape') {
+                    overlay.classList.remove('active');
+                    document.removeEventListener('keydown', closeTerminal);
+                }
+            });
+        }
+
+        // ==================== EASTER EGG 2: KONAMI CODE ====================
+        const konamiCode = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+        let konamiIndex = 0;
+        const hint = document.getElementById('easterEggHint');
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === konamiCode[konamiIndex]) {
+                konamiIndex++;
+                if (hint) {
+                    hint.textContent = konamiCode.slice(0, konamiIndex).join(' ');
+                    hint.classList.add('show');
+                }
+                if (konamiIndex === konamiCode.length) {
+                    konamiIndex = 0;
+                    if (hint) hint.classList.remove('show');
+                    launchConfetti();
+                }
+            } else {
+                konamiIndex = 0;
+                if (hint) hint.classList.remove('show');
+            }
+        });
+
+        function launchConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#00CC88', '#FFE500', '#FF3366', '#0066FF', '#7C3AED', '#FF6B00', '#06B6D4'];
+            for (let i = 0; i < 120; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+                confetti.style.animationDelay = (Math.random() * 0.5) + 's';
+                container.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 4000);
+            }
+
+            // Also show a big 100% overlay
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
+                font-size: 120px; font-weight: 900; color: #00CC88;
+                z-index: 100000; pointer-events: none;
+                text-shadow: 6px 6px 0px #1a1a1a;
+                animation: bounce-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            `;
+            overlay.textContent = '100%';
+            document.body.appendChild(overlay);
+            setTimeout(() => {
+                overlay.style.transition = 'opacity 0.5s ease';
+                overlay.style.opacity = '0';
+                setTimeout(() => overlay.remove(), 500);
+            }, 2000);
+        }
+
+        // ==================== EASTER EGG 3: TRIPLE CLICK ON "270" ====================
+        document.querySelectorAll('.counter').forEach(el => {
+            el.addEventListener('dblclick', () => {
+                // Mini matrix rain effect
+                startMiniMatrix();
+            });
+        });
+
+        function startMiniMatrix() {
+            const canvas = document.getElementById('matrixCanvas');
+            canvas.classList.add('active');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const chars = '01OLIVER270100%GLASS';
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            const drops = Array(Math.floor(columns)).fill(1);
+
+            let frame = 0;
+            const maxFrames = 120;
+
+            function draw() {
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#00CC88';
+                ctx.font = fontSize + 'px JetBrains Mono';
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = chars[Math.floor(Math.random() * chars.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                    drops[i]++;
+                }
+
+                frame++;
+                if (frame < maxFrames) {
+                    requestAnimationFrame(draw);
+                } else {
+                    canvas.classList.remove('active');
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
+            draw();
+        }
+
+        // ==================== EASTER EGG 4: SECRET WORD ====================
+        let secretBuffer = '';
+        document.addEventListener('keypress', (e) => {
+            secretBuffer += e.key;
+            if (secretBuffer.length > 20) secretBuffer = secretBuffer.slice(-20);
+            if (secretBuffer.includes('oliver')) {
+                secretBuffer = '';
+                // Shake all scenario cards
+                document.querySelectorAll('.scenario-card').forEach((card, i) => {
+                    setTimeout(() => {
+                        card.style.animation = 'wiggle 0.5s ease-in-out';
+                        setTimeout(() => card.style.animation = '', 500);
+                    }, i * 80);
+                });
+            }
+            if (secretBuffer.includes('glass')) {
+                secretBuffer = '';
+                // Flash all green elements
+                document.querySelectorAll('.bg-brutal-green').forEach(el => {
+                    el.style.transition = 'filter 0.3s ease';
+                    el.style.filter = 'brightness(1.5)';
+                    setTimeout(() => el.style.filter = '', 300);
+                });
+            }
+        });
+
+        // ==================== NAVBAR SCROLL EFFECT ====================
+        let lastScrollY = window.scrollY;
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            if (currentScrollY > lastScrollY && currentScrollY > 100) {
+                navbar.style.transform = 'translateY(-100%)';
+                navbar.style.transition = 'transform 0.3s ease';
+            } else {
+                navbar.style.transform = 'translateY(0)';
+            }
+            lastScrollY = currentScrollY;
+        });
+
+        // ==================== PARALLAX ON HERO STATS ====================
+        window.addEventListener('scroll', () => {
+            const scrollY = window.scrollY;
+            document.querySelectorAll('.tooltip-trigger').forEach((el, i) => {
+                const speed = 0.02 + (i * 0.01);
+                el.style.transform = `translateY(${scrollY * speed}px)`;
+            });
+        });
+
+        // ==================== CURSOR TRAIL (subtle) ====================
+        let trailTimeout;
+        document.addEventListener('mousemove', (e) => {
+            clearTimeout(trailTimeout);
+            trailTimeout = setTimeout(() => {
+                // Only on larger screens
+                if (window.innerWidth < 768) return;
+                const dot = document.createElement('div');
+                dot.style.cssText = `
+                    position: fixed; left: ${e.clientX}px; top: ${e.clientY}px;
+                    width: 4px; height: 4px; background: #00CC88; border-radius: 50%;
+                    pointer-events: none; z-index: 99997;
+                    transition: all 0.5s ease; opacity: 0.6;
+                `;
+                document.body.appendChild(dot);
+                requestAnimationFrame(() => {
+                    dot.style.opacity = '0';
+                    dot.style.transform = 'scale(3)';
+                });
+                setTimeout(() => dot.remove(), 500);
+            }, 10);
+        });
+    </script>
+</body>
+</html>
