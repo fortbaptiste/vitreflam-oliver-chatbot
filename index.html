@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PostPilot — Ta machine LinkedIn</title>
+  <title>PostPilot — Tes 2 workflows</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -34,53 +34,36 @@
   </script>
   <style>
     * { font-family: 'Inter', sans-serif; }
-    h1,h2,h3,h4,h5,h6,.font-display { font-family: 'Space Grotesky', 'Space Grotesk', sans-serif; }
+    h1,h2,h3,h4,h5,h6,.font-display { font-family: 'Space Grotesk', sans-serif; }
     .font-mono, code, pre { font-family: 'JetBrains Mono', monospace; }
 
-    /* Scroll animations */
     .reveal { opacity: 0; transform: translateY(40px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
     .reveal.active { opacity: 1; transform: translateY(0); }
     .reveal-left { opacity: 0; transform: translateX(-60px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
     .reveal-left.active { opacity: 1; transform: translateX(0); }
     .reveal-right { opacity: 0; transform: translateX(60px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
     .reveal-right.active { opacity: 1; transform: translateX(0); }
-    .reveal-scale { opacity: 0; transform: scale(0.85); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
-    .reveal-scale.active { opacity: 1; transform: scale(1); }
 
-    /* Neo button press */
     .neo-btn { transition: all 0.1s ease; }
     .neo-btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0px #1a1a1a !important; }
 
-    /* Floating animation */
     @keyframes float { 0%,100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-12px) rotate(2deg); } }
     @keyframes float-reverse { 0%,100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-10px) rotate(-2deg); } }
     .float { animation: float 4s ease-in-out infinite; }
     .float-reverse { animation: float-reverse 5s ease-in-out infinite; }
     .float-slow { animation: float 7s ease-in-out infinite; }
 
-    /* Pulse ring */
-    @keyframes pulse-ring { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
-    .pulse-ring::after { content:''; position:absolute; inset:-4px; border:2px solid #3B82F6; border-radius:inherit; animation: pulse-ring 2s ease-out infinite; }
-
-    /* Typewriter */
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
     .cursor-blink::after { content:'|'; animation: blink 0.8s infinite; color: #3B82F6; }
 
-    /* Ticker tape */
     @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
     .ticker { animation: ticker 30s linear infinite; }
     .ticker:hover { animation-play-state: paused; }
 
-    /* Glow */
     .glow-blue { box-shadow: 0 0 20px rgba(59,130,246,0.3), 4px 4px 0px #1a1a1a; }
-
-    /* Grid pattern */
     .grid-bg { background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px); background-size: 24px 24px; }
-
-    /* Diagonal stripes */
     .stripes { background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 20px); }
 
-    /* Stagger children */
     .stagger > *:nth-child(1) { transition-delay: 0.05s; }
     .stagger > *:nth-child(2) { transition-delay: 0.12s; }
     .stagger > *:nth-child(3) { transition-delay: 0.19s; }
@@ -88,34 +71,17 @@
     .stagger > *:nth-child(5) { transition-delay: 0.33s; }
     .stagger > *:nth-child(6) { transition-delay: 0.40s; }
 
-    /* Magnetic hover */
-    .magnetic { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
-
-    /* Scrollbar */
     ::-webkit-scrollbar { width: 10px; }
     ::-webkit-scrollbar-track { background: #F5F0E8; }
     ::-webkit-scrollbar-thumb { background: #1a1a1a; border: 2px solid #F5F0E8; }
 
-    /* Counter animation */
-    @keyframes countUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-    /* Confetti */
-    @keyframes confetti-fall { 0% { transform: translateY(-100vh) rotate(0deg); opacity:1; } 100% { transform: translateY(100vh) rotate(720deg); opacity:0; } }
-    .confetti-piece { position:fixed; width:10px; height:10px; top:-10px; z-index:9999; animation: confetti-fall 3s ease-in forwards; pointer-events:none; }
-
-    /* Marquee highlight */
     .highlight-box { position:relative; }
     .highlight-box::before { content:''; position:absolute; bottom:2px; left:0; width:100%; height:35%; background:#FBBF24; z-index:-1; transform: rotate(-1deg); }
 
-    /* Step connector line */
-    .step-line { position: relative; }
-    .step-line::after { content:''; position:absolute; left:50%; top:100%; width:3px; height:40px; background: repeating-linear-gradient(to bottom, #1a1a1a 0, #1a1a1a 6px, transparent 6px, transparent 12px); }
-
-    /* Noise texture overlay */
     .noise::before { content:''; position:absolute; inset:0; opacity:0.03; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
-    /* Smooth number transition */
-    .stat-number { display: inline-block; min-width: 2ch; }
+    @keyframes confetti-fall { 0% { transform: translateY(-100vh) rotate(0deg); opacity:1; } 100% { transform: translateY(100vh) rotate(720deg); opacity:0; } }
+    .confetti-piece { position:fixed; width:10px; height:10px; top:-10px; z-index:9999; animation: confetti-fall 3s ease-in forwards; pointer-events:none; }
   </style>
 </head>
 
@@ -132,109 +98,55 @@
           <span class="font-display font-bold text-lg sm:text-xl tracking-tight">PostPilot</span>
         </a>
         <div class="hidden md:flex items-center gap-1">
-          <a href="#problem" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Probleme</a>
-          <a href="#workflow1" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Generation</a>
-          <a href="#workflow2" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Publication</a>
-          <a href="#dashboard" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Analytics</a>
+          <a href="#workflow1" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Workflow 1</a>
+          <a href="#workflow2" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Workflow 2</a>
+          <a href="#partieB" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Stats</a>
+          <a href="#partieC" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Analyse IA</a>
           <a href="#cycle" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Pipeline</a>
         </div>
-        <div class="flex items-center gap-3">
-          <button id="mobile-menu-btn" class="md:hidden w-10 h-10 border-2 border-neo-dark shadow-neo-hover bg-white flex items-center justify-center neo-btn">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
-          </button>
-        </div>
+        <button id="mobile-menu-btn" class="md:hidden w-10 h-10 border-2 border-neo-dark shadow-neo-hover bg-white flex items-center justify-center neo-btn">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
       </div>
     </div>
-    <!-- Mobile menu -->
     <div id="mobile-menu" class="md:hidden hidden border-t-2 border-neo-dark bg-cream">
       <div class="px-4 py-3 space-y-1">
-        <a href="#problem" class="block px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white border-2 border-transparent hover:border-neo-dark">Probleme</a>
-        <a href="#workflow1" class="block px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white border-2 border-transparent hover:border-neo-dark">Generation</a>
-        <a href="#workflow2" class="block px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white border-2 border-transparent hover:border-neo-dark">Publication</a>
-        <a href="#dashboard" class="block px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white border-2 border-transparent hover:border-neo-dark">Analytics</a>
+        <a href="#workflow1" class="block px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white border-2 border-transparent hover:border-neo-dark">Workflow 1</a>
+        <a href="#workflow2" class="block px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white border-2 border-transparent hover:border-neo-dark">Workflow 2</a>
+        <a href="#partieB" class="block px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white border-2 border-transparent hover:border-neo-dark">Stats</a>
+        <a href="#partieC" class="block px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white border-2 border-transparent hover:border-neo-dark">Analyse IA</a>
+        <a href="#cycle" class="block px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white border-2 border-transparent hover:border-neo-dark">Pipeline</a>
       </div>
     </div>
   </nav>
 
   <!-- ========== HERO ========== -->
-  <section id="hero" class="relative min-h-screen flex items-center pt-20 overflow-hidden grid-bg">
-    <!-- Decorative shapes -->
+  <section id="hero" class="relative min-h-[70vh] flex items-center pt-20 overflow-hidden grid-bg">
     <div class="absolute top-32 right-[8%] w-20 h-20 sm:w-28 sm:h-28 bg-neo-yellow border-2 border-neo-dark shadow-neo-lg rotate-12 float opacity-60"></div>
     <div class="absolute bottom-[15%] left-[5%] w-14 h-14 sm:w-20 sm:h-20 bg-neo-blue border-2 border-neo-dark shadow-neo -rotate-6 float-reverse opacity-50"></div>
     <div class="absolute top-[45%] right-[3%] w-10 h-10 sm:w-16 sm:h-16 rounded-full bg-neo-red border-2 border-neo-dark shadow-neo float-slow opacity-40"></div>
-    <div class="absolute bottom-[30%] right-[15%] w-8 h-8 bg-neo-green border-2 border-neo-dark rotate-45 float opacity-30"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 sm:py-20">
-      <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-        <!-- Left -->
-        <div class="reveal">
-          <div class="inline-flex items-center gap-2 px-4 py-2 bg-white border-2 border-neo-dark shadow-neo text-xs font-mono font-bold mb-6 sm:mb-8">
-            <span class="w-2 h-2 bg-neo-green rounded-full animate-pulse"></span>
-            WORKFLOW ACTIF — TOURNE TOUTES LES 3 MIN
-          </div>
-          <h1 class="font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] mb-6">
-            Une idee.<br>
-            <span class="highlight-box">Un post LinkedIn.</span><br>
-            <span class="text-neo-blue">Zero effort.</span>
-          </h1>
-          <p class="text-lg sm:text-xl text-gray-600 max-w-xl mb-8 leading-relaxed">
-            Tu ecris une ligne dans Notion. L'IA genere le post, cree l'image, publie a 9h, suit les stats pendant 7 jours, et te livre un rapport. <span class="font-bold text-neo-dark">Tu ne touches plus a rien.</span>
-          </p>
-          <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <a href="#workflow1" class="neo-btn px-8 py-4 bg-neo-blue text-white font-bold text-base border-2 border-neo-dark shadow-neo-lg hover:bg-blue-600 transition-colors text-center">
-              Voir comment ca marche &darr;
-            </a>
-          </div>
-          <!-- Social proof -->
-          <div class="flex items-center gap-4 mt-8 sm:mt-10">
-            <div class="flex -space-x-2">
-              <div class="w-8 h-8 rounded-full bg-neo-blue border-2 border-white flex items-center justify-center text-white text-xs font-bold">S</div>
-              <div class="w-8 h-8 rounded-full bg-neo-purple border-2 border-white flex items-center justify-center text-white text-xs font-bold">M</div>
-              <div class="w-8 h-8 rounded-full bg-neo-orange border-2 border-white flex items-center justify-center text-white text-xs font-bold">A</div>
-              <div class="w-8 h-8 rounded-full bg-neo-green border-2 border-white flex items-center justify-center text-white text-xs font-bold">L</div>
-            </div>
-            <p class="text-sm text-gray-500"><span class="font-bold text-neo-dark">127 posts</span> generes ce mois-ci</p>
-          </div>
+      <div class="max-w-3xl reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white border-2 border-neo-dark shadow-neo text-xs font-mono font-bold mb-6 sm:mb-8">
+          <span class="w-2 h-2 bg-neo-green rounded-full animate-pulse"></span>
+          2 WORKFLOWS ACTIFS
         </div>
-
-        <!-- Right - Mock terminal / Post preview -->
-        <div class="reveal-right">
-          <div class="relative">
-            <div class="bg-white border-2 border-neo-dark shadow-neo-xl p-0 overflow-hidden">
-              <!-- Terminal header -->
-              <div class="flex items-center gap-2 px-4 py-3 bg-neo-dark">
-                <div class="w-3 h-3 rounded-full bg-neo-red"></div>
-                <div class="w-3 h-3 rounded-full bg-neo-yellow"></div>
-                <div class="w-3 h-3 rounded-full bg-neo-green"></div>
-                <span class="ml-3 text-white/60 font-mono text-xs">postpilot — workflow actif</span>
-              </div>
-              <!-- Terminal content -->
-              <div class="p-5 sm:p-6 font-mono text-sm space-y-3">
-                <div class="text-gray-400">$ checking notion database...</div>
-                <div class="text-neo-green">&#10003; Post trouve: "Pourquoi 80% des PME perdent de l'argent"</div>
-                <div class="text-gray-400">$ analyzing writing style (10 posts)...</div>
-                <div class="text-neo-green">&#10003; Style identifie: direct, percutant, 180 mots/avg</div>
-                <div class="text-gray-400">$ generating with Claude...</div>
-                <div class="text-neo-blue font-bold" id="typewriter-target"></div>
-                <div class="text-gray-400 mt-4">$ generating image via Nano Banana...</div>
-                <div class="text-neo-green">&#10003; Image uploadee sur ImgBB</div>
-                <div class="text-gray-400">$ updating Notion page...</div>
-                <div class="text-neo-green">&#10003; Statut: "A generer" &rarr; "A valider"</div>
-                <div class="mt-4 pt-4 border-t border-dashed border-gray-200">
-                  <span class="text-neo-blue">Temps total:</span> <span class="text-neo-dark font-bold">47 secondes</span>
-                </div>
-              </div>
-            </div>
-            <!-- Floating badge -->
-            <div class="absolute -bottom-4 -right-4 bg-neo-yellow border-2 border-neo-dark shadow-neo px-4 py-2 font-bold text-sm rotate-3 float">
-              100% automatique
-            </div>
-          </div>
+        <h1 class="font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] mb-6">
+          Tes 2 workflows<br>
+          <span class="highlight-box">Comment ca marche</span>
+        </h1>
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-8">
+          <a href="#workflow1" class="neo-btn px-8 py-4 bg-neo-blue text-white font-bold text-base border-2 border-neo-dark shadow-neo-lg hover:bg-blue-600 transition-colors text-center">
+            Workflow 1 &darr;
+          </a>
+          <a href="#workflow2" class="neo-btn px-8 py-4 bg-white font-bold text-base border-2 border-neo-dark shadow-neo hover:bg-gray-50 transition-colors text-center">
+            Workflow 2 &darr;
+          </a>
         </div>
       </div>
     </div>
 
-    <!-- Ticker tape -->
     <div class="absolute bottom-0 left-0 w-full border-t-2 border-b-2 border-neo-dark bg-neo-dark text-white py-3 overflow-hidden">
       <div class="ticker flex whitespace-nowrap">
         <span class="mx-8 font-mono text-sm flex items-center gap-2"><span class="text-neo-yellow">&#9679;</span> Generation IA</span>
@@ -253,95 +165,7 @@
     </div>
   </section>
 
-  <!-- ========== SECTION 2: THE PROBLEM ========== -->
-  <section id="problem" class="py-20 sm:py-28 relative stripes">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-14 sm:mb-20 reveal">
-        <div class="inline-flex items-center gap-2 px-4 py-2 bg-neo-red/10 border-2 border-neo-red text-neo-red text-xs font-mono font-bold mb-6">
-          DIAGNOSTIC
-        </div>
-        <h2 class="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-6">
-          LinkedIn te coute <span class="highlight-box">6h par semaine</span>
-        </h2>
-        <p class="text-lg text-gray-500 max-w-2xl mx-auto">Et malgre ca, tes posts sont irreguliers, tu ne sais pas ce qui marche, et tu n'as aucune donnee pour t'ameliorer.</p>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 stagger">
-        <!-- Pain 1 -->
-        <div class="reveal bg-white border-2 border-neo-dark shadow-neo p-6 sm:p-8 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all duration-200 group">
-          <div class="w-12 h-12 bg-neo-red/10 border-2 border-neo-red flex items-center justify-center mb-5 text-2xl group-hover:rotate-12 transition-transform">&#9202;</div>
-          <h3 class="font-display font-bold text-lg mb-3">2h pour ecrire un post</h3>
-          <p class="text-gray-500 text-sm leading-relaxed">Trouver l'idee, structurer, rediger, reformuler, trouver une accroche... Tu y passes ta matinee pour 200 mots.</p>
-          <div class="mt-4 pt-4 border-t border-dashed border-gray-200 font-mono text-xs text-neo-red font-bold">Avec PostPilot: 47 secondes</div>
-        </div>
-        <!-- Pain 2 -->
-        <div class="reveal bg-white border-2 border-neo-dark shadow-neo p-6 sm:p-8 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all duration-200 group">
-          <div class="w-12 h-12 bg-neo-orange/10 border-2 border-neo-orange flex items-center justify-center mb-5 text-2xl group-hover:rotate-12 transition-transform">&#128200;</div>
-          <h3 class="font-display font-bold text-lg mb-3">Zero donnees, zero strategie</h3>
-          <p class="text-gray-500 text-sm leading-relaxed">Tu publies, tu check tes likes 2h apres, et c'est tout. Tu ne sais pas quels sujets performent ni pourquoi.</p>
-          <div class="mt-4 pt-4 border-t border-dashed border-gray-200 font-mono text-xs text-neo-orange font-bold">Avec PostPilot: analyse IA a J+7</div>
-        </div>
-        <!-- Pain 3 -->
-        <div class="reveal bg-white border-2 border-neo-dark shadow-neo p-6 sm:p-8 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all duration-200 group">
-          <div class="w-12 h-12 bg-neo-yellow/20 border-2 border-neo-yellow flex items-center justify-center mb-5 text-2xl group-hover:rotate-12 transition-transform">&#128197;</div>
-          <h3 class="font-display font-bold text-lg mb-3">Irregular et imprevisible</h3>
-          <p class="text-gray-500 text-sm leading-relaxed">Tu publies 3 fois une semaine, zero la suivante. L'algorithme te penalise. Ta visibilite chute. Le cercle vicieux.</p>
-          <div class="mt-4 pt-4 border-t border-dashed border-gray-200 font-mono text-xs text-neo-yellow font-bold">Avec PostPilot: publication auto a 9h</div>
-        </div>
-        <!-- Pain 4 -->
-        <div class="reveal bg-white border-2 border-neo-dark shadow-neo p-6 sm:p-8 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all duration-200 group">
-          <div class="w-12 h-12 bg-neo-purple/10 border-2 border-neo-purple flex items-center justify-center mb-5 text-2xl group-hover:rotate-12 transition-transform">&#127912;</div>
-          <h3 class="font-display font-bold text-lg mb-3">Visuels inexistants</h3>
-          <p class="text-gray-500 text-sm leading-relaxed">Tu postes du texte brut ou tu perds 30 min sur Canva. Un post sans image, c'est 40% d'impressions en moins.</p>
-          <div class="mt-4 pt-4 border-t border-dashed border-gray-200 font-mono text-xs text-neo-purple font-bold">Avec PostPilot: image generee auto</div>
-        </div>
-        <!-- Pain 5 -->
-        <div class="reveal bg-white border-2 border-neo-dark shadow-neo p-6 sm:p-8 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all duration-200 group">
-          <div class="w-12 h-12 bg-neo-blue/10 border-2 border-neo-blue flex items-center justify-center mb-5 text-2xl group-hover:rotate-12 transition-transform">&#129302;</div>
-          <h3 class="font-display font-bold text-lg mb-3">Posts IA generiques</h3>
-          <p class="text-gray-500 text-sm leading-relaxed">ChatGPT ecrit comme tout le monde. Ton audience sent le template. Tu perds en authenticite et en engagement.</p>
-          <div class="mt-4 pt-4 border-t border-dashed border-gray-200 font-mono text-xs text-neo-blue font-bold">Avec PostPilot: clone de ton style</div>
-        </div>
-        <!-- Pain 6 -->
-        <div class="reveal bg-white border-2 border-neo-dark shadow-neo p-6 sm:p-8 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all duration-200 group">
-          <div class="w-12 h-12 bg-neo-green/10 border-2 border-neo-green flex items-center justify-center mb-5 text-2xl group-hover:rotate-12 transition-transform">&#128640;</div>
-          <h3 class="font-display font-bold text-lg mb-3">Pas de passage a l'echelle</h3>
-          <p class="text-gray-500 text-sm leading-relaxed">Tu veux publier 5x par semaine mais t'as pas le temps. Tu es le goulot d'etranglement de ta propre visibilite.</p>
-          <div class="mt-4 pt-4 border-t border-dashed border-gray-200 font-mono text-xs text-neo-green font-bold">Avec PostPilot: 5 posts = 5 lignes</div>
-        </div>
-      </div>
-
-      <!-- Comparison bar -->
-      <div class="mt-14 sm:mt-20 reveal">
-        <div class="bg-white border-2 border-neo-dark shadow-neo-lg overflow-hidden">
-          <div class="grid md:grid-cols-2">
-            <div class="p-6 sm:p-8 border-b-2 md:border-b-0 md:border-r-2 border-neo-dark bg-red-50/50">
-              <h4 class="font-display font-bold text-lg mb-4 text-neo-red flex items-center gap-2">&#10005; Sans PostPilot</h4>
-              <ul class="space-y-3 text-sm text-gray-600">
-                <li class="flex items-start gap-2"><span class="text-neo-red mt-0.5">&#10005;</span> 2h par post, 3 posts max/semaine</li>
-                <li class="flex items-start gap-2"><span class="text-neo-red mt-0.5">&#10005;</span> Aucun suivi des performances</li>
-                <li class="flex items-start gap-2"><span class="text-neo-red mt-0.5">&#10005;</span> Publication manuelle, souvent oubliee</li>
-                <li class="flex items-start gap-2"><span class="text-neo-red mt-0.5">&#10005;</span> Images generiques ou absentes</li>
-                <li class="flex items-start gap-2"><span class="text-neo-red mt-0.5">&#10005;</span> Pas de strategie, pas de data</li>
-              </ul>
-            </div>
-            <div class="p-6 sm:p-8 bg-green-50/50">
-              <h4 class="font-display font-bold text-lg mb-4 text-neo-green flex items-center gap-2">&#10003; Avec PostPilot</h4>
-              <ul class="space-y-3 text-sm text-gray-600">
-                <li class="flex items-start gap-2"><span class="text-neo-green mt-0.5">&#10003;</span> 47 sec par post, illimite</li>
-                <li class="flex items-start gap-2"><span class="text-neo-green mt-0.5">&#10003;</span> Stats toutes les 4h pendant 7 jours</li>
-                <li class="flex items-start gap-2"><span class="text-neo-green mt-0.5">&#10003;</span> Publication auto a 9h, chaque jour</li>
-                <li class="flex items-start gap-2"><span class="text-neo-green mt-0.5">&#10003;</span> Images pro generees automatiquement</li>
-                <li class="flex items-start gap-2"><span class="text-neo-green mt-0.5">&#10003;</span> Rapport IA avec recommandations</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== SECTION 3: WORKFLOW 1 — CONTENT MACHINE ========== -->
+  <!-- ========== WORKFLOW 1 ========== -->
   <section id="workflow1" class="py-20 sm:py-28 bg-neo-dark text-white relative noise overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="text-center mb-14 sm:mb-20 reveal">
@@ -351,95 +175,74 @@
         <h2 class="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-6">
           La machine a ecrire tes posts
         </h2>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto">Tu mets une idee dans Notion, le systeme te livre un post complet avec image, pret a valider. Toutes les 3 minutes, il tourne.</p>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto">Tu mets une idee dans Notion, et le systeme te livre un post LinkedIn complet avec image, pret a valider.</p>
       </div>
 
-      <!-- Steps -->
+      <!-- Fonctionnement -->
+      <div class="reveal mb-10">
+        <div class="bg-white/5 border-2 border-white/20 p-6 sm:p-8 max-w-3xl mx-auto">
+          <h3 class="font-display font-bold text-xl mb-4 text-neo-yellow">Le fonctionnement</h3>
+          <p class="text-gray-300 leading-relaxed">Le workflow tourne en boucle toutes les 3 minutes. A chaque tour, il va checker ta base Notion : "Est-ce qu'il y a un post avec le statut <span class="font-mono text-neo-blue bg-white/10 px-2 py-0.5">A generer</span> ?"</p>
+          <p class="text-gray-400 mt-3">Si oui :</p>
+        </div>
+      </div>
+
+      <!-- 6 Steps -->
       <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 stagger">
-        <!-- Step 1 -->
         <div class="reveal bg-white/5 border-2 border-white/20 p-6 sm:p-8 hover:border-neo-blue hover:bg-neo-blue/5 transition-all duration-300 group relative">
           <div class="absolute -top-4 -left-3 w-10 h-10 bg-neo-blue border-2 border-white flex items-center justify-center font-display font-bold text-lg shadow-neo-blue">1</div>
           <div class="mt-4">
-            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-blue transition-colors">Lecture Notion</h3>
-            <p class="text-gray-400 text-sm leading-relaxed mb-4">Le workflow check ta base toutes les 3 min. Il recupere le titre, l'idee, le ton, la cible, le pilier, la thematique et l'angle de ta fiche.</p>
-            <div class="font-mono text-xs bg-white/5 p-3 border border-white/10">
-              <span class="text-neo-green">GET</span> notion.databases.query<br>
-              <span class="text-gray-500">filter: status = "A generer"</span>
-            </div>
+            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-blue transition-colors">Il lit ta fiche Notion</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Il recupere tout : le titre, l'idee du post, le ton (direct, business...), la cible, le pilier, la thematique, l'angle...</p>
           </div>
         </div>
-        <!-- Step 2 -->
         <div class="reveal bg-white/5 border-2 border-white/20 p-6 sm:p-8 hover:border-neo-yellow hover:bg-neo-yellow/5 transition-all duration-300 group relative">
           <div class="absolute -top-4 -left-3 w-10 h-10 bg-neo-yellow border-2 border-neo-dark flex items-center justify-center font-display font-bold text-lg text-neo-dark shadow-neo-yellow">2</div>
           <div class="mt-4">
-            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-yellow transition-colors">Analyse de ton style</h3>
-            <p class="text-gray-400 text-sm leading-relaxed mb-4">Il lit tes 10 derniers posts publies pour que Claude comprenne comment tu ecris. Pas de contenu generique — il ecrit comme toi.</p>
-            <div class="font-mono text-xs bg-white/5 p-3 border border-white/10">
-              <span class="text-neo-yellow">SCAN</span> 10 derniers posts<br>
-              <span class="text-gray-500">style: direct, percutant, 180 mots</span>
-            </div>
+            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-yellow transition-colors">Il regarde tes 10 derniers posts publies</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Pour que Claude comprenne ton style d'ecriture. Il ne va pas ecrire un post generique, il va ecrire comme toi.</p>
           </div>
         </div>
-        <!-- Step 3 -->
         <div class="reveal bg-white/5 border-2 border-white/20 p-6 sm:p-8 hover:border-neo-purple hover:bg-neo-purple/5 transition-all duration-300 group relative">
           <div class="absolute -top-4 -left-3 w-10 h-10 bg-neo-purple border-2 border-white flex items-center justify-center font-display font-bold text-lg shadow-[4px_4px_0px_#8B5CF6]">3</div>
           <div class="mt-4">
-            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-purple transition-colors">Generation Claude</h3>
-            <p class="text-gray-400 text-sm leading-relaxed mb-4">Claude recoit tes guidelines, ton style, et les consignes: accroche forte, phrases courtes, pas de hashtags, 150-250 mots, punchline finale.</p>
-            <div class="font-mono text-xs bg-white/5 p-3 border border-white/10">
-              <span class="text-neo-purple">AI</span> claude.messages.create<br>
-              <span class="text-gray-500">output: texte + support + expertise</span>
-            </div>
+            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-purple transition-colors">Il envoie tout a Claude</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Claude recoit un prompt avec tes guidelines Scalether (transformation interne, execution, rentabilite...), ton style, et les consignes : accroche forte, phrases courtes, pas de hashtags, 150-250 mots, finir par une punchline. Claude renvoie le texte + il choisit le support (carrousel, video, texte...), l'expertise et la thematique qui collent le mieux.</p>
           </div>
         </div>
-        <!-- Step 4 -->
         <div class="reveal bg-white/5 border-2 border-white/20 p-6 sm:p-8 hover:border-neo-green hover:bg-neo-green/5 transition-all duration-300 group relative">
           <div class="absolute -top-4 -left-3 w-10 h-10 bg-neo-green border-2 border-neo-dark flex items-center justify-center font-display font-bold text-lg text-neo-dark shadow-[4px_4px_0px_#10B981]">4</div>
           <div class="mt-4">
-            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-green transition-colors">Image auto-generee</h3>
-            <p class="text-gray-400 text-sm leading-relaxed mb-4">Nano Banana (modele Google) cree une image pro, minimaliste, tons bleu/blanc, sans texte. Uploadee sur ImgBB pour une URL permanente.</p>
-            <div class="font-mono text-xs bg-white/5 p-3 border border-white/10">
-              <span class="text-neo-green">IMG</span> nano-banana.generate<br>
-              <span class="text-gray-500">style: pro, minimal, blue/white</span>
-            </div>
+            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-green transition-colors">Il genere une image</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Via Nano Banana (modele Google), il cree une image pro, minimaliste, tons bleu/blanc, sans texte dessus. L'image est uploadee sur ImgBB pour avoir une URL permanente.</p>
           </div>
         </div>
-        <!-- Step 5 -->
         <div class="reveal bg-white/5 border-2 border-white/20 p-6 sm:p-8 hover:border-neo-orange hover:bg-neo-orange/5 transition-all duration-300 group relative">
           <div class="absolute -top-4 -left-3 w-10 h-10 bg-neo-orange border-2 border-neo-dark flex items-center justify-center font-display font-bold text-lg text-neo-dark shadow-[4px_4px_0px_#F97316]">5</div>
           <div class="mt-4">
-            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-orange transition-colors">Ecriture dans Notion</h3>
-            <p class="text-gray-400 text-sm leading-relaxed mb-4">Le texte dans le body, l'image en dessous, et toutes les colonnes remplies automatiquement: Support, Expertise, Thematique.</p>
-            <div class="font-mono text-xs bg-white/5 p-3 border border-white/10">
-              <span class="text-neo-orange">WRITE</span> notion.pages.update<br>
-              <span class="text-gray-500">body + image + metadata</span>
-            </div>
+            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-orange transition-colors">Il ecrit tout dans ta page Notion</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Le texte dans le body, l'image en dessous, et toutes les colonnes remplies (Support, Expertise, Thematique...).</p>
           </div>
         </div>
-        <!-- Step 6 -->
         <div class="reveal bg-white/5 border-2 border-white/20 p-6 sm:p-8 hover:border-neo-red hover:bg-neo-red/5 transition-all duration-300 group relative">
           <div class="absolute -top-4 -left-3 w-10 h-10 bg-neo-red border-2 border-white flex items-center justify-center font-display font-bold text-lg shadow-[4px_4px_0px_#EF4444]">6</div>
           <div class="mt-4">
-            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-red transition-colors">Statut: A valider</h3>
-            <p class="text-gray-400 text-sm leading-relaxed mb-4">Le post passe en "A valider". Tu ouvres Notion, tu lis, tu modifies si besoin, et tu passes en "Programme" quand c'est bon.</p>
-            <div class="font-mono text-xs bg-white/5 p-3 border border-white/10">
-              <span class="text-neo-red">STATUS</span> "A generer" &rarr; "A valider"<br>
-              <span class="text-gray-500">toi: valider &rarr; "Programme"</span>
-            </div>
+            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-red transition-colors">Il passe le statut a "A valider"</h3>
+            <p class="text-gray-400 text-sm leading-relaxed">Toi tu ouvres Notion, tu lis, tu valides ou tu modifies, et tu passes en "Programme" quand c'est bon.</p>
           </div>
         </div>
       </div>
 
-      <!-- Concrete example -->
+      <!-- Exemple -->
       <div class="mt-14 sm:mt-20 reveal">
         <div class="bg-white/5 border-2 border-neo-blue p-6 sm:p-8 lg:p-10">
           <h3 class="font-display font-bold text-xl sm:text-2xl mb-6 text-neo-blue flex items-center gap-3">
             <span class="w-8 h-8 bg-neo-blue text-white flex items-center justify-center text-sm font-mono border-2 border-white">EX</span>
-            Exemple concret
+            Exemple
           </h3>
           <div class="grid md:grid-cols-2 gap-8">
             <div>
-              <h4 class="font-bold text-sm uppercase tracking-wider text-gray-400 mb-3">Ce que tu ecris (10 sec)</h4>
+              <h4 class="font-bold text-sm uppercase tracking-wider text-gray-400 mb-3">Tu crees une ligne dans Notion avec :</h4>
               <div class="bg-white/10 border border-white/20 p-4 font-mono text-sm space-y-2">
                 <div><span class="text-gray-500">Titre:</span> Pourquoi 80% des PME perdent de l'argent sur leur facturation</div>
                 <div><span class="text-gray-500">Ton:</span> Direct, Business</div>
@@ -447,61 +250,73 @@
               </div>
             </div>
             <div>
-              <h4 class="font-bold text-sm uppercase tracking-wider text-gray-400 mb-3">Ce que tu recois (47 sec plus tard)</h4>
+              <h4 class="font-bold text-sm uppercase tracking-wider text-gray-400 mb-3">3 minutes plus tard, dans ta page Notion :</h4>
               <div class="bg-white/10 border border-white/20 p-4 text-sm space-y-2">
                 <div class="text-neo-blue font-bold italic">"Tu factures. Mais tu ne sais pas combien tu perds."</div>
-                <div class="text-gray-400 text-xs">+ 200 mots de post structure</div>
-                <div class="text-gray-400 text-xs">+ image pro bleutee generee</div>
-                <div class="text-gray-400 text-xs">+ Support: Texte | Expertise: Facturation</div>
+                <div class="text-gray-400 text-xs">+ Un post de 200 mots avec accroche</div>
+                <div class="text-gray-400 text-xs">+ Une image pro bleutee</div>
+                <div class="text-gray-400 text-xs">+ Support: Texte | Expertise: Facturation, Efficience</div>
                 <div class="text-gray-400 text-xs">+ Statut: "A valider"</div>
               </div>
             </div>
+          </div>
+          <div class="mt-6 pt-6 border-t border-white/10 text-center">
+            <p class="text-gray-300 text-sm">Tu as juste ecrit une ligne d'idee. Le reste s'est fait tout seul.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== SECTION 4: WORKFLOW 2 — PUBLISH + STATS + ANALYSIS ========== -->
-  <section id="workflow2" class="py-20 sm:py-28 relative">
+  <!-- ========== WORKFLOW 2 ========== -->
+  <section id="workflow2" class="py-20 sm:py-28 relative stripes">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="text-center mb-14 sm:mb-20 reveal">
         <div class="inline-flex items-center gap-2 px-4 py-2 bg-neo-green/10 border-2 border-neo-green text-neo-green text-xs font-mono font-bold mb-6">
           WORKFLOW 2
         </div>
         <h2 class="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-6">
-          Publication + Stats + Analyse IA
+          Publication + Suivi des stats + Analyse IA
         </h2>
-        <p class="text-lg text-gray-500 max-w-2xl mx-auto">Un seul workflow qui fait 3 choses en parallele. Publication auto, suivi en continu, et rapport intelligent.</p>
+        <p class="text-lg text-gray-500 max-w-2xl mx-auto">Il fait 3 choses differentes qui tournent en parallele dans le meme workflow.</p>
       </div>
 
-      <!-- Part A -->
-      <div class="mb-14 sm:mb-20">
-        <div class="grid lg:grid-cols-5 gap-6 lg:gap-10 items-center">
+      <!-- PARTIE A -->
+      <div class="mb-16 sm:mb-24">
+        <div class="grid lg:grid-cols-5 gap-6 lg:gap-10 items-start">
           <div class="lg:col-span-2 reveal-left">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-neo-blue/10 border-2 border-neo-blue text-neo-blue text-xs font-mono font-bold mb-5">PARTIE A</div>
             <h3 class="font-display font-bold text-2xl sm:text-3xl mb-4">Publication automatique</h3>
-            <p class="text-gray-500 mb-6 leading-relaxed">Chaque matin a 9h, tes posts programmes partent sur LinkedIn. Tu programmes a l'avance, le systeme execute.</p>
+            <p class="text-gray-500 text-sm mb-2 italic">Tous les jours a 9h</p>
+            <p class="text-gray-500 mb-6 leading-relaxed">Chaque matin a 9h, il publie automatiquement tes posts programmes sur LinkedIn.</p>
             <div class="space-y-4">
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-neo-blue text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">9h</div>
-                <div class="text-sm"><span class="font-bold">Check Notion</span> — Cherche les posts "Programme" dont la date est passee</div>
+                <div class="w-8 h-8 bg-neo-blue text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">1</div>
+                <div class="text-sm">A 9h, il cherche dans Notion les posts en statut "Programme" dont la date est passee</div>
               </div>
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-neo-blue text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">&#10003;</div>
-                <div class="text-sm"><span class="font-bold">Publie sur LinkedIn</span> — Texte + image, directement via l'API</div>
+                <div class="w-8 h-8 bg-neo-blue text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">2</div>
+                <div class="text-sm">Il recupere le texte du post dans la page</div>
               </div>
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-neo-blue text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">&#8599;</div>
-                <div class="text-sm"><span class="font-bold">Met a jour Notion</span> — Statut "Publie" + URL du post LinkedIn</div>
+                <div class="w-8 h-8 bg-neo-blue text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">3</div>
+                <div class="text-sm">Il publie sur LinkedIn</div>
               </div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-blue text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">4</div>
+                <div class="text-sm">Il passe le statut a "Publie" et enregistre l'URL du post</div>
+              </div>
+            </div>
+            <p class="text-gray-500 text-sm mt-6 leading-relaxed">Toi tu programmes tes posts a l'avance (genre "Publication le 15 fevrier"), et le jour J a 9h, ca part tout seul.</p>
+            <div class="mt-4 bg-yellow-50 border-2 border-neo-yellow p-3 text-xs text-gray-600">
+              Le node LinkedIn est en mode simulation tant que l'OAuth n'est pas configure. Une fois branche, ca publie pour de vrai.
             </div>
           </div>
           <div class="lg:col-span-3 reveal-right">
             <div class="bg-white border-2 border-neo-dark shadow-neo-lg p-6">
               <div class="flex items-center justify-between mb-4">
                 <span class="font-mono text-xs text-gray-400">calendrier de publication</span>
-                <span class="font-mono text-xs text-neo-green font-bold">&#9679; AUTO</span>
+                <span class="font-mono text-xs text-neo-green font-bold">&#9679; AUTO 9h</span>
               </div>
               <div class="space-y-2 font-mono text-sm">
                 <div class="flex items-center gap-3 p-3 bg-green-50 border border-green-200">
@@ -519,379 +334,242 @@
                   <span class="text-gray-600 truncate flex-1">Le secret des dirigeants qui scalent</span>
                   <span class="text-xs bg-neo-blue text-white px-2 py-0.5 border border-blue-700">PROGRAMME</span>
                 </div>
-                <div class="flex items-center gap-3 p-3 bg-yellow-50 border border-yellow-200">
-                  <span class="text-neo-yellow font-bold w-20">Lun 9h</span>
-                  <span class="text-gray-600 truncate flex-1">Comment perdre des clients en etant trop lent</span>
-                  <span class="text-xs bg-neo-yellow text-neo-dark px-2 py-0.5 border border-yellow-500">A VALIDER</span>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Part B -->
-      <div class="mb-14 sm:mb-20">
-        <div class="grid lg:grid-cols-5 gap-6 lg:gap-10 items-center">
+      <!-- PARTIE B -->
+      <div id="partieB" class="mb-16 sm:mb-24">
+        <div class="grid lg:grid-cols-5 gap-6 lg:gap-10 items-start">
           <div class="lg:col-span-3 order-2 lg:order-1 reveal-left">
-            <div class="bg-white border-2 border-neo-dark shadow-neo-lg p-6 overflow-x-auto">
+            <!-- Snapshot example -->
+            <div class="bg-white border-2 border-neo-dark shadow-neo-lg p-6 mb-6">
               <div class="flex items-center justify-between mb-4">
-                <span class="font-mono text-xs text-gray-400">suivi en temps reel — 7 jours</span>
-                <span class="font-mono text-xs text-neo-orange font-bold">&#9679; TRACKING</span>
+                <span class="font-mono text-xs text-gray-400">historique des stats — snapshot horodate</span>
+                <span class="font-mono text-xs text-neo-orange font-bold">&#9679; TOUTES LES 4H</span>
               </div>
-              <table class="w-full text-sm font-mono min-w-[480px]">
-                <thead>
-                  <tr class="text-left text-xs text-gray-400 border-b-2 border-neo-dark">
-                    <th class="pb-2 pr-3">Quand</th>
-                    <th class="pb-2 pr-3">Likes</th>
-                    <th class="pb-2 pr-3">Com.</th>
-                    <th class="pb-2 pr-3">Partages</th>
-                    <th class="pb-2">Impressions</th>
-                  </tr>
-                </thead>
-                <tbody id="stats-table" class="stagger">
-                  <tr class="border-b border-dashed border-gray-200 reveal"><td class="py-2 pr-3 text-gray-500">Lun 09:00</td><td class="py-2 pr-3">3</td><td class="py-2 pr-3">1</td><td class="py-2 pr-3">0</td><td class="py-2">120</td></tr>
-                  <tr class="border-b border-dashed border-gray-200 reveal"><td class="py-2 pr-3 text-gray-500">Lun 13:00</td><td class="py-2 pr-3 text-neo-green">12 <span class="text-xs">&#9650;</span></td><td class="py-2 pr-3">3</td><td class="py-2 pr-3">1</td><td class="py-2 text-neo-green">380 <span class="text-xs">&#9650;</span></td></tr>
-                  <tr class="border-b border-dashed border-gray-200 reveal"><td class="py-2 pr-3 text-gray-500">Lun 17:00</td><td class="py-2 pr-3 text-neo-green font-bold">28 <span class="text-xs">&#9650;&#9650;</span></td><td class="py-2 pr-3">7</td><td class="py-2 pr-3">1</td><td class="py-2 text-neo-green font-bold">650 <span class="text-xs">&#9650;&#9650;</span></td></tr>
-                  <tr class="border-b border-dashed border-gray-200 reveal"><td class="py-2 pr-3 text-gray-500">Lun 21:00</td><td class="py-2 pr-3">35</td><td class="py-2 pr-3">9</td><td class="py-2 pr-3">2</td><td class="py-2">890</td></tr>
-                  <tr class="border-b border-dashed border-gray-200 reveal"><td class="py-2 pr-3 text-gray-500">Mar 01:00</td><td class="py-2 pr-3 text-gray-400">38</td><td class="py-2 pr-3 text-gray-400">9</td><td class="py-2 pr-3 text-gray-400">2</td><td class="py-2 text-gray-400">940</td></tr>
-                  <tr class="border-b border-dashed border-gray-200 reveal"><td class="py-2 pr-3 text-gray-500">Mar 09:00</td><td class="py-2 pr-3">41</td><td class="py-2 pr-3">10</td><td class="py-2 pr-3">3</td><td class="py-2">1020</td></tr>
-                  <tr class="reveal"><td class="py-2 pr-3 text-gray-500">...</td><td class="py-2 pr-3 font-bold">52</td><td class="py-2 pr-3 font-bold">14</td><td class="py-2 pr-3 font-bold">5</td><td class="py-2 font-bold">1850</td></tr>
-                </tbody>
-              </table>
-              <div class="mt-4 pt-4 border-t-2 border-neo-dark text-xs text-gray-400">
-                &#9679; Colonnes ecrasees a chaque passage (derniers chiffres) &nbsp; &#9679; Snapshot horodate ajoute en bas de page (historique complet)
+              <div class="font-mono text-sm space-y-1 text-gray-600">
+                <div class="p-2 hover:bg-blue-50 transition-colors cursor-default">2026-02-10 09:00 | Likes: <span class="font-bold text-neo-dark">3</span> &nbsp;| Com: <span class="font-bold text-neo-dark">1</span> &nbsp;| Partages: <span class="font-bold text-neo-dark">0</span> | Impressions: <span class="font-bold text-neo-dark">120</span></div>
+                <div class="p-2 hover:bg-blue-50 transition-colors cursor-default">2026-02-10 13:00 | Likes: <span class="font-bold text-neo-green">12</span> | Com: <span class="font-bold text-neo-dark">3</span> &nbsp;| Partages: <span class="font-bold text-neo-dark">1</span> | Impressions: <span class="font-bold text-neo-green">380</span></div>
+                <div class="p-2 hover:bg-blue-50 transition-colors cursor-default bg-green-50/50">2026-02-10 17:00 | Likes: <span class="font-bold text-neo-green">28</span> | Com: <span class="font-bold text-neo-dark">7</span> &nbsp;| Partages: <span class="font-bold text-neo-dark">1</span> | Impressions: <span class="font-bold text-neo-green">650</span></div>
+                <div class="p-2 hover:bg-blue-50 transition-colors cursor-default">2026-02-10 21:00 | Likes: <span class="font-bold text-neo-dark">35</span> | Com: <span class="font-bold text-neo-dark">9</span> &nbsp;| Partages: <span class="font-bold text-neo-dark">2</span> | Impressions: <span class="font-bold text-neo-dark">890</span></div>
+                <div class="p-2 hover:bg-blue-50 transition-colors cursor-default text-gray-400">2026-02-11 01:00 | Likes: <span class="font-bold">38</span> | Com: <span class="font-bold">9</span> &nbsp;| Partages: <span class="font-bold">2</span> | Impressions: <span class="font-bold">940</span></div>
+                <div class="p-2 hover:bg-blue-50 transition-colors cursor-default">2026-02-11 09:00 | Likes: <span class="font-bold text-neo-dark">41</span> | Com: <span class="font-bold text-neo-dark">10</span> | Partages: <span class="font-bold text-neo-dark">3</span> | Impressions: <span class="font-bold text-neo-dark">1020</span></div>
+                <div class="p-2 text-gray-400">...</div>
               </div>
+            </div>
+            <!-- Interpretation -->
+            <div class="bg-blue-50 border-2 border-neo-blue p-5 text-sm text-gray-600 leading-relaxed">
+              En un coup d'oeil tu vois que ton post a explose entre 9h et 17h le premier jour (+25 likes en 8h), que ca s'est calme la nuit, et que le gros de l'engagement etait dans les premieres 12 heures.
             </div>
           </div>
           <div class="lg:col-span-2 order-1 lg:order-2 reveal-right">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-neo-orange/10 border-2 border-neo-orange text-neo-orange text-xs font-mono font-bold mb-5">PARTIE B</div>
             <h3 class="font-display font-bold text-2xl sm:text-3xl mb-4">Suivi des stats en continu</h3>
-            <p class="text-gray-500 mb-6 leading-relaxed">Pendant 7 jours apres la publication, le systeme scrape tes stats LinkedIn toutes les 4 heures via Apify et note tout dans Notion.</p>
+            <p class="text-gray-500 text-sm mb-2 italic">Toutes les 4h, pendant 7 jours</p>
+            <p class="text-gray-500 mb-6 leading-relaxed">Pendant 7 jours apres la publication, le systeme check les stats de tes posts toutes les 4 heures et note tout dans Notion.</p>
             <div class="space-y-4">
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-neo-orange text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">4h</div>
-                <div class="text-sm"><span class="font-bold">Scraping Apify</span> — Recupere likes, commentaires, partages, impressions</div>
+                <div class="w-8 h-8 bg-neo-orange text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">1</div>
+                <div class="text-sm">Toutes les 4 heures, il cherche tous les posts "Publies" des 7 derniers jours</div>
               </div>
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-neo-orange text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">&#8644;</div>
-                <div class="text-sm"><span class="font-bold">Matching intelligent</span> — Fait le lien entre posts Notion et posts scrapes</div>
+                <div class="w-8 h-8 bg-neo-orange text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">2</div>
+                <div class="text-sm">Il lance Apify qui scrape ton profil LinkedIn pour recuperer les chiffres</div>
               </div>
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-neo-orange text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">&#128247;</div>
-                <div class="text-sm"><span class="font-bold">Snapshot horodate</span> — Tu gardes l'historique complet de la courbe</div>
+                <div class="w-8 h-8 bg-neo-orange text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">3</div>
+                <div class="text-sm">Il fait le matching entre tes posts Notion et les posts scrapes</div>
               </div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-orange text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">4</div>
+                <div class="text-sm">Il met a jour les colonnes : Likes, Commentaires, Partages, Impressions</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-orange text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">5</div>
+                <div class="text-sm">Il ajoute un <span class="font-bold">snapshot horodate</span> en bas de la page Notion</div>
+              </div>
+            </div>
+            <p class="text-gray-500 text-sm mt-6 leading-relaxed">Un snapshot c'est une photo des stats a un instant T.</p>
+          </div>
+        </div>
+
+        <!-- Exemple concret Partie B -->
+        <div class="mt-10 reveal">
+          <div class="bg-white border-2 border-neo-dark shadow-neo-lg p-6 sm:p-8">
+            <h4 class="font-display font-bold text-lg mb-4 flex items-center gap-2">
+              <span class="w-7 h-7 bg-neo-orange text-white flex items-center justify-center text-xs font-mono border-2 border-neo-dark">EX</span>
+              Exemple concret
+            </h4>
+            <p class="text-gray-500 text-sm mb-4">Post publie le lundi 10 fevrier a 9h sur "Les 3 erreurs de facturation des PME" :</p>
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm font-mono min-w-[500px]">
+                <thead>
+                  <tr class="text-left text-xs text-gray-400 border-b-2 border-neo-dark">
+                    <th class="pb-2 pr-4">Quand</th>
+                    <th class="pb-2">Tes colonnes Notion</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="border-b border-dashed border-gray-200"><td class="py-2.5 pr-4 text-gray-500">Lun 13h</td><td class="py-2.5">Likes: 8, Com: 2, Impressions: 250</td></tr>
+                  <tr class="border-b border-dashed border-gray-200"><td class="py-2.5 pr-4 text-gray-500">Lun 17h</td><td class="py-2.5 text-neo-green font-bold">Likes: 22, Com: 5, Impressions: 580</td></tr>
+                  <tr class="border-b border-dashed border-gray-200"><td class="py-2.5 pr-4 text-gray-500">Lun 21h</td><td class="py-2.5">Likes: 31, Com: 8, Impressions: 790</td></tr>
+                  <tr class="border-b border-dashed border-gray-200"><td class="py-2.5 pr-4 text-gray-500">Mar 01h</td><td class="py-2.5 text-gray-400">Likes: 33, Com: 8, Impressions: 820</td></tr>
+                  <tr class="border-b border-dashed border-gray-200"><td class="py-2.5 pr-4 text-gray-500">...</td><td class="py-2.5 text-gray-400">(ca continue toutes les 4h pendant 7 jours)</td></tr>
+                  <tr><td class="py-2.5 pr-4 text-gray-500 font-bold">Dim 21h</td><td class="py-2.5 font-bold">Likes: 52, Com: 14, Impressions: 1850</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="mt-4 pt-4 border-t-2 border-neo-dark text-xs text-gray-500">
+              A chaque passage, les colonnes sont ecrasees avec les chiffres a jour (tu vois toujours les stats les plus recentes), et une nouvelle ligne de snapshot s'ajoute en bas de la page (tu gardes l'historique complet).
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Part C -->
-      <div>
-        <div class="grid lg:grid-cols-5 gap-6 lg:gap-10 items-center">
+      <!-- PARTIE C -->
+      <div id="partieC">
+        <div class="grid lg:grid-cols-5 gap-6 lg:gap-10 items-start">
           <div class="lg:col-span-2 reveal-left">
             <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-neo-purple/10 border-2 border-neo-purple text-neo-purple text-xs font-mono font-bold mb-5">PARTIE C</div>
-            <h3 class="font-display font-bold text-2xl sm:text-3xl mb-4">Analyse IA a J+7</h3>
-            <p class="text-gray-500 mb-6 leading-relaxed">Au bout d'une semaine, Claude analyse tes stats, les compare a tes 10 derniers posts (le benchmark), et ecrit un mini-rapport directement dans Notion.</p>
+            <h3 class="font-display font-bold text-2xl sm:text-3xl mb-4">Analyse IA au bout de 7 jours</h3>
+            <p class="text-gray-500 text-sm mb-2 italic">Tous les jours a 8h</p>
+            <p class="text-gray-500 mb-6 leading-relaxed">Au bout d'une semaine, Claude analyse tes stats, les compare a tes autres posts, et t'ecrit un mini-rapport directement dans Notion.</p>
             <div class="space-y-4">
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-neo-purple text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">8h</div>
-                <div class="text-sm"><span class="font-bold">Trigger quotidien</span> — Chaque matin a 8h, check les posts a J+7</div>
+                <div class="w-8 h-8 bg-neo-purple text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">1</div>
+                <div class="text-sm">Chaque matin a 8h, il cherche les posts publies il y a ~7 jours qui n'ont pas encore d'analyse</div>
               </div>
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-neo-purple text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">&#128202;</div>
-                <div class="text-sm"><span class="font-bold">Benchmark</span> — Compare avec tes moyennes sur 10 posts</div>
+                <div class="w-8 h-8 bg-neo-purple text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">2</div>
+                <div class="text-sm">Il lit tout l'historique des snapshots de la page</div>
               </div>
               <div class="flex items-start gap-3">
-                <div class="w-8 h-8 bg-neo-purple text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">&#129504;</div>
-                <div class="text-sm"><span class="font-bold">Rapport IA</span> — Performance, velocite, recommandations</div>
+                <div class="w-8 h-8 bg-neo-purple text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">3</div>
+                <div class="text-sm">Il recupere les stats des 10 derniers posts pour calculer tes moyennes (le benchmark)</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-purple text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">4</div>
+                <div class="text-sm">Il recupere les metadonnees du post : thematique, ton, cible, pilier, support</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-purple text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">5</div>
+                <div class="text-sm">Il envoie tout a Claude qui genere un rapport en ~500 caracteres</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-purple text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">6</div>
+                <div class="text-sm">Le rapport est ecrit dans la colonne "Analyse statistique post"</div>
               </div>
             </div>
           </div>
           <div class="lg:col-span-3 reveal-right">
             <div class="bg-white border-2 border-neo-dark shadow-neo-lg p-6 relative">
               <div class="flex items-center justify-between mb-4">
-                <span class="font-mono text-xs text-gray-400">analyse statistique post — colonne Notion</span>
+                <span class="font-mono text-xs text-gray-400">ca ressemble a quoi ?</span>
                 <span class="font-mono text-xs text-neo-purple font-bold">&#9679; CLAUDE AI</span>
               </div>
               <div class="bg-purple-50 border-2 border-neo-purple p-5 text-sm leading-relaxed" id="analysis-box">
-                <p class="mb-3"><span class="font-bold text-neo-purple">Performance</span> +45% likes vs moyenne (52 vs 36). Pic d'engagement H+4 a H+8 (phase virale rapide).</p>
-                <p class="mb-3"><span class="font-bold text-neo-purple">Velocite</span> rapide les 12 premieres heures puis stabilisation. Croissance derniere journee: +3%.</p>
-                <p class="mb-3"><span class="font-bold text-neo-purple">Benchmark</span> Surperforme tes posts "cas terrain" (+30% impressions). Le ton direct + thematique facturation = combo gagnant.</p>
-                <p><span class="font-bold text-neo-purple">Recommandations</span> Capitaliser sur les posts "erreurs systeme", tester un carrousel sur ce sujet pour amplifier les partages.</p>
+                <p>Performance +45% likes vs moyenne (52 vs 36). Pic d'engagement H+4 a H+8 (phase virale rapide). Velocite: rapide les 12 premieres heures puis stabilisation. Croissance derniere journee: +3%. Surperforme tes posts "cas terrain" (+30% impressions). Le ton direct + thematique facturation = combo gagnant. Recommandations : capitaliser sur les posts "erreurs systeme", tester un carrousel sur ce sujet pour amplifier les partages.</p>
               </div>
               <div class="absolute -top-3 -right-3 bg-neo-purple text-white border-2 border-neo-dark shadow-neo px-3 py-1 font-mono text-xs font-bold -rotate-3">
                 ~500 caracteres
               </div>
             </div>
+            <div class="mt-4 bg-purple-50 border-2 border-neo-purple/30 p-4 text-sm text-gray-600">
+              C'est ton community manager IA qui te dit ce qui a marche, pourquoi, et quoi faire ensuite. Directement dans une colonne de ton tableau Notion.
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========== SECTION 5: DASHBOARD PREVIEW ========== -->
-  <section id="dashboard" class="py-20 sm:py-28 bg-neo-dark text-white relative noise overflow-hidden">
+  <!-- ========== LE CYCLE COMPLET ========== -->
+  <section id="cycle" class="py-20 sm:py-28 bg-neo-dark text-white relative noise overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
       <div class="text-center mb-14 sm:mb-20 reveal">
-        <div class="inline-flex items-center gap-2 px-4 py-2 bg-neo-yellow/20 border-2 border-neo-yellow text-neo-yellow text-xs font-mono font-bold mb-6">
-          DASHBOARD
-        </div>
-        <h2 class="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-6">
-          Tout est dans Notion
-        </h2>
-        <p class="text-lg text-gray-400 max-w-2xl mx-auto">Pas de nouvel outil a apprendre. Ton tableau Notion devient ton cockpit LinkedIn.</p>
-      </div>
-
-      <!-- Stats Cards -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-10 stagger">
-        <div class="reveal bg-white/5 border-2 border-white/20 p-5 sm:p-6 hover:border-neo-blue transition-all group">
-          <div class="text-sm text-gray-400 mb-2">Posts ce mois</div>
-          <div class="font-display font-bold text-3xl sm:text-4xl counter" data-target="24">0</div>
-          <div class="text-xs text-neo-green font-mono mt-2">&#9650; 60% vs mois dernier</div>
-        </div>
-        <div class="reveal bg-white/5 border-2 border-white/20 p-5 sm:p-6 hover:border-neo-yellow transition-all group">
-          <div class="text-sm text-gray-400 mb-2">Impressions totales</div>
-          <div class="font-display font-bold text-3xl sm:text-4xl counter" data-target="14200">0</div>
-          <div class="text-xs text-neo-green font-mono mt-2">&#9650; 120% vs mois dernier</div>
-        </div>
-        <div class="reveal bg-white/5 border-2 border-white/20 p-5 sm:p-6 hover:border-neo-green transition-all group">
-          <div class="text-sm text-gray-400 mb-2">Taux d'engagement</div>
-          <div class="font-display font-bold text-3xl sm:text-4xl"><span class="counter" data-target="4">0</span><span class="text-lg">.7%</span></div>
-          <div class="text-xs text-neo-green font-mono mt-2">&#9650; Top 5% LinkedIn</div>
-        </div>
-        <div class="reveal bg-white/5 border-2 border-white/20 p-5 sm:p-6 hover:border-neo-purple transition-all group">
-          <div class="text-sm text-gray-400 mb-2">Temps economise</div>
-          <div class="font-display font-bold text-3xl sm:text-4xl"><span class="counter" data-target="22">0</span><span class="text-lg">h</span></div>
-          <div class="text-xs text-neo-yellow font-mono mt-2">ce mois-ci</div>
-        </div>
-      </div>
-
-      <!-- Mock Notion Table -->
-      <div class="reveal">
-        <div class="bg-white text-neo-dark border-2 border-white shadow-neo-xl overflow-hidden">
-          <div class="flex items-center gap-2 px-4 sm:px-6 py-3 bg-gray-50 border-b-2 border-gray-200">
-            <div class="w-5 h-5 bg-neo-blue rounded flex items-center justify-center text-white text-xs">&#9776;</div>
-            <span class="font-mono text-sm font-bold">Base LinkedIn — PostPilot</span>
-          </div>
-          <div class="overflow-x-auto">
-            <table class="w-full text-sm min-w-[900px]">
-              <thead>
-                <tr class="bg-gray-50 text-left text-xs font-mono text-gray-500 border-b border-gray-200">
-                  <th class="px-4 py-3">Titre</th>
-                  <th class="px-4 py-3">Statut</th>
-                  <th class="px-4 py-3">Date</th>
-                  <th class="px-4 py-3">Likes</th>
-                  <th class="px-4 py-3">Com.</th>
-                  <th class="px-4 py-3">Impr.</th>
-                  <th class="px-4 py-3">Support</th>
-                  <th class="px-4 py-3">Analyse</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="border-b border-gray-100 hover:bg-blue-50/50 transition-colors cursor-pointer group">
-                  <td class="px-4 py-3 font-medium">Les 3 erreurs de facturation</td>
-                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-bold border border-green-300">Publie</span></td>
-                  <td class="px-4 py-3 text-gray-500 font-mono text-xs">10 fev</td>
-                  <td class="px-4 py-3 font-bold">52</td>
-                  <td class="px-4 py-3 font-bold">14</td>
-                  <td class="px-4 py-3 font-bold">1850</td>
-                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs border border-blue-300">Texte</span></td>
-                  <td class="px-4 py-3 text-xs text-gray-500 max-w-[150px] truncate group-hover:text-neo-purple transition-colors">+45% likes vs moy...</td>
-                </tr>
-                <tr class="border-b border-gray-100 hover:bg-blue-50/50 transition-colors cursor-pointer group">
-                  <td class="px-4 py-3 font-medium">Automatiser 80% de son business</td>
-                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-bold border border-green-300">Publie</span></td>
-                  <td class="px-4 py-3 text-gray-500 font-mono text-xs">8 fev</td>
-                  <td class="px-4 py-3 font-bold">36</td>
-                  <td class="px-4 py-3 font-bold">8</td>
-                  <td class="px-4 py-3 font-bold">1240</td>
-                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs border border-purple-300">Carrousel</span></td>
-                  <td class="px-4 py-3 text-xs text-gray-500 max-w-[150px] truncate group-hover:text-neo-purple transition-colors">Engagement stable...</td>
-                </tr>
-                <tr class="border-b border-gray-100 hover:bg-blue-50/50 transition-colors cursor-pointer group">
-                  <td class="px-4 py-3 font-medium">Le secret des dirigeants qui scalent</td>
-                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-bold border border-blue-300">Programme</span></td>
-                  <td class="px-4 py-3 text-gray-500 font-mono text-xs">14 fev</td>
-                  <td class="px-4 py-3 text-gray-300">—</td>
-                  <td class="px-4 py-3 text-gray-300">—</td>
-                  <td class="px-4 py-3 text-gray-300">—</td>
-                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs border border-orange-300">Video</span></td>
-                  <td class="px-4 py-3 text-gray-300">—</td>
-                </tr>
-                <tr class="hover:bg-blue-50/50 transition-colors cursor-pointer group">
-                  <td class="px-4 py-3 font-medium">Perdre des clients en etant trop lent</td>
-                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-bold border border-yellow-300">A valider</span></td>
-                  <td class="px-4 py-3 text-gray-500 font-mono text-xs">17 fev</td>
-                  <td class="px-4 py-3 text-gray-300">—</td>
-                  <td class="px-4 py-3 text-gray-300">—</td>
-                  <td class="px-4 py-3 text-gray-300">—</td>
-                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs border border-blue-300">Texte</span></td>
-                  <td class="px-4 py-3 text-gray-300">—</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== SECTION 6: COMPLETE CYCLE (PIPELINE) ========== -->
-  <section id="cycle" class="py-20 sm:py-28 relative grid-bg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-14 sm:mb-20 reveal">
-        <div class="inline-flex items-center gap-2 px-4 py-2 bg-neo-dark border-2 border-neo-dark text-white text-xs font-mono font-bold mb-6">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border-2 border-white/30 text-white text-xs font-mono font-bold mb-6">
           PIPELINE COMPLET
         </div>
         <h2 class="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-6">
           Le cycle complet d'un post
         </h2>
-        <p class="text-lg text-gray-500 max-w-2xl mx-auto">De l'idee au rapport d'analyse, chaque etape est automatisee. Tu gardes le controle, le systeme fait le travail.</p>
+        <p class="text-lg text-gray-400 max-w-xl mx-auto">Tu interviens uniquement a l'etape "valider". Tout le reste est automatique.</p>
       </div>
 
-      <!-- Pipeline Steps -->
       <div class="max-w-3xl mx-auto space-y-0">
-        <!-- Step 1 -->
         <div class="reveal flex items-stretch gap-4 sm:gap-6">
           <div class="flex flex-col items-center">
-            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-yellow border-2 border-neo-dark shadow-neo flex items-center justify-center font-display font-bold text-lg shrink-0">1</div>
-            <div class="w-0.5 flex-1 bg-neo-dark mt-2"></div>
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-yellow border-2 border-white shadow-neo flex items-center justify-center font-display font-bold text-lg text-neo-dark shrink-0">1</div>
+            <div class="w-0.5 flex-1 bg-white/30 mt-2"></div>
           </div>
-          <div class="bg-white border-2 border-neo-dark shadow-neo p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
+          <div class="bg-white/5 border-2 border-white/20 p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
             <div class="flex items-center justify-between mb-2">
-              <h4 class="font-display font-bold text-lg">Tu ecris une idee</h4>
-              <span class="font-mono text-xs bg-neo-yellow/20 text-neo-dark px-2 py-0.5 border border-neo-yellow">"A generer"</span>
+              <h4 class="font-display font-bold text-lg">Tu ecris une idee dans Notion</h4>
+              <span class="font-mono text-xs bg-neo-yellow/20 text-neo-yellow px-2 py-0.5 border border-neo-yellow/40">"A generer"</span>
             </div>
-            <p class="text-gray-500 text-sm">Une ligne dans Notion. Titre, ton, cible. 10 secondes. C'est ton seul effort.</p>
           </div>
         </div>
-        <!-- Step 2 -->
         <div class="reveal flex items-stretch gap-4 sm:gap-6">
           <div class="flex flex-col items-center">
-            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-blue border-2 border-neo-dark shadow-neo flex items-center justify-center font-display font-bold text-lg text-white shrink-0">2</div>
-            <div class="w-0.5 flex-1 bg-neo-dark mt-2"></div>
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-blue border-2 border-white shadow-neo flex items-center justify-center font-display font-bold text-lg text-white shrink-0">2</div>
+            <div class="w-0.5 flex-1 bg-white/30 mt-2"></div>
           </div>
-          <div class="bg-white border-2 border-neo-dark shadow-neo p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
+          <div class="bg-white/5 border-2 border-white/20 p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
             <div class="flex items-center justify-between mb-2">
               <h4 class="font-display font-bold text-lg">Workflow 1 genere le post + image</h4>
-              <span class="font-mono text-xs bg-neo-blue/10 text-neo-blue px-2 py-0.5 border border-neo-blue">"A valider"</span>
+              <span class="font-mono text-xs bg-neo-blue/20 text-neo-blue px-2 py-0.5 border border-neo-blue/40">"A valider"</span>
             </div>
-            <p class="text-gray-500 text-sm">Claude ecrit comme toi, Nano Banana cree l'image. 47 secondes, tout est dans ta page Notion.</p>
           </div>
         </div>
-        <!-- Step 3 -->
         <div class="reveal flex items-stretch gap-4 sm:gap-6">
           <div class="flex flex-col items-center">
-            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white border-2 border-neo-dark shadow-neo flex items-center justify-center font-display font-bold text-lg shrink-0">3</div>
-            <div class="w-0.5 flex-1 bg-neo-dark mt-2"></div>
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white border-2 border-white shadow-neo flex items-center justify-center font-display font-bold text-lg text-neo-dark shrink-0">3</div>
+            <div class="w-0.5 flex-1 bg-white/30 mt-2"></div>
           </div>
-          <div class="bg-white border-2 border-neo-dark shadow-neo p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
+          <div class="bg-white/5 border-2 border-white/20 p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
             <div class="flex items-center justify-between mb-2">
               <h4 class="font-display font-bold text-lg">Tu valides / modifies</h4>
-              <span class="font-mono text-xs bg-green-100 text-green-700 px-2 py-0.5 border border-green-300">"Programme"</span>
+              <span class="font-mono text-xs bg-neo-green/20 text-neo-green px-2 py-0.5 border border-neo-green/40">"Programme"</span>
             </div>
-            <p class="text-gray-500 text-sm">Tu ouvres Notion, tu lis, tu ajustes si besoin, et tu choisis la date de publication. C'est toi le boss.</p>
           </div>
         </div>
-        <!-- Step 4 -->
         <div class="reveal flex items-stretch gap-4 sm:gap-6">
           <div class="flex flex-col items-center">
-            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-green border-2 border-neo-dark shadow-neo flex items-center justify-center font-display font-bold text-lg text-white shrink-0">4</div>
-            <div class="w-0.5 flex-1 bg-neo-dark mt-2"></div>
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-green border-2 border-white shadow-neo flex items-center justify-center font-display font-bold text-lg text-white shrink-0">4</div>
+            <div class="w-0.5 flex-1 bg-white/30 mt-2"></div>
           </div>
-          <div class="bg-white border-2 border-neo-dark shadow-neo p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
+          <div class="bg-white/5 border-2 border-white/20 p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
             <div class="flex items-center justify-between mb-2">
               <h4 class="font-display font-bold text-lg">Workflow 2A publie a 9h</h4>
-              <span class="font-mono text-xs bg-green-100 text-green-700 px-2 py-0.5 border border-green-300">"Publie"</span>
+              <span class="font-mono text-xs bg-neo-green/20 text-neo-green px-2 py-0.5 border border-neo-green/40">"Publie"</span>
             </div>
-            <p class="text-gray-500 text-sm">Le jour J a 9h, le post part sur LinkedIn. Le statut passe a "Publie", l'URL est enregistree.</p>
           </div>
         </div>
-        <!-- Step 5 -->
         <div class="reveal flex items-stretch gap-4 sm:gap-6">
           <div class="flex flex-col items-center">
-            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-orange border-2 border-neo-dark shadow-neo flex items-center justify-center font-display font-bold text-lg text-white shrink-0">5</div>
-            <div class="w-0.5 flex-1 bg-neo-dark mt-2"></div>
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-orange border-2 border-white shadow-neo flex items-center justify-center font-display font-bold text-lg text-white shrink-0">5</div>
+            <div class="w-0.5 flex-1 bg-white/30 mt-2"></div>
           </div>
-          <div class="bg-white border-2 border-neo-dark shadow-neo p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
+          <div class="bg-white/5 border-2 border-white/20 p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
             <div class="flex items-center justify-between mb-2">
               <h4 class="font-display font-bold text-lg">Workflow 2B suit les stats pendant 7j</h4>
-              <span class="font-mono text-xs bg-orange-100 text-orange-700 px-2 py-0.5 border border-orange-300">TRACKING</span>
+              <span class="font-mono text-xs bg-neo-orange/20 text-neo-orange px-2 py-0.5 border border-neo-orange/40">colonnes + snapshots</span>
             </div>
-            <p class="text-gray-500 text-sm">Toutes les 4h, Apify scrape tes stats LinkedIn. Colonnes mises a jour + snapshots horodates en bas de page.</p>
           </div>
         </div>
-        <!-- Step 6 -->
         <div class="reveal flex items-stretch gap-4 sm:gap-6">
           <div class="flex flex-col items-center">
-            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-purple border-2 border-neo-dark shadow-neo flex items-center justify-center font-display font-bold text-lg text-white shrink-0">6</div>
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-purple border-2 border-white shadow-neo flex items-center justify-center font-display font-bold text-lg text-white shrink-0">6</div>
           </div>
-          <div class="bg-white border-2 border-neo-dark shadow-neo p-5 sm:p-6 flex-1 hover:translate-x-1 transition-transform glow-blue">
+          <div class="bg-white/5 border-2 border-neo-purple p-5 sm:p-6 flex-1 hover:translate-x-1 transition-transform glow-blue">
             <div class="flex items-center justify-between mb-2">
               <h4 class="font-display font-bold text-lg">Workflow 2C analyse avec Claude a J+7</h4>
-              <span class="font-mono text-xs bg-purple-100 text-purple-700 px-2 py-0.5 border border-purple-300">ANALYSE IA</span>
+              <span class="font-mono text-xs bg-neo-purple/20 text-neo-purple px-2 py-0.5 border border-neo-purple/40">colonne "Analyse statistique post"</span>
             </div>
-            <p class="text-gray-500 text-sm">Claude compare tes stats a ta moyenne, identifie ce qui a marche, et te donne des recommandations actionables.</p>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========== SECTION 7: TECH STACK + FEATURES ========== -->
-  <section id="features" class="py-20 sm:py-28 bg-white relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-14 sm:mb-20 reveal">
-        <div class="inline-flex items-center gap-2 px-4 py-2 bg-neo-dark border-2 border-neo-dark text-white text-xs font-mono font-bold mb-6">
-          SOUS LE CAPOT
-        </div>
-        <h2 class="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-6">
-          Construit avec les meilleurs outils
-        </h2>
-        <p class="text-lg text-gray-500 max-w-2xl mx-auto">Chaque brique est choisie pour sa fiabilite. Pas de gadget, que de l'infrastructure solide.</p>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 stagger">
-        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
-          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-purple transition-colors">Claude AI</div>
-          <div class="text-xs font-mono text-gray-400 mb-3">GENERATION + ANALYSE</div>
-          <p class="text-sm text-gray-500">Redaction dans ton style, choix du support, analyse statistique avec recommandations.</p>
-        </div>
-        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
-          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-blue transition-colors">Notion API</div>
-          <div class="text-xs font-mono text-gray-400 mb-3">DATABASE + INTERFACE</div>
-          <p class="text-sm text-gray-500">Ton cockpit. Lecture, ecriture, statuts, snapshots. Tout passe par Notion.</p>
-        </div>
-        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
-          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-green transition-colors">Nano Banana</div>
-          <div class="text-xs font-mono text-gray-400 mb-3">IMAGE GENERATION</div>
-          <p class="text-sm text-gray-500">Modele Google. Images pro, minimalistes, tons bleu/blanc, sans texte. Upload ImgBB.</p>
-        </div>
-        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
-          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-orange transition-colors">Apify</div>
-          <div class="text-xs font-mono text-gray-400 mb-3">SCRAPING LINKEDIN</div>
-          <p class="text-sm text-gray-500">Scrape ton profil toutes les 4h pour recuperer likes, commentaires, partages, impressions.</p>
-        </div>
-        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
-          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-red transition-colors">LinkedIn API</div>
-          <div class="text-xs font-mono text-gray-400 mb-3">PUBLICATION</div>
-          <p class="text-sm text-gray-500">Publication directe via OAuth. Texte + image, chaque matin a 9h, sans intervention.</p>
-        </div>
-        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
-          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-yellow transition-colors">ImgBB</div>
-          <div class="text-xs font-mono text-gray-400 mb-3">HOSTING IMAGE</div>
-          <p class="text-sm text-gray-500">Upload automatique, URL permanente. Les images restent accessibles dans Notion et LinkedIn.</p>
-        </div>
-        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
-          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-blue transition-colors">n8n / Make</div>
-          <div class="text-xs font-mono text-gray-400 mb-3">ORCHESTRATION</div>
-          <p class="text-sm text-gray-500">Les workflows tournent en boucle, se declenchent sur cron, et gerent toute la logique de routage.</p>
-        </div>
-        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
-          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-purple transition-colors">Scalether</div>
-          <div class="text-xs font-mono text-gray-400 mb-3">GUIDELINES + STYLE</div>
-          <p class="text-sm text-gray-500">Tes guidelines de marque injectees dans chaque prompt. Transformation, execution, rentabilite.</p>
         </div>
       </div>
     </div>
@@ -906,12 +584,7 @@
           <span class="font-display font-bold text-lg">PostPilot</span>
           <span class="text-gray-500 text-sm ml-2 font-mono">by Scalether</span>
         </div>
-        <div class="flex items-center gap-6 text-sm text-gray-400">
-          <a href="#" class="hover:text-white transition-colors">Contact</a>
-          <a href="#" class="hover:text-white transition-colors">LinkedIn</a>
-          <a href="#" class="hover:text-white transition-colors">Notion Template</a>
-        </div>
-        <div class="text-sm text-gray-500 font-mono" id="footer-secret" title="Try the Konami code...">
+        <div class="text-sm text-gray-500 font-mono" id="footer-secret">
           &copy; 2026 PostPilot
         </div>
       </div>
@@ -920,107 +593,43 @@
 
   <!-- ========== JAVASCRIPT ========== -->
   <script>
-    // ===== Intersection Observer for Scroll Reveals =====
-    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    // Scroll Reveals
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          // Trigger counter animation
-          if (entry.target.classList.contains('counter-parent')) {
-            animateCounters(entry.target);
-          }
-        }
+        if (entry.isIntersecting) entry.target.classList.add('active');
       });
-    }, observerOptions);
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
 
-    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
-      observer.observe(el);
-    });
-
-    // ===== Counter Animation =====
-    function animateCounters(parent) {
-      const counters = (parent || document).querySelectorAll('.counter:not(.counted)');
-      counters.forEach(counter => {
-        counter.classList.add('counted');
-        const target = parseInt(counter.dataset.target);
-        const duration = 2000;
-        const start = performance.now();
-        function update(now) {
-          const elapsed = now - start;
-          const progress = Math.min(elapsed / duration, 1);
-          const eased = 1 - Math.pow(1 - progress, 3);
-          counter.textContent = Math.floor(eased * target).toLocaleString();
-          if (progress < 1) requestAnimationFrame(update);
-          else counter.textContent = target.toLocaleString();
-        }
-        requestAnimationFrame(update);
-      });
-    }
-
-    // Observe counter parents
-    document.querySelectorAll('.counter').forEach(c => {
-      const parent = c.closest('.reveal, .reveal-left, .reveal-right, .reveal-scale');
-      if (parent) parent.classList.add('counter-parent');
-    });
-
-    // Also trigger counters that are already visible
-    setTimeout(() => animateCounters(document), 500);
-
-    // ===== Typewriter Effect =====
-    const typewriterText = '> "Tu factures. Mais tu ne sais pas combien tu perds chaque mois."';
-    const typeTarget = document.getElementById('typewriter-target');
-    let charIndex = 0;
-    function typewrite() {
-      if (charIndex < typewriterText.length) {
-        typeTarget.textContent = typewriterText.substring(0, charIndex + 1);
-        charIndex++;
-        setTimeout(typewrite, 40 + Math.random() * 30);
-      } else {
-        typeTarget.classList.add('cursor-blink');
-      }
-    }
-    setTimeout(typewrite, 1500);
-
-    // ===== Navbar Scroll Behavior =====
+    // Navbar scroll
     const navbar = document.getElementById('navbar');
-    let lastScroll = 0;
     window.addEventListener('scroll', () => {
-      const currentScroll = window.pageYOffset;
-      if (currentScroll > 100) {
-        navbar.classList.add('border-b-2', 'border-neo-dark');
-      } else {
-        navbar.classList.remove('border-b-2', 'border-neo-dark');
-      }
-      lastScroll = currentScroll;
+      if (window.pageYOffset > 100) navbar.classList.add('border-b-2', 'border-neo-dark');
+      else navbar.classList.remove('border-b-2', 'border-neo-dark');
     }, { passive: true });
 
-    // ===== Mobile Menu =====
-    const menuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    menuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
+    // Mobile menu
+    document.getElementById('mobile-menu-btn').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('hidden');
     });
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    document.querySelectorAll('#mobile-menu a').forEach(link => {
+      link.addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
     });
 
-    // ===== Logo Easter Egg =====
+    // Logo easter egg
     const logo = document.getElementById('logo');
     let logoClicks = 0;
     logo.addEventListener('click', (e) => {
       e.preventDefault();
       logoClicks++;
-      if (logoClicks === 7) {
-        launchConfetti();
-        logoClicks = 0;
-      } else if (logoClicks >= 4) {
+      if (logoClicks === 7) { launchConfetti(); logoClicks = 0; }
+      else if (logoClicks >= 4) {
         logo.querySelector('span').style.transition = 'transform 0.3s';
         logo.querySelector('span').style.transform = `rotate(${logoClicks * 30}deg)`;
       }
     });
 
-    // ===== Konami Code Easter Egg =====
+    // Konami code
     const konamiCode = [38,38,40,40,37,39,37,39,66,65];
     let konamiIndex = 0;
     document.addEventListener('keydown', (e) => {
@@ -1028,29 +637,18 @@
         konamiIndex++;
         if (konamiIndex === konamiCode.length) {
           konamiIndex = 0;
-          activateRainbowMode();
+          document.body.style.transition = 'filter 0.5s';
+          let hue = 0;
+          const interval = setInterval(() => {
+            hue += 5;
+            document.body.style.filter = `hue-rotate(${hue}deg)`;
+            if (hue >= 360) { clearInterval(interval); document.body.style.filter = 'none'; launchConfetti(); }
+          }, 30);
         }
-      } else {
-        konamiIndex = 0;
-      }
+      } else konamiIndex = 0;
     });
 
-    function activateRainbowMode() {
-      document.body.style.transition = 'filter 0.5s';
-      document.body.style.filter = 'hue-rotate(0deg)';
-      let hue = 0;
-      const interval = setInterval(() => {
-        hue += 5;
-        document.body.style.filter = `hue-rotate(${hue}deg)`;
-        if (hue >= 360) {
-          clearInterval(interval);
-          document.body.style.filter = 'none';
-          launchConfetti();
-        }
-      }, 30);
-    }
-
-    // ===== Confetti =====
+    // Confetti
     function launchConfetti() {
       const colors = ['#3B82F6', '#FBBF24', '#EF4444', '#10B981', '#8B5CF6', '#F97316'];
       for (let i = 0; i < 60; i++) {
@@ -1060,14 +658,13 @@
         piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
         piece.style.animationDelay = Math.random() * 2 + 's';
         piece.style.animationDuration = (2 + Math.random() * 2) + 's';
-        piece.style.transform = `rotate(${Math.random() * 360}deg)`;
         if (Math.random() > 0.5) piece.style.borderRadius = '50%';
         document.body.appendChild(piece);
         setTimeout(() => piece.remove(), 5000);
       }
     }
 
-    // ===== Magnetic Button Effect =====
+    // Magnetic buttons
     document.querySelectorAll('.neo-btn').forEach(btn => {
       btn.addEventListener('mousemove', (e) => {
         const rect = btn.getBoundingClientRect();
@@ -1075,85 +672,48 @@
         const y = e.clientY - rect.top - rect.height / 2;
         btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
       });
-      btn.addEventListener('mouseleave', () => {
-        btn.style.transform = 'translate(0, 0)';
-      });
+      btn.addEventListener('mouseleave', () => { btn.style.transform = 'translate(0, 0)'; });
     });
 
-    // ===== Cursor Trail (Subtle particles on hero) =====
-    const hero = document.getElementById('hero');
-    let trailThrottle = 0;
-    hero.addEventListener('mousemove', (e) => {
-      if (trailThrottle++ % 4 !== 0) return;
+    // Hero cursor trail
+    document.getElementById('hero').addEventListener('mousemove', (e) => {
+      if (Math.random() > 0.25) return;
       const dot = document.createElement('div');
       dot.style.cssText = `position:fixed;width:6px;height:6px;background:#3B82F6;border-radius:50%;pointer-events:none;z-index:40;left:${e.clientX}px;top:${e.clientY}px;opacity:0.6;transition:all 0.8s ease;`;
       document.body.appendChild(dot);
-      requestAnimationFrame(() => {
-        dot.style.opacity = '0';
-        dot.style.transform = `translate(${(Math.random()-0.5)*40}px, ${(Math.random()-0.5)*40}px) scale(0)`;
-      });
+      requestAnimationFrame(() => { dot.style.opacity = '0'; dot.style.transform = `translate(${(Math.random()-0.5)*40}px, ${(Math.random()-0.5)*40}px) scale(0)`; });
       setTimeout(() => dot.remove(), 900);
     });
 
-    // ===== Analysis box hover reveal =====
+    // Analysis box hover
     const analysisBox = document.getElementById('analysis-box');
     if (analysisBox) {
-      analysisBox.addEventListener('mouseenter', () => {
-        analysisBox.style.transition = 'transform 0.3s, box-shadow 0.3s';
-        analysisBox.style.transform = 'scale(1.02)';
-        analysisBox.style.boxShadow = '0 0 30px rgba(139,92,246,0.2)';
-      });
-      analysisBox.addEventListener('mouseleave', () => {
-        analysisBox.style.transform = 'scale(1)';
-        analysisBox.style.boxShadow = 'none';
-      });
+      analysisBox.addEventListener('mouseenter', () => { analysisBox.style.transition = 'transform 0.3s, box-shadow 0.3s'; analysisBox.style.transform = 'scale(1.02)'; analysisBox.style.boxShadow = '0 0 30px rgba(139,92,246,0.2)'; });
+      analysisBox.addEventListener('mouseleave', () => { analysisBox.style.transform = 'scale(1)'; analysisBox.style.boxShadow = 'none'; });
     }
 
-    // ===== Smooth Scroll =====
+    // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(link => {
       link.addEventListener('click', (e) => {
         const href = link.getAttribute('href');
         if (href === '#') return;
         e.preventDefault();
-        const target = document.querySelector(href);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
 
-    // ===== Footer Secret Double-Click =====
-    const footerSecret = document.getElementById('footer-secret');
-    footerSecret.addEventListener('dblclick', () => {
-      footerSecret.innerHTML = '&#10084; Fait avec du cafe et de l\'automatisation';
-      footerSecret.style.color = '#FBBF24';
-      setTimeout(() => {
-        footerSecret.innerHTML = '&copy; 2026 PostPilot';
-        footerSecret.style.color = '';
-      }, 3000);
+    // Footer double-click
+    document.getElementById('footer-secret').addEventListener('dblclick', function() {
+      this.innerHTML = '&#10084; Fait avec du cafe et de l\'automatisation';
+      this.style.color = '#FBBF24';
+      setTimeout(() => { this.innerHTML = '&copy; 2026 PostPilot'; this.style.color = ''; }, 3000);
     });
 
-    // ===== Stats table row hover sound-like effect =====
-    document.querySelectorAll('#stats-table tr').forEach((row, i) => {
-      row.addEventListener('mouseenter', () => {
-        row.style.transition = 'all 0.2s';
-        row.style.backgroundColor = 'rgba(59,130,246,0.05)';
-        row.style.transform = 'translateX(4px)';
-      });
-      row.addEventListener('mouseleave', () => {
-        row.style.backgroundColor = '';
-        row.style.transform = '';
-      });
-    });
-
-    // ===== Active nav link highlight =====
+    // Active nav
     const sections = document.querySelectorAll('section[id]');
     window.addEventListener('scroll', () => {
       let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop - 100;
-        if (pageYOffset >= sectionTop) current = section.getAttribute('id');
-      });
+      sections.forEach(s => { if (pageYOffset >= s.offsetTop - 100) current = s.getAttribute('id'); });
       document.querySelectorAll('.nav-link').forEach(link => {
         link.classList.remove('bg-neo-dark', 'text-white', 'border-neo-dark');
         link.classList.add('border-transparent');
