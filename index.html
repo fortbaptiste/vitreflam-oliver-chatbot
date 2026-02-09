@@ -1,608 +1,1203 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="fr" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VITREFLAM - Oliver | Assistant SAV</title>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --red: #E63946;
-            --yellow: #FFE66D;
-            --black: #1a1a1a;
-            --white: #FFFEF9;
-            --gray: #f5f5f5;
-            --shadow: 4px 4px 0px var(--black);
-            --shadow-lg: 8px 8px 0px var(--black);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PostPilot — Ta machine LinkedIn</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#F5F0E8',
+            neo: { blue: '#3B82F6', yellow: '#FBBF24', red: '#EF4444', green: '#10B981', dark: '#1a1a1a', purple: '#8B5CF6', orange: '#F97316' }
+          },
+          boxShadow: {
+            'neo': '4px 4px 0px #1a1a1a',
+            'neo-lg': '6px 6px 0px #1a1a1a',
+            'neo-xl': '8px 8px 0px #1a1a1a',
+            'neo-hover': '2px 2px 0px #1a1a1a',
+            'neo-blue': '4px 4px 0px #3B82F6',
+            'neo-yellow': '4px 4px 0px #FBBF24',
+          },
+          fontFamily: {
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+            body: ['Inter', 'sans-serif'],
+          }
         }
+      }
+    }
+  </script>
+  <style>
+    * { font-family: 'Inter', sans-serif; }
+    h1,h2,h3,h4,h5,h6,.font-display { font-family: 'Space Grotesky', 'Space Grotesk', sans-serif; }
+    .font-mono, code, pre { font-family: 'JetBrains Mono', monospace; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    /* Scroll animations */
+    .reveal { opacity: 0; transform: translateY(40px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-60px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-left.active { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(60px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-right.active { opacity: 1; transform: translateX(0); }
+    .reveal-scale { opacity: 0; transform: scale(0.85); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .reveal-scale.active { opacity: 1; transform: scale(1); }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--white);
-            color: var(--black);
-            line-height: 1.6;
-        }
+    /* Neo button press */
+    .neo-btn { transition: all 0.1s ease; }
+    .neo-btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0px #1a1a1a !important; }
 
-        header {
-            background: var(--red);
-            border-bottom: 4px solid var(--black);
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    /* Floating animation */
+    @keyframes float { 0%,100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-12px) rotate(2deg); } }
+    @keyframes float-reverse { 0%,100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-10px) rotate(-2deg); } }
+    .float { animation: float 4s ease-in-out infinite; }
+    .float-reverse { animation: float-reverse 5s ease-in-out infinite; }
+    .float-slow { animation: float 7s ease-in-out infinite; }
 
-        .logo {
-            font-family: 'Space Mono', monospace;
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--white);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+    /* Pulse ring */
+    @keyframes pulse-ring { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(1.5); opacity: 0; } }
+    .pulse-ring::after { content:''; position:absolute; inset:-4px; border:2px solid #3B82F6; border-radius:inherit; animation: pulse-ring 2s ease-out infinite; }
 
-        .badge {
-            background: var(--yellow);
-            color: var(--black);
-            padding: 8px 16px;
-            font-weight: 700;
-            border: 3px solid var(--black);
-            box-shadow: var(--shadow);
-            font-size: 14px;
-        }
+    /* Typewriter */
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+    .cursor-blink::after { content:'|'; animation: blink 0.8s infinite; color: #3B82F6; }
 
-        .hero {
-            background: var(--yellow);
-            border-bottom: 4px solid var(--black);
-            padding: 60px 40px;
-        }
+    /* Ticker tape */
+    @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    .ticker { animation: ticker 30s linear infinite; }
+    .ticker:hover { animation-play-state: paused; }
 
-        .hero h1 {
-            font-size: 48px;
-            font-weight: 900;
-            margin-bottom: 20px;
-        }
+    /* Glow */
+    .glow-blue { box-shadow: 0 0 20px rgba(59,130,246,0.3), 4px 4px 0px #1a1a1a; }
 
-        .hero h1 span {
-            background: var(--red);
-            color: var(--white);
-            padding: 0 15px;
-            display: inline-block;
-            border: 4px solid var(--black);
-            box-shadow: var(--shadow);
-        }
+    /* Grid pattern */
+    .grid-bg { background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px); background-size: 24px 24px; }
 
-        .hero p {
-            font-size: 20px;
-            max-width: 800px;
-        }
+    /* Diagonal stripes */
+    .stripes { background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(0,0,0,0.03) 10px, rgba(0,0,0,0.03) 20px); }
 
-        .intro-box {
-            background: var(--white);
-            border: 4px solid var(--black);
-            padding: 20px 25px;
-            margin-top: 25px;
-            box-shadow: var(--shadow);
-            max-width: 800px;
-        }
+    /* Stagger children */
+    .stagger > *:nth-child(1) { transition-delay: 0.05s; }
+    .stagger > *:nth-child(2) { transition-delay: 0.12s; }
+    .stagger > *:nth-child(3) { transition-delay: 0.19s; }
+    .stagger > *:nth-child(4) { transition-delay: 0.26s; }
+    .stagger > *:nth-child(5) { transition-delay: 0.33s; }
+    .stagger > *:nth-child(6) { transition-delay: 0.40s; }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 60px 40px;
-        }
+    /* Magnetic hover */
+    .magnetic { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
 
-        section {
-            margin-bottom: 60px;
-        }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #F5F0E8; }
+    ::-webkit-scrollbar-thumb { background: #1a1a1a; border: 2px solid #F5F0E8; }
 
-        .section-title {
-            font-family: 'Space Mono', monospace;
-            font-size: 28px;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 25px;
-            background: var(--black);
-            color: var(--white);
-            padding: 12px 20px;
-            display: inline-block;
-            border: 4px solid var(--black);
-            box-shadow: var(--shadow);
-        }
+    /* Counter animation */
+    @keyframes countUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .cards-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
+    /* Confetti */
+    @keyframes confetti-fall { 0% { transform: translateY(-100vh) rotate(0deg); opacity:1; } 100% { transform: translateY(100vh) rotate(720deg); opacity:0; } }
+    .confetti-piece { position:fixed; width:10px; height:10px; top:-10px; z-index:9999; animation: confetti-fall 3s ease-in forwards; pointer-events:none; }
 
-        .card {
-            background: var(--white);
-            border: 4px solid var(--black);
-            box-shadow: var(--shadow-lg);
-            padding: 25px;
-        }
+    /* Marquee highlight */
+    .highlight-box { position:relative; }
+    .highlight-box::before { content:''; position:absolute; bottom:2px; left:0; width:100%; height:35%; background:#FBBF24; z-index:-1; transform: rotate(-1deg); }
 
-        .card h3 {
-            font-family: 'Space Mono', monospace;
-            font-size: 18px;
-            text-transform: uppercase;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 3px solid var(--yellow);
-        }
+    /* Step connector line */
+    .step-line { position: relative; }
+    .step-line::after { content:''; position:absolute; left:50%; top:100%; width:3px; height:40px; background: repeating-linear-gradient(to bottom, #1a1a1a 0, #1a1a1a 6px, transparent 6px, transparent 12px); }
 
-        .card p {
-            font-size: 15px;
-            color: #444;
-        }
+    /* Noise texture overlay */
+    .noise::before { content:''; position:absolute; inset:0; opacity:0.03; pointer-events:none; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
 
-        .card.highlight {
-            background: var(--yellow);
-        }
-
-        .card.red {
-            background: var(--red);
-            color: var(--white);
-        }
-
-        .card.red h3 {
-            border-bottom-color: var(--white);
-        }
-
-        .card.red p {
-            color: var(--white);
-        }
-
-        .features-list {
-            list-style: none;
-        }
-
-        .features-list li {
-            padding: 15px 20px;
-            border: 3px solid var(--black);
-            margin-bottom: 15px;
-            background: var(--white);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: var(--shadow);
-        }
-
-        .features-list li::before {
-            content: ">";
-            font-family: 'Space Mono', monospace;
-            font-size: 24px;
-            color: var(--red);
-            font-weight: 700;
-        }
-
-        .brutal-table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 4px solid var(--black);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .brutal-table th {
-            background: var(--black);
-            color: var(--white);
-            padding: 15px 20px;
-            text-align: left;
-            font-family: 'Space Mono', monospace;
-            text-transform: uppercase;
-            font-size: 14px;
-        }
-
-        .brutal-table td {
-            padding: 15px 20px;
-            border: 2px solid var(--black);
-            background: var(--white);
-        }
-
-        .brutal-table tr:nth-child(even) td {
-            background: var(--gray);
-        }
-
-        .flow {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0;
-        }
-
-        .flow-step {
-            background: var(--white);
-            border: 4px solid var(--black);
-            padding: 20px 40px;
-            font-weight: 700;
-            text-transform: uppercase;
-            font-family: 'Space Mono', monospace;
-            box-shadow: var(--shadow);
-            text-align: center;
-            min-width: 250px;
-        }
-
-        .flow-step.active {
-            background: var(--yellow);
-        }
-
-        .flow-arrow {
-            font-size: 36px;
-            font-weight: 900;
-            color: var(--red);
-            margin: 10px 0;
-        }
-
-        .chat-example {
-            border: 4px solid var(--black);
-            box-shadow: var(--shadow-lg);
-            background: var(--gray);
-            max-width: 600px;
-        }
-
-        .chat-header {
-            background: var(--red);
-            color: var(--white);
-            padding: 15px 20px;
-            font-family: 'Space Mono', monospace;
-            font-weight: 700;
-            text-transform: uppercase;
-            border-bottom: 4px solid var(--black);
-        }
-
-        .chat-body {
-            padding: 20px;
-        }
-
-        .chat-message {
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .chat-message.client {
-            align-items: flex-end;
-        }
-
-        .chat-message.oliver {
-            align-items: flex-start;
-        }
-
-        .chat-bubble {
-            padding: 15px 20px;
-            border: 3px solid var(--black);
-            max-width: 80%;
-            box-shadow: 3px 3px 0px var(--black);
-        }
-
-        .chat-message.client .chat-bubble {
-            background: var(--yellow);
-        }
-
-        .chat-message.oliver .chat-bubble {
-            background: var(--white);
-        }
-
-        .chat-label {
-            font-family: 'Space Mono', monospace;
-            font-size: 12px;
-            font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 5px;
-            color: #666;
-        }
-
-        .languages {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .lang-tag {
-            background: var(--black);
-            color: var(--white);
-            padding: 12px 24px;
-            font-weight: 700;
-            border: 3px solid var(--black);
-            box-shadow: var(--shadow);
-        }
-
-        .lang-tag:nth-child(even) {
-            background: var(--red);
-        }
-
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-
-        .tech-item {
-            background: var(--yellow);
-            border: 4px solid var(--black);
-            padding: 20px 30px;
-            font-family: 'Space Mono', monospace;
-            font-weight: 700;
-            box-shadow: var(--shadow);
-        }
-
-        .checklist {
-            list-style: none;
-        }
-
-        .checklist li {
-            padding: 12px 20px;
-            border: 3px solid var(--black);
-            margin-bottom: 10px;
-            background: var(--white);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            box-shadow: var(--shadow);
-        }
-
-        .check {
-            width: 30px;
-            height: 30px;
-            background: #22c55e;
-            border: 3px solid var(--black);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 900;
-            font-size: 18px;
-        }
-
-        footer {
-            background: var(--black);
-            color: var(--white);
-            padding: 40px;
-            text-align: center;
-            border-top: 4px solid var(--red);
-        }
-
-        footer p {
-            font-family: 'Space Mono', monospace;
-        }
-
-        footer a {
-            color: var(--yellow);
-        }
-
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 32px;
-            }
-
-            .hero p {
-                font-size: 18px;
-            }
-
-            .section-title {
-                font-size: 20px;
-            }
-
-            header {
-                flex-direction: column;
-                gap: 15px;
-            }
-        }
-    </style>
+    /* Smooth number transition */
+    .stat-number { display: inline-block; min-width: 2ch; }
+  </style>
 </head>
-<body>
 
-    <header>
-        <div class="logo">Vitreflam</div>
-        <div class="badge">Février 2026</div>
-    </header>
+<body class="bg-cream text-neo-dark overflow-x-hidden">
 
-    <section class="hero">
-        <h1>Hello Fabien</h1>
-        <p>Je t'ai préparé un récap de ce que j'ai construit pour le SAV. Voici <span>Oliver</span>, ton nouvel assistant.</p>
-        <div class="intro-box">
-            <strong>En gros :</strong> Quand un client a un souci avec sa vitre, il discute avec Oliver sur le site. Oliver répond instantanément, reconnaît le client s'il est déjà venu, et peut même analyser les photos de verre cassé.
+  <!-- ========== NAVBAR ========== -->
+  <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-cream/80 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 sm:h-20">
+        <a href="#" id="logo" class="flex items-center gap-2 group select-none" data-clicks="0">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 bg-neo-blue border-2 border-neo-dark shadow-neo flex items-center justify-center transition-transform group-hover:rotate-12">
+            <span class="text-white font-bold text-lg">P</span>
+          </div>
+          <span class="font-display font-bold text-lg sm:text-xl tracking-tight">PostPilot</span>
+        </a>
+        <div class="hidden md:flex items-center gap-1">
+          <a href="#problem" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Probleme</a>
+          <a href="#workflow1" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Generation</a>
+          <a href="#workflow2" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Publication</a>
+          <a href="#dashboard" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Analytics</a>
+          <a href="#cycle" class="nav-link px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white transition-all duration-200 border-2 border-transparent hover:border-neo-dark">Pipeline</a>
         </div>
-    </section>
+        <div class="flex items-center gap-3">
+          <a href="#cta" class="neo-btn hidden sm:inline-flex px-5 py-2.5 bg-neo-blue text-white font-bold text-sm border-2 border-neo-dark shadow-neo hover:bg-blue-600 transition-colors">
+            Demarrer &rarr;
+          </a>
+          <button id="mobile-menu-btn" class="md:hidden w-10 h-10 border-2 border-neo-dark shadow-neo-hover bg-white flex items-center justify-center neo-btn">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden hidden border-t-2 border-neo-dark bg-cream">
+      <div class="px-4 py-3 space-y-1">
+        <a href="#problem" class="block px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white border-2 border-transparent hover:border-neo-dark">Probleme</a>
+        <a href="#workflow1" class="block px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white border-2 border-transparent hover:border-neo-dark">Generation</a>
+        <a href="#workflow2" class="block px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white border-2 border-transparent hover:border-neo-dark">Publication</a>
+        <a href="#dashboard" class="block px-4 py-2 font-medium text-sm hover:bg-neo-dark hover:text-white border-2 border-transparent hover:border-neo-dark">Analytics</a>
+        <a href="#cta" class="block px-4 py-3 bg-neo-blue text-white font-bold text-sm border-2 border-neo-dark shadow-neo text-center mt-2">Demarrer &rarr;</a>
+      </div>
+    </div>
+  </nav>
 
-    <div class="container">
+  <!-- ========== HERO ========== -->
+  <section id="hero" class="relative min-h-screen flex items-center pt-20 overflow-hidden grid-bg">
+    <!-- Decorative shapes -->
+    <div class="absolute top-32 right-[8%] w-20 h-20 sm:w-28 sm:h-28 bg-neo-yellow border-2 border-neo-dark shadow-neo-lg rotate-12 float opacity-60"></div>
+    <div class="absolute bottom-[15%] left-[5%] w-14 h-14 sm:w-20 sm:h-20 bg-neo-blue border-2 border-neo-dark shadow-neo -rotate-6 float-reverse opacity-50"></div>
+    <div class="absolute top-[45%] right-[3%] w-10 h-10 sm:w-16 sm:h-16 rounded-full bg-neo-red border-2 border-neo-dark shadow-neo float-slow opacity-40"></div>
+    <div class="absolute bottom-[30%] right-[15%] w-8 h-8 bg-neo-green border-2 border-neo-dark rotate-45 float opacity-30"></div>
 
-        <!-- Ce que Oliver sait faire -->
-        <section>
-            <div class="section-title">Ce que Oliver sait faire</div>
-            <div class="cards-grid">
-                <div class="card highlight">
-                    <h3>Il reconnaît les clients</h3>
-                    <p>Le client donne son email et Oliver sait direct si c'est quelqu'un de nouveau ou un habitué. S'il est déjà venu, Oliver a tout l'historique : les anciennes conversations, les problèmes passés, comment ça s'était terminé.</p>
-                </div>
-                <div class="card">
-                    <h3>Il comprend le problème</h3>
-                    <p>Casse livraison, casse montage, souci de dimensions, suivi de commande... Oliver détecte automatiquement de quoi il s'agit et va chercher les bonnes infos pour répondre.</p>
-                </div>
-                <div class="card red">
-                    <h3>Il analyse les photos</h3>
-                    <p>Le client envoie une photo de sa vitre cassée, Oliver l'analyse vraiment. Il cherche les fissures, les éclats, et peut confirmer ou non la casse. Ça évite les abus.</p>
-                </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full py-12 sm:py-20">
+      <div class="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <!-- Left -->
+        <div class="reveal">
+          <div class="inline-flex items-center gap-2 px-4 py-2 bg-white border-2 border-neo-dark shadow-neo text-xs font-mono font-bold mb-6 sm:mb-8">
+            <span class="w-2 h-2 bg-neo-green rounded-full animate-pulse"></span>
+            WORKFLOW ACTIF — TOURNE TOUTES LES 3 MIN
+          </div>
+          <h1 class="font-display font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05] mb-6">
+            Une idee.<br>
+            <span class="highlight-box">Un post LinkedIn.</span><br>
+            <span class="text-neo-blue">Zero effort.</span>
+          </h1>
+          <p class="text-lg sm:text-xl text-gray-600 max-w-xl mb-8 leading-relaxed">
+            Tu ecris une ligne dans Notion. L'IA genere le post, cree l'image, publie a 9h, suit les stats pendant 7 jours, et te livre un rapport. <span class="font-bold text-neo-dark">Tu ne touches plus a rien.</span>
+          </p>
+          <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <a href="#cta" class="neo-btn px-8 py-4 bg-neo-blue text-white font-bold text-base border-2 border-neo-dark shadow-neo-lg hover:bg-blue-600 transition-colors text-center">
+              Automatiser mon LinkedIn &rarr;
+            </a>
+            <a href="#workflow1" class="neo-btn px-8 py-4 bg-white font-bold text-base border-2 border-neo-dark shadow-neo hover:bg-gray-50 transition-colors text-center">
+              Voir comment ca marche
+            </a>
+          </div>
+          <!-- Social proof -->
+          <div class="flex items-center gap-4 mt-8 sm:mt-10">
+            <div class="flex -space-x-2">
+              <div class="w-8 h-8 rounded-full bg-neo-blue border-2 border-white flex items-center justify-center text-white text-xs font-bold">S</div>
+              <div class="w-8 h-8 rounded-full bg-neo-purple border-2 border-white flex items-center justify-center text-white text-xs font-bold">M</div>
+              <div class="w-8 h-8 rounded-full bg-neo-orange border-2 border-white flex items-center justify-center text-white text-xs font-bold">A</div>
+              <div class="w-8 h-8 rounded-full bg-neo-green border-2 border-white flex items-center justify-center text-white text-xs font-bold">L</div>
             </div>
-        </section>
+            <p class="text-sm text-gray-500"><span class="font-bold text-neo-dark">127 posts</span> generes ce mois-ci</p>
+          </div>
+        </div>
 
-        <!-- Fonctionnalités -->
-        <section>
-            <div class="section-title">Tout ce qu'il gère</div>
-            <ul class="features-list">
-                <li>Reconnaissance automatique des clients par email</li>
-                <li>Détection du type de problème (casse, retard, dimensions...)</li>
-                <li>Analyse de photos par intelligence artificielle</li>
-                <li>Création automatique de tickets SAV</li>
-                <li>Détection quand un client est frustré</li>
-                <li>Escalade vers un responsable si ça dégénère</li>
-                <li>Fermeture auto des conversations inactives</li>
-            </ul>
-        </section>
-
-        <!-- Langues -->
-        <section>
-            <div class="section-title">6 Langues</div>
-            <p style="margin-bottom: 20px;">Le client choisit sa langue au début et toute la conversation se fait dedans.</p>
-            <div class="languages">
-                <div class="lang-tag">Français</div>
-                <div class="lang-tag">English</div>
-                <div class="lang-tag">Italiano</div>
-                <div class="lang-tag">Español</div>
-                <div class="lang-tag">Deutsch</div>
-                <div class="lang-tag">中文</div>
-            </div>
-        </section>
-
-        <!-- Parcours client -->
-        <section>
-            <div class="section-title">Le parcours client</div>
-            <div class="flow">
-                <div class="flow-step">Arrive sur le chat</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step active">Choisit sa langue</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step">Donne son email</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step active">Explique son problème</div>
-                <div class="flow-arrow">↓</div>
-                <div class="flow-step">Oliver répond</div>
-            </div>
-        </section>
-
-        <!-- Exemple -->
-        <section>
-            <div class="section-title">Un exemple concret</div>
-            <p style="margin-bottom: 20px;">Marie a reçu sa vitre cassée ce matin. Voilà comment ça se passe :</p>
-            <div class="chat-example">
-                <div class="chat-header">Chat avec Oliver</div>
-                <div class="chat-body">
-                    <div class="chat-message client">
-                        <div class="chat-label">Marie</div>
-                        <div class="chat-bubble">Bonjour, j'ai reçu ma commande ce matin et la vitre est cassée</div>
-                    </div>
-                    <div class="chat-message oliver">
-                        <div class="chat-label">Oliver</div>
-                        <div class="chat-bubble">Bonjour Marie, je suis vraiment désolé. Avez-vous souscrit l'assurance transport lors de votre commande ?</div>
-                    </div>
-                    <div class="chat-message client">
-                        <div class="chat-label">Marie</div>
-                        <div class="chat-bubble">Oui j'ai pris l'assurance</div>
-                    </div>
-                    <div class="chat-message oliver">
-                        <div class="chat-label">Oliver</div>
-                        <div class="chat-bubble">Parfait. Vous avez 48h pour déclarer. Envoyez-moi une photo du verre cassé et je lance le remplacement.</div>
-                    </div>
+        <!-- Right - Mock terminal / Post preview -->
+        <div class="reveal-right">
+          <div class="relative">
+            <div class="bg-white border-2 border-neo-dark shadow-neo-xl p-0 overflow-hidden">
+              <!-- Terminal header -->
+              <div class="flex items-center gap-2 px-4 py-3 bg-neo-dark">
+                <div class="w-3 h-3 rounded-full bg-neo-red"></div>
+                <div class="w-3 h-3 rounded-full bg-neo-yellow"></div>
+                <div class="w-3 h-3 rounded-full bg-neo-green"></div>
+                <span class="ml-3 text-white/60 font-mono text-xs">postpilot — workflow actif</span>
+              </div>
+              <!-- Terminal content -->
+              <div class="p-5 sm:p-6 font-mono text-sm space-y-3">
+                <div class="text-gray-400">$ checking notion database...</div>
+                <div class="text-neo-green">&#10003; Post trouve: "Pourquoi 80% des PME perdent de l'argent"</div>
+                <div class="text-gray-400">$ analyzing writing style (10 posts)...</div>
+                <div class="text-neo-green">&#10003; Style identifie: direct, percutant, 180 mots/avg</div>
+                <div class="text-gray-400">$ generating with Claude...</div>
+                <div class="text-neo-blue font-bold" id="typewriter-target"></div>
+                <div class="text-gray-400 mt-4">$ generating image via Nano Banana...</div>
+                <div class="text-neo-green">&#10003; Image uploadee sur ImgBB</div>
+                <div class="text-gray-400">$ updating Notion page...</div>
+                <div class="text-neo-green">&#10003; Statut: "A generer" &rarr; "A valider"</div>
+                <div class="mt-4 pt-4 border-t border-dashed border-gray-200">
+                  <span class="text-neo-blue">Temps total:</span> <span class="text-neo-dark font-bold">47 secondes</span>
                 </div>
+              </div>
             </div>
-        </section>
-
-        <!-- Règles d'assurance -->
-        <section>
-            <div class="section-title">Les règles qu'il connaît</div>
-            <p style="margin-bottom: 20px;">Oliver applique automatiquement les bonnes procédures selon la situation.</p>
-            <div class="cards-grid">
-                <div class="card">
-                    <h3>Assurance Transport</h3>
-                    <p><strong>Délai :</strong> 48 heures après livraison<br>
-                    <strong>Pièces :</strong> Photos colis + verre<br>
-                    <strong>Action :</strong> Renvoi gratuit<br>
-                    <strong>Limite :</strong> 1 fois par commande</p>
-                </div>
-                <div class="card">
-                    <h3>Assurance Montage</h3>
-                    <p><strong>Délai :</strong> 8 jours après livraison<br>
-                    <strong>Pièces :</strong> Photos verre cassé<br>
-                    <strong>Action :</strong> Renvoi gratuit<br>
-                    <strong>Limite :</strong> 1 fois par commande</p>
-                </div>
-                <div class="card highlight">
-                    <h3>Sans Assurance</h3>
-                    <p><strong>Casse transport :</strong> Oliver oriente vers Colissimo<br>
-                    <strong>Casse montage :</strong> Oliver propose 30% de remise sur la prochaine commande</p>
-                </div>
+            <!-- Floating badge -->
+            <div class="absolute -bottom-4 -right-4 bg-neo-yellow border-2 border-neo-dark shadow-neo px-4 py-2 font-bold text-sm rotate-3 float">
+              100% automatique
             </div>
-        </section>
-
-        <!-- Analyse photos -->
-        <section>
-            <div class="section-title">L'analyse des photos</div>
-            <p style="margin-bottom: 20px;">Oliver regarde vraiment les photos. Il ne fait pas semblant.</p>
-            <table class="brutal-table">
-                <thead>
-                    <tr>
-                        <th>Ce qu'il voit</th>
-                        <th>Ce qu'il fait</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Casse confirmée</strong> (fissure, éclat visible)</td>
-                        <td>Lance le remplacement si les conditions sont ok</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Pas de casse visible</strong></td>
-                        <td>Explique ce qu'il voit et demande une autre photo si besoin</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Photo floue ou mal cadrée</strong></td>
-                        <td>Demande poliment une meilleure photo</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
-
-        <!-- Technologies -->
-        <section>
-            <div class="section-title">Côté technique</div>
-            <div class="tech-stack">
-                <div class="tech-item">HTML/CSS/JS</div>
-                <div class="tech-item">Node.js</div>
-                <div class="tech-item">Supabase</div>
-                <div class="tech-item">Claude (Anthropic)</div>
-                <div class="tech-item">Render</div>
-            </div>
-        </section>
-
-        <!-- Statut -->
-        <section>
-            <div class="section-title">Où on en est</div>
-            <p style="margin-bottom: 20px;">Tout ça fonctionne. Le chatbot est prêt à être mis en ligne sur Render.</p>
-            <ul class="checklist">
-                <li><span class="check">✓</span> Chat en temps réel</li>
-                <li><span class="check">✓</span> Réponses dans les 6 langues</li>
-                <li><span class="check">✓</span> Analyse de photos par IA</li>
-                <li><span class="check">✓</span> Mémoire client</li>
-                <li><span class="check">✓</span> Création auto de tickets</li>
-                <li><span class="check">✓</span> Détection de frustration</li>
-                <li><span class="check">✓</span> Fermeture auto des conversations</li>
-            </ul>
-        </section>
-
-        <!-- Suite -->
-        <section>
-            <div class="section-title">La suite</div>
-            <div class="card highlight">
-                <h3>Intégration Colissimo</h3>
-                <p>Je suis en train de les contacter pour voir ce qu'on peut faire. L'idée c'est de récupérer automatiquement les infos de suivi et faciliter les réclamations pour les clients sans assurance. Je te tiens au courant.</p>
-            </div>
-        </section>
-
+          </div>
+        </div>
+      </div>
     </div>
 
-    <footer>
-        <p>VITREFLAM - Oliver | Février 2026</p>
-        <p>Contact : <a href="mailto:contactglassgroup@gmail.com">contactglassgroup@gmail.com</a></p>
-    </footer>
+    <!-- Ticker tape -->
+    <div class="absolute bottom-0 left-0 w-full border-t-2 border-b-2 border-neo-dark bg-neo-dark text-white py-3 overflow-hidden">
+      <div class="ticker flex whitespace-nowrap">
+        <span class="mx-8 font-mono text-sm flex items-center gap-2"><span class="text-neo-yellow">&#9679;</span> Generation IA</span>
+        <span class="mx-8 font-mono text-sm flex items-center gap-2"><span class="text-neo-blue">&#9679;</span> Publication auto 9h</span>
+        <span class="mx-8 font-mono text-sm flex items-center gap-2"><span class="text-neo-green">&#9679;</span> Suivi stats 7 jours</span>
+        <span class="mx-8 font-mono text-sm flex items-center gap-2"><span class="text-neo-red">&#9679;</span> Analyse IA J+7</span>
+        <span class="mx-8 font-mono text-sm flex items-center gap-2"><span class="text-neo-purple">&#9679;</span> Image auto generee</span>
+        <span class="mx-8 font-mono text-sm flex items-center gap-2"><span class="text-neo-orange">&#9679;</span> Style d'ecriture clone</span>
+        <span class="mx-8 font-mono text-sm flex items-center gap-2"><span class="text-neo-yellow">&#9679;</span> Generation IA</span>
+        <span class="mx-8 font-mono text-sm flex items-center gap-2"><span class="text-neo-blue">&#9679;</span> Publication auto 9h</span>
+        <span class="mx-8 font-mono text-sm flex items-center gap-2"><span class="text-neo-green">&#9679;</span> Suivi stats 7 jours</span>
+        <span class="mx-8 font-mono text-sm flex items-center gap-2"><span class="text-neo-red">&#9679;</span> Analyse IA J+7</span>
+        <span class="mx-8 font-mono text-sm flex items-center gap-2"><span class="text-neo-purple">&#9679;</span> Image auto generee</span>
+        <span class="mx-8 font-mono text-sm flex items-center gap-2"><span class="text-neo-orange">&#9679;</span> Style d'ecriture clone</span>
+      </div>
+    </div>
+  </section>
 
+  <!-- ========== SECTION 2: THE PROBLEM ========== -->
+  <section id="problem" class="py-20 sm:py-28 relative stripes">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-14 sm:mb-20 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-neo-red/10 border-2 border-neo-red text-neo-red text-xs font-mono font-bold mb-6">
+          DIAGNOSTIC
+        </div>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-6">
+          LinkedIn te coute <span class="highlight-box">6h par semaine</span>
+        </h2>
+        <p class="text-lg text-gray-500 max-w-2xl mx-auto">Et malgre ca, tes posts sont irreguliers, tu ne sais pas ce qui marche, et tu n'as aucune donnee pour t'ameliorer.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 stagger">
+        <!-- Pain 1 -->
+        <div class="reveal bg-white border-2 border-neo-dark shadow-neo p-6 sm:p-8 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all duration-200 group">
+          <div class="w-12 h-12 bg-neo-red/10 border-2 border-neo-red flex items-center justify-center mb-5 text-2xl group-hover:rotate-12 transition-transform">&#9202;</div>
+          <h3 class="font-display font-bold text-lg mb-3">2h pour ecrire un post</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Trouver l'idee, structurer, rediger, reformuler, trouver une accroche... Tu y passes ta matinee pour 200 mots.</p>
+          <div class="mt-4 pt-4 border-t border-dashed border-gray-200 font-mono text-xs text-neo-red font-bold">Avec PostPilot: 47 secondes</div>
+        </div>
+        <!-- Pain 2 -->
+        <div class="reveal bg-white border-2 border-neo-dark shadow-neo p-6 sm:p-8 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all duration-200 group">
+          <div class="w-12 h-12 bg-neo-orange/10 border-2 border-neo-orange flex items-center justify-center mb-5 text-2xl group-hover:rotate-12 transition-transform">&#128200;</div>
+          <h3 class="font-display font-bold text-lg mb-3">Zero donnees, zero strategie</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Tu publies, tu check tes likes 2h apres, et c'est tout. Tu ne sais pas quels sujets performent ni pourquoi.</p>
+          <div class="mt-4 pt-4 border-t border-dashed border-gray-200 font-mono text-xs text-neo-orange font-bold">Avec PostPilot: analyse IA a J+7</div>
+        </div>
+        <!-- Pain 3 -->
+        <div class="reveal bg-white border-2 border-neo-dark shadow-neo p-6 sm:p-8 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all duration-200 group">
+          <div class="w-12 h-12 bg-neo-yellow/20 border-2 border-neo-yellow flex items-center justify-center mb-5 text-2xl group-hover:rotate-12 transition-transform">&#128197;</div>
+          <h3 class="font-display font-bold text-lg mb-3">Irregular et imprevisible</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Tu publies 3 fois une semaine, zero la suivante. L'algorithme te penalise. Ta visibilite chute. Le cercle vicieux.</p>
+          <div class="mt-4 pt-4 border-t border-dashed border-gray-200 font-mono text-xs text-neo-yellow font-bold">Avec PostPilot: publication auto a 9h</div>
+        </div>
+        <!-- Pain 4 -->
+        <div class="reveal bg-white border-2 border-neo-dark shadow-neo p-6 sm:p-8 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all duration-200 group">
+          <div class="w-12 h-12 bg-neo-purple/10 border-2 border-neo-purple flex items-center justify-center mb-5 text-2xl group-hover:rotate-12 transition-transform">&#127912;</div>
+          <h3 class="font-display font-bold text-lg mb-3">Visuels inexistants</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Tu postes du texte brut ou tu perds 30 min sur Canva. Un post sans image, c'est 40% d'impressions en moins.</p>
+          <div class="mt-4 pt-4 border-t border-dashed border-gray-200 font-mono text-xs text-neo-purple font-bold">Avec PostPilot: image generee auto</div>
+        </div>
+        <!-- Pain 5 -->
+        <div class="reveal bg-white border-2 border-neo-dark shadow-neo p-6 sm:p-8 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all duration-200 group">
+          <div class="w-12 h-12 bg-neo-blue/10 border-2 border-neo-blue flex items-center justify-center mb-5 text-2xl group-hover:rotate-12 transition-transform">&#129302;</div>
+          <h3 class="font-display font-bold text-lg mb-3">Posts IA generiques</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">ChatGPT ecrit comme tout le monde. Ton audience sent le template. Tu perds en authenticite et en engagement.</p>
+          <div class="mt-4 pt-4 border-t border-dashed border-gray-200 font-mono text-xs text-neo-blue font-bold">Avec PostPilot: clone de ton style</div>
+        </div>
+        <!-- Pain 6 -->
+        <div class="reveal bg-white border-2 border-neo-dark shadow-neo p-6 sm:p-8 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-neo-lg transition-all duration-200 group">
+          <div class="w-12 h-12 bg-neo-green/10 border-2 border-neo-green flex items-center justify-center mb-5 text-2xl group-hover:rotate-12 transition-transform">&#128640;</div>
+          <h3 class="font-display font-bold text-lg mb-3">Pas de passage a l'echelle</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">Tu veux publier 5x par semaine mais t'as pas le temps. Tu es le goulot d'etranglement de ta propre visibilite.</p>
+          <div class="mt-4 pt-4 border-t border-dashed border-gray-200 font-mono text-xs text-neo-green font-bold">Avec PostPilot: 5 posts = 5 lignes</div>
+        </div>
+      </div>
+
+      <!-- Comparison bar -->
+      <div class="mt-14 sm:mt-20 reveal">
+        <div class="bg-white border-2 border-neo-dark shadow-neo-lg overflow-hidden">
+          <div class="grid md:grid-cols-2">
+            <div class="p-6 sm:p-8 border-b-2 md:border-b-0 md:border-r-2 border-neo-dark bg-red-50/50">
+              <h4 class="font-display font-bold text-lg mb-4 text-neo-red flex items-center gap-2">&#10005; Sans PostPilot</h4>
+              <ul class="space-y-3 text-sm text-gray-600">
+                <li class="flex items-start gap-2"><span class="text-neo-red mt-0.5">&#10005;</span> 2h par post, 3 posts max/semaine</li>
+                <li class="flex items-start gap-2"><span class="text-neo-red mt-0.5">&#10005;</span> Aucun suivi des performances</li>
+                <li class="flex items-start gap-2"><span class="text-neo-red mt-0.5">&#10005;</span> Publication manuelle, souvent oubliee</li>
+                <li class="flex items-start gap-2"><span class="text-neo-red mt-0.5">&#10005;</span> Images generiques ou absentes</li>
+                <li class="flex items-start gap-2"><span class="text-neo-red mt-0.5">&#10005;</span> Pas de strategie, pas de data</li>
+              </ul>
+            </div>
+            <div class="p-6 sm:p-8 bg-green-50/50">
+              <h4 class="font-display font-bold text-lg mb-4 text-neo-green flex items-center gap-2">&#10003; Avec PostPilot</h4>
+              <ul class="space-y-3 text-sm text-gray-600">
+                <li class="flex items-start gap-2"><span class="text-neo-green mt-0.5">&#10003;</span> 47 sec par post, illimite</li>
+                <li class="flex items-start gap-2"><span class="text-neo-green mt-0.5">&#10003;</span> Stats toutes les 4h pendant 7 jours</li>
+                <li class="flex items-start gap-2"><span class="text-neo-green mt-0.5">&#10003;</span> Publication auto a 9h, chaque jour</li>
+                <li class="flex items-start gap-2"><span class="text-neo-green mt-0.5">&#10003;</span> Images pro generees automatiquement</li>
+                <li class="flex items-start gap-2"><span class="text-neo-green mt-0.5">&#10003;</span> Rapport IA avec recommandations</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 3: WORKFLOW 1 — CONTENT MACHINE ========== -->
+  <section id="workflow1" class="py-20 sm:py-28 bg-neo-dark text-white relative noise overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center mb-14 sm:mb-20 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-neo-blue/20 border-2 border-neo-blue text-neo-blue text-xs font-mono font-bold mb-6">
+          WORKFLOW 1
+        </div>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-6">
+          La machine a ecrire tes posts
+        </h2>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto">Tu mets une idee dans Notion, le systeme te livre un post complet avec image, pret a valider. Toutes les 3 minutes, il tourne.</p>
+      </div>
+
+      <!-- Steps -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 stagger">
+        <!-- Step 1 -->
+        <div class="reveal bg-white/5 border-2 border-white/20 p-6 sm:p-8 hover:border-neo-blue hover:bg-neo-blue/5 transition-all duration-300 group relative">
+          <div class="absolute -top-4 -left-3 w-10 h-10 bg-neo-blue border-2 border-white flex items-center justify-center font-display font-bold text-lg shadow-neo-blue">1</div>
+          <div class="mt-4">
+            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-blue transition-colors">Lecture Notion</h3>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">Le workflow check ta base toutes les 3 min. Il recupere le titre, l'idee, le ton, la cible, le pilier, la thematique et l'angle de ta fiche.</p>
+            <div class="font-mono text-xs bg-white/5 p-3 border border-white/10">
+              <span class="text-neo-green">GET</span> notion.databases.query<br>
+              <span class="text-gray-500">filter: status = "A generer"</span>
+            </div>
+          </div>
+        </div>
+        <!-- Step 2 -->
+        <div class="reveal bg-white/5 border-2 border-white/20 p-6 sm:p-8 hover:border-neo-yellow hover:bg-neo-yellow/5 transition-all duration-300 group relative">
+          <div class="absolute -top-4 -left-3 w-10 h-10 bg-neo-yellow border-2 border-neo-dark flex items-center justify-center font-display font-bold text-lg text-neo-dark shadow-neo-yellow">2</div>
+          <div class="mt-4">
+            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-yellow transition-colors">Analyse de ton style</h3>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">Il lit tes 10 derniers posts publies pour que Claude comprenne comment tu ecris. Pas de contenu generique — il ecrit comme toi.</p>
+            <div class="font-mono text-xs bg-white/5 p-3 border border-white/10">
+              <span class="text-neo-yellow">SCAN</span> 10 derniers posts<br>
+              <span class="text-gray-500">style: direct, percutant, 180 mots</span>
+            </div>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div class="reveal bg-white/5 border-2 border-white/20 p-6 sm:p-8 hover:border-neo-purple hover:bg-neo-purple/5 transition-all duration-300 group relative">
+          <div class="absolute -top-4 -left-3 w-10 h-10 bg-neo-purple border-2 border-white flex items-center justify-center font-display font-bold text-lg shadow-[4px_4px_0px_#8B5CF6]">3</div>
+          <div class="mt-4">
+            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-purple transition-colors">Generation Claude</h3>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">Claude recoit tes guidelines, ton style, et les consignes: accroche forte, phrases courtes, pas de hashtags, 150-250 mots, punchline finale.</p>
+            <div class="font-mono text-xs bg-white/5 p-3 border border-white/10">
+              <span class="text-neo-purple">AI</span> claude.messages.create<br>
+              <span class="text-gray-500">output: texte + support + expertise</span>
+            </div>
+          </div>
+        </div>
+        <!-- Step 4 -->
+        <div class="reveal bg-white/5 border-2 border-white/20 p-6 sm:p-8 hover:border-neo-green hover:bg-neo-green/5 transition-all duration-300 group relative">
+          <div class="absolute -top-4 -left-3 w-10 h-10 bg-neo-green border-2 border-neo-dark flex items-center justify-center font-display font-bold text-lg text-neo-dark shadow-[4px_4px_0px_#10B981]">4</div>
+          <div class="mt-4">
+            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-green transition-colors">Image auto-generee</h3>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">Nano Banana (modele Google) cree une image pro, minimaliste, tons bleu/blanc, sans texte. Uploadee sur ImgBB pour une URL permanente.</p>
+            <div class="font-mono text-xs bg-white/5 p-3 border border-white/10">
+              <span class="text-neo-green">IMG</span> nano-banana.generate<br>
+              <span class="text-gray-500">style: pro, minimal, blue/white</span>
+            </div>
+          </div>
+        </div>
+        <!-- Step 5 -->
+        <div class="reveal bg-white/5 border-2 border-white/20 p-6 sm:p-8 hover:border-neo-orange hover:bg-neo-orange/5 transition-all duration-300 group relative">
+          <div class="absolute -top-4 -left-3 w-10 h-10 bg-neo-orange border-2 border-neo-dark flex items-center justify-center font-display font-bold text-lg text-neo-dark shadow-[4px_4px_0px_#F97316]">5</div>
+          <div class="mt-4">
+            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-orange transition-colors">Ecriture dans Notion</h3>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">Le texte dans le body, l'image en dessous, et toutes les colonnes remplies automatiquement: Support, Expertise, Thematique.</p>
+            <div class="font-mono text-xs bg-white/5 p-3 border border-white/10">
+              <span class="text-neo-orange">WRITE</span> notion.pages.update<br>
+              <span class="text-gray-500">body + image + metadata</span>
+            </div>
+          </div>
+        </div>
+        <!-- Step 6 -->
+        <div class="reveal bg-white/5 border-2 border-white/20 p-6 sm:p-8 hover:border-neo-red hover:bg-neo-red/5 transition-all duration-300 group relative">
+          <div class="absolute -top-4 -left-3 w-10 h-10 bg-neo-red border-2 border-white flex items-center justify-center font-display font-bold text-lg shadow-[4px_4px_0px_#EF4444]">6</div>
+          <div class="mt-4">
+            <h3 class="font-display font-bold text-xl mb-3 group-hover:text-neo-red transition-colors">Statut: A valider</h3>
+            <p class="text-gray-400 text-sm leading-relaxed mb-4">Le post passe en "A valider". Tu ouvres Notion, tu lis, tu modifies si besoin, et tu passes en "Programme" quand c'est bon.</p>
+            <div class="font-mono text-xs bg-white/5 p-3 border border-white/10">
+              <span class="text-neo-red">STATUS</span> "A generer" &rarr; "A valider"<br>
+              <span class="text-gray-500">toi: valider &rarr; "Programme"</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Concrete example -->
+      <div class="mt-14 sm:mt-20 reveal">
+        <div class="bg-white/5 border-2 border-neo-blue p-6 sm:p-8 lg:p-10">
+          <h3 class="font-display font-bold text-xl sm:text-2xl mb-6 text-neo-blue flex items-center gap-3">
+            <span class="w-8 h-8 bg-neo-blue text-white flex items-center justify-center text-sm font-mono border-2 border-white">EX</span>
+            Exemple concret
+          </h3>
+          <div class="grid md:grid-cols-2 gap-8">
+            <div>
+              <h4 class="font-bold text-sm uppercase tracking-wider text-gray-400 mb-3">Ce que tu ecris (10 sec)</h4>
+              <div class="bg-white/10 border border-white/20 p-4 font-mono text-sm space-y-2">
+                <div><span class="text-gray-500">Titre:</span> Pourquoi 80% des PME perdent de l'argent sur leur facturation</div>
+                <div><span class="text-gray-500">Ton:</span> Direct, Business</div>
+                <div><span class="text-gray-500">Cible:</span> Dirigeants PME</div>
+              </div>
+            </div>
+            <div>
+              <h4 class="font-bold text-sm uppercase tracking-wider text-gray-400 mb-3">Ce que tu recois (47 sec plus tard)</h4>
+              <div class="bg-white/10 border border-white/20 p-4 text-sm space-y-2">
+                <div class="text-neo-blue font-bold italic">"Tu factures. Mais tu ne sais pas combien tu perds."</div>
+                <div class="text-gray-400 text-xs">+ 200 mots de post structure</div>
+                <div class="text-gray-400 text-xs">+ image pro bleutee generee</div>
+                <div class="text-gray-400 text-xs">+ Support: Texte | Expertise: Facturation</div>
+                <div class="text-gray-400 text-xs">+ Statut: "A valider"</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 4: WORKFLOW 2 — PUBLISH + STATS + ANALYSIS ========== -->
+  <section id="workflow2" class="py-20 sm:py-28 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-14 sm:mb-20 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-neo-green/10 border-2 border-neo-green text-neo-green text-xs font-mono font-bold mb-6">
+          WORKFLOW 2
+        </div>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-6">
+          Publication + Stats + Analyse IA
+        </h2>
+        <p class="text-lg text-gray-500 max-w-2xl mx-auto">Un seul workflow qui fait 3 choses en parallele. Publication auto, suivi en continu, et rapport intelligent.</p>
+      </div>
+
+      <!-- Part A -->
+      <div class="mb-14 sm:mb-20">
+        <div class="grid lg:grid-cols-5 gap-6 lg:gap-10 items-center">
+          <div class="lg:col-span-2 reveal-left">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-neo-blue/10 border-2 border-neo-blue text-neo-blue text-xs font-mono font-bold mb-5">PARTIE A</div>
+            <h3 class="font-display font-bold text-2xl sm:text-3xl mb-4">Publication automatique</h3>
+            <p class="text-gray-500 mb-6 leading-relaxed">Chaque matin a 9h, tes posts programmes partent sur LinkedIn. Tu programmes a l'avance, le systeme execute.</p>
+            <div class="space-y-4">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-blue text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">9h</div>
+                <div class="text-sm"><span class="font-bold">Check Notion</span> — Cherche les posts "Programme" dont la date est passee</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-blue text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">&#10003;</div>
+                <div class="text-sm"><span class="font-bold">Publie sur LinkedIn</span> — Texte + image, directement via l'API</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-blue text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">&#8599;</div>
+                <div class="text-sm"><span class="font-bold">Met a jour Notion</span> — Statut "Publie" + URL du post LinkedIn</div>
+              </div>
+            </div>
+          </div>
+          <div class="lg:col-span-3 reveal-right">
+            <div class="bg-white border-2 border-neo-dark shadow-neo-lg p-6">
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-xs text-gray-400">calendrier de publication</span>
+                <span class="font-mono text-xs text-neo-green font-bold">&#9679; AUTO</span>
+              </div>
+              <div class="space-y-2 font-mono text-sm">
+                <div class="flex items-center gap-3 p-3 bg-green-50 border border-green-200">
+                  <span class="text-neo-green font-bold w-20">Lun 9h</span>
+                  <span class="text-gray-600 truncate flex-1">Les 3 erreurs de facturation des PME</span>
+                  <span class="text-xs bg-neo-green text-white px-2 py-0.5 border border-green-700">PUBLIE</span>
+                </div>
+                <div class="flex items-center gap-3 p-3 bg-green-50 border border-green-200">
+                  <span class="text-neo-green font-bold w-20">Mer 9h</span>
+                  <span class="text-gray-600 truncate flex-1">Pourquoi j'ai automatise 80% de mon business</span>
+                  <span class="text-xs bg-neo-green text-white px-2 py-0.5 border border-green-700">PUBLIE</span>
+                </div>
+                <div class="flex items-center gap-3 p-3 bg-blue-50 border border-blue-200">
+                  <span class="text-neo-blue font-bold w-20">Ven 9h</span>
+                  <span class="text-gray-600 truncate flex-1">Le secret des dirigeants qui scalent</span>
+                  <span class="text-xs bg-neo-blue text-white px-2 py-0.5 border border-blue-700">PROGRAMME</span>
+                </div>
+                <div class="flex items-center gap-3 p-3 bg-yellow-50 border border-yellow-200">
+                  <span class="text-neo-yellow font-bold w-20">Lun 9h</span>
+                  <span class="text-gray-600 truncate flex-1">Comment perdre des clients en etant trop lent</span>
+                  <span class="text-xs bg-neo-yellow text-neo-dark px-2 py-0.5 border border-yellow-500">A VALIDER</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part B -->
+      <div class="mb-14 sm:mb-20">
+        <div class="grid lg:grid-cols-5 gap-6 lg:gap-10 items-center">
+          <div class="lg:col-span-3 order-2 lg:order-1 reveal-left">
+            <div class="bg-white border-2 border-neo-dark shadow-neo-lg p-6 overflow-x-auto">
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-xs text-gray-400">suivi en temps reel — 7 jours</span>
+                <span class="font-mono text-xs text-neo-orange font-bold">&#9679; TRACKING</span>
+              </div>
+              <table class="w-full text-sm font-mono min-w-[480px]">
+                <thead>
+                  <tr class="text-left text-xs text-gray-400 border-b-2 border-neo-dark">
+                    <th class="pb-2 pr-3">Quand</th>
+                    <th class="pb-2 pr-3">Likes</th>
+                    <th class="pb-2 pr-3">Com.</th>
+                    <th class="pb-2 pr-3">Partages</th>
+                    <th class="pb-2">Impressions</th>
+                  </tr>
+                </thead>
+                <tbody id="stats-table" class="stagger">
+                  <tr class="border-b border-dashed border-gray-200 reveal"><td class="py-2 pr-3 text-gray-500">Lun 09:00</td><td class="py-2 pr-3">3</td><td class="py-2 pr-3">1</td><td class="py-2 pr-3">0</td><td class="py-2">120</td></tr>
+                  <tr class="border-b border-dashed border-gray-200 reveal"><td class="py-2 pr-3 text-gray-500">Lun 13:00</td><td class="py-2 pr-3 text-neo-green">12 <span class="text-xs">&#9650;</span></td><td class="py-2 pr-3">3</td><td class="py-2 pr-3">1</td><td class="py-2 text-neo-green">380 <span class="text-xs">&#9650;</span></td></tr>
+                  <tr class="border-b border-dashed border-gray-200 reveal"><td class="py-2 pr-3 text-gray-500">Lun 17:00</td><td class="py-2 pr-3 text-neo-green font-bold">28 <span class="text-xs">&#9650;&#9650;</span></td><td class="py-2 pr-3">7</td><td class="py-2 pr-3">1</td><td class="py-2 text-neo-green font-bold">650 <span class="text-xs">&#9650;&#9650;</span></td></tr>
+                  <tr class="border-b border-dashed border-gray-200 reveal"><td class="py-2 pr-3 text-gray-500">Lun 21:00</td><td class="py-2 pr-3">35</td><td class="py-2 pr-3">9</td><td class="py-2 pr-3">2</td><td class="py-2">890</td></tr>
+                  <tr class="border-b border-dashed border-gray-200 reveal"><td class="py-2 pr-3 text-gray-500">Mar 01:00</td><td class="py-2 pr-3 text-gray-400">38</td><td class="py-2 pr-3 text-gray-400">9</td><td class="py-2 pr-3 text-gray-400">2</td><td class="py-2 text-gray-400">940</td></tr>
+                  <tr class="border-b border-dashed border-gray-200 reveal"><td class="py-2 pr-3 text-gray-500">Mar 09:00</td><td class="py-2 pr-3">41</td><td class="py-2 pr-3">10</td><td class="py-2 pr-3">3</td><td class="py-2">1020</td></tr>
+                  <tr class="reveal"><td class="py-2 pr-3 text-gray-500">...</td><td class="py-2 pr-3 font-bold">52</td><td class="py-2 pr-3 font-bold">14</td><td class="py-2 pr-3 font-bold">5</td><td class="py-2 font-bold">1850</td></tr>
+                </tbody>
+              </table>
+              <div class="mt-4 pt-4 border-t-2 border-neo-dark text-xs text-gray-400">
+                &#9679; Colonnes ecrasees a chaque passage (derniers chiffres) &nbsp; &#9679; Snapshot horodate ajoute en bas de page (historique complet)
+              </div>
+            </div>
+          </div>
+          <div class="lg:col-span-2 order-1 lg:order-2 reveal-right">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-neo-orange/10 border-2 border-neo-orange text-neo-orange text-xs font-mono font-bold mb-5">PARTIE B</div>
+            <h3 class="font-display font-bold text-2xl sm:text-3xl mb-4">Suivi des stats en continu</h3>
+            <p class="text-gray-500 mb-6 leading-relaxed">Pendant 7 jours apres la publication, le systeme scrape tes stats LinkedIn toutes les 4 heures via Apify et note tout dans Notion.</p>
+            <div class="space-y-4">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-orange text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">4h</div>
+                <div class="text-sm"><span class="font-bold">Scraping Apify</span> — Recupere likes, commentaires, partages, impressions</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-orange text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">&#8644;</div>
+                <div class="text-sm"><span class="font-bold">Matching intelligent</span> — Fait le lien entre posts Notion et posts scrapes</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-orange text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">&#128247;</div>
+                <div class="text-sm"><span class="font-bold">Snapshot horodate</span> — Tu gardes l'historique complet de la courbe</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part C -->
+      <div>
+        <div class="grid lg:grid-cols-5 gap-6 lg:gap-10 items-center">
+          <div class="lg:col-span-2 reveal-left">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-neo-purple/10 border-2 border-neo-purple text-neo-purple text-xs font-mono font-bold mb-5">PARTIE C</div>
+            <h3 class="font-display font-bold text-2xl sm:text-3xl mb-4">Analyse IA a J+7</h3>
+            <p class="text-gray-500 mb-6 leading-relaxed">Au bout d'une semaine, Claude analyse tes stats, les compare a tes 10 derniers posts (le benchmark), et ecrit un mini-rapport directement dans Notion.</p>
+            <div class="space-y-4">
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-purple text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">8h</div>
+                <div class="text-sm"><span class="font-bold">Trigger quotidien</span> — Chaque matin a 8h, check les posts a J+7</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-purple text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">&#128202;</div>
+                <div class="text-sm"><span class="font-bold">Benchmark</span> — Compare avec tes moyennes sur 10 posts</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-neo-purple text-white flex items-center justify-center text-xs font-bold border-2 border-neo-dark shrink-0">&#129504;</div>
+                <div class="text-sm"><span class="font-bold">Rapport IA</span> — Performance, velocite, recommandations</div>
+              </div>
+            </div>
+          </div>
+          <div class="lg:col-span-3 reveal-right">
+            <div class="bg-white border-2 border-neo-dark shadow-neo-lg p-6 relative">
+              <div class="flex items-center justify-between mb-4">
+                <span class="font-mono text-xs text-gray-400">analyse statistique post — colonne Notion</span>
+                <span class="font-mono text-xs text-neo-purple font-bold">&#9679; CLAUDE AI</span>
+              </div>
+              <div class="bg-purple-50 border-2 border-neo-purple p-5 text-sm leading-relaxed" id="analysis-box">
+                <p class="mb-3"><span class="font-bold text-neo-purple">Performance</span> +45% likes vs moyenne (52 vs 36). Pic d'engagement H+4 a H+8 (phase virale rapide).</p>
+                <p class="mb-3"><span class="font-bold text-neo-purple">Velocite</span> rapide les 12 premieres heures puis stabilisation. Croissance derniere journee: +3%.</p>
+                <p class="mb-3"><span class="font-bold text-neo-purple">Benchmark</span> Surperforme tes posts "cas terrain" (+30% impressions). Le ton direct + thematique facturation = combo gagnant.</p>
+                <p><span class="font-bold text-neo-purple">Recommandations</span> Capitaliser sur les posts "erreurs systeme", tester un carrousel sur ce sujet pour amplifier les partages.</p>
+              </div>
+              <div class="absolute -top-3 -right-3 bg-neo-purple text-white border-2 border-neo-dark shadow-neo px-3 py-1 font-mono text-xs font-bold -rotate-3">
+                ~500 caracteres
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 5: DASHBOARD PREVIEW ========== -->
+  <section id="dashboard" class="py-20 sm:py-28 bg-neo-dark text-white relative noise overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center mb-14 sm:mb-20 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-neo-yellow/20 border-2 border-neo-yellow text-neo-yellow text-xs font-mono font-bold mb-6">
+          DASHBOARD
+        </div>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-6">
+          Tout est dans Notion
+        </h2>
+        <p class="text-lg text-gray-400 max-w-2xl mx-auto">Pas de nouvel outil a apprendre. Ton tableau Notion devient ton cockpit LinkedIn.</p>
+      </div>
+
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-10 stagger">
+        <div class="reveal bg-white/5 border-2 border-white/20 p-5 sm:p-6 hover:border-neo-blue transition-all group">
+          <div class="text-sm text-gray-400 mb-2">Posts ce mois</div>
+          <div class="font-display font-bold text-3xl sm:text-4xl counter" data-target="24">0</div>
+          <div class="text-xs text-neo-green font-mono mt-2">&#9650; 60% vs mois dernier</div>
+        </div>
+        <div class="reveal bg-white/5 border-2 border-white/20 p-5 sm:p-6 hover:border-neo-yellow transition-all group">
+          <div class="text-sm text-gray-400 mb-2">Impressions totales</div>
+          <div class="font-display font-bold text-3xl sm:text-4xl counter" data-target="14200">0</div>
+          <div class="text-xs text-neo-green font-mono mt-2">&#9650; 120% vs mois dernier</div>
+        </div>
+        <div class="reveal bg-white/5 border-2 border-white/20 p-5 sm:p-6 hover:border-neo-green transition-all group">
+          <div class="text-sm text-gray-400 mb-2">Taux d'engagement</div>
+          <div class="font-display font-bold text-3xl sm:text-4xl"><span class="counter" data-target="4">0</span><span class="text-lg">.7%</span></div>
+          <div class="text-xs text-neo-green font-mono mt-2">&#9650; Top 5% LinkedIn</div>
+        </div>
+        <div class="reveal bg-white/5 border-2 border-white/20 p-5 sm:p-6 hover:border-neo-purple transition-all group">
+          <div class="text-sm text-gray-400 mb-2">Temps economise</div>
+          <div class="font-display font-bold text-3xl sm:text-4xl"><span class="counter" data-target="22">0</span><span class="text-lg">h</span></div>
+          <div class="text-xs text-neo-yellow font-mono mt-2">ce mois-ci</div>
+        </div>
+      </div>
+
+      <!-- Mock Notion Table -->
+      <div class="reveal">
+        <div class="bg-white text-neo-dark border-2 border-white shadow-neo-xl overflow-hidden">
+          <div class="flex items-center gap-2 px-4 sm:px-6 py-3 bg-gray-50 border-b-2 border-gray-200">
+            <div class="w-5 h-5 bg-neo-blue rounded flex items-center justify-center text-white text-xs">&#9776;</div>
+            <span class="font-mono text-sm font-bold">Base LinkedIn — PostPilot</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm min-w-[900px]">
+              <thead>
+                <tr class="bg-gray-50 text-left text-xs font-mono text-gray-500 border-b border-gray-200">
+                  <th class="px-4 py-3">Titre</th>
+                  <th class="px-4 py-3">Statut</th>
+                  <th class="px-4 py-3">Date</th>
+                  <th class="px-4 py-3">Likes</th>
+                  <th class="px-4 py-3">Com.</th>
+                  <th class="px-4 py-3">Impr.</th>
+                  <th class="px-4 py-3">Support</th>
+                  <th class="px-4 py-3">Analyse</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b border-gray-100 hover:bg-blue-50/50 transition-colors cursor-pointer group">
+                  <td class="px-4 py-3 font-medium">Les 3 erreurs de facturation</td>
+                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-bold border border-green-300">Publie</span></td>
+                  <td class="px-4 py-3 text-gray-500 font-mono text-xs">10 fev</td>
+                  <td class="px-4 py-3 font-bold">52</td>
+                  <td class="px-4 py-3 font-bold">14</td>
+                  <td class="px-4 py-3 font-bold">1850</td>
+                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs border border-blue-300">Texte</span></td>
+                  <td class="px-4 py-3 text-xs text-gray-500 max-w-[150px] truncate group-hover:text-neo-purple transition-colors">+45% likes vs moy...</td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-blue-50/50 transition-colors cursor-pointer group">
+                  <td class="px-4 py-3 font-medium">Automatiser 80% de son business</td>
+                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs font-bold border border-green-300">Publie</span></td>
+                  <td class="px-4 py-3 text-gray-500 font-mono text-xs">8 fev</td>
+                  <td class="px-4 py-3 font-bold">36</td>
+                  <td class="px-4 py-3 font-bold">8</td>
+                  <td class="px-4 py-3 font-bold">1240</td>
+                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs border border-purple-300">Carrousel</span></td>
+                  <td class="px-4 py-3 text-xs text-gray-500 max-w-[150px] truncate group-hover:text-neo-purple transition-colors">Engagement stable...</td>
+                </tr>
+                <tr class="border-b border-gray-100 hover:bg-blue-50/50 transition-colors cursor-pointer group">
+                  <td class="px-4 py-3 font-medium">Le secret des dirigeants qui scalent</td>
+                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs font-bold border border-blue-300">Programme</span></td>
+                  <td class="px-4 py-3 text-gray-500 font-mono text-xs">14 fev</td>
+                  <td class="px-4 py-3 text-gray-300">—</td>
+                  <td class="px-4 py-3 text-gray-300">—</td>
+                  <td class="px-4 py-3 text-gray-300">—</td>
+                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs border border-orange-300">Video</span></td>
+                  <td class="px-4 py-3 text-gray-300">—</td>
+                </tr>
+                <tr class="hover:bg-blue-50/50 transition-colors cursor-pointer group">
+                  <td class="px-4 py-3 font-medium">Perdre des clients en etant trop lent</td>
+                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-yellow-100 text-yellow-700 text-xs font-bold border border-yellow-300">A valider</span></td>
+                  <td class="px-4 py-3 text-gray-500 font-mono text-xs">17 fev</td>
+                  <td class="px-4 py-3 text-gray-300">—</td>
+                  <td class="px-4 py-3 text-gray-300">—</td>
+                  <td class="px-4 py-3 text-gray-300">—</td>
+                  <td class="px-4 py-3"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs border border-blue-300">Texte</span></td>
+                  <td class="px-4 py-3 text-gray-300">—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 6: COMPLETE CYCLE (PIPELINE) ========== -->
+  <section id="cycle" class="py-20 sm:py-28 relative grid-bg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-14 sm:mb-20 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-neo-dark border-2 border-neo-dark text-white text-xs font-mono font-bold mb-6">
+          PIPELINE COMPLET
+        </div>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-6">
+          Le cycle complet d'un post
+        </h2>
+        <p class="text-lg text-gray-500 max-w-2xl mx-auto">De l'idee au rapport d'analyse, chaque etape est automatisee. Tu gardes le controle, le systeme fait le travail.</p>
+      </div>
+
+      <!-- Pipeline Steps -->
+      <div class="max-w-3xl mx-auto space-y-0">
+        <!-- Step 1 -->
+        <div class="reveal flex items-stretch gap-4 sm:gap-6">
+          <div class="flex flex-col items-center">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-yellow border-2 border-neo-dark shadow-neo flex items-center justify-center font-display font-bold text-lg shrink-0">1</div>
+            <div class="w-0.5 flex-1 bg-neo-dark mt-2"></div>
+          </div>
+          <div class="bg-white border-2 border-neo-dark shadow-neo p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-display font-bold text-lg">Tu ecris une idee</h4>
+              <span class="font-mono text-xs bg-neo-yellow/20 text-neo-dark px-2 py-0.5 border border-neo-yellow">"A generer"</span>
+            </div>
+            <p class="text-gray-500 text-sm">Une ligne dans Notion. Titre, ton, cible. 10 secondes. C'est ton seul effort.</p>
+          </div>
+        </div>
+        <!-- Step 2 -->
+        <div class="reveal flex items-stretch gap-4 sm:gap-6">
+          <div class="flex flex-col items-center">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-blue border-2 border-neo-dark shadow-neo flex items-center justify-center font-display font-bold text-lg text-white shrink-0">2</div>
+            <div class="w-0.5 flex-1 bg-neo-dark mt-2"></div>
+          </div>
+          <div class="bg-white border-2 border-neo-dark shadow-neo p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-display font-bold text-lg">Workflow 1 genere le post + image</h4>
+              <span class="font-mono text-xs bg-neo-blue/10 text-neo-blue px-2 py-0.5 border border-neo-blue">"A valider"</span>
+            </div>
+            <p class="text-gray-500 text-sm">Claude ecrit comme toi, Nano Banana cree l'image. 47 secondes, tout est dans ta page Notion.</p>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div class="reveal flex items-stretch gap-4 sm:gap-6">
+          <div class="flex flex-col items-center">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-white border-2 border-neo-dark shadow-neo flex items-center justify-center font-display font-bold text-lg shrink-0">3</div>
+            <div class="w-0.5 flex-1 bg-neo-dark mt-2"></div>
+          </div>
+          <div class="bg-white border-2 border-neo-dark shadow-neo p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-display font-bold text-lg">Tu valides / modifies</h4>
+              <span class="font-mono text-xs bg-green-100 text-green-700 px-2 py-0.5 border border-green-300">"Programme"</span>
+            </div>
+            <p class="text-gray-500 text-sm">Tu ouvres Notion, tu lis, tu ajustes si besoin, et tu choisis la date de publication. C'est toi le boss.</p>
+          </div>
+        </div>
+        <!-- Step 4 -->
+        <div class="reveal flex items-stretch gap-4 sm:gap-6">
+          <div class="flex flex-col items-center">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-green border-2 border-neo-dark shadow-neo flex items-center justify-center font-display font-bold text-lg text-white shrink-0">4</div>
+            <div class="w-0.5 flex-1 bg-neo-dark mt-2"></div>
+          </div>
+          <div class="bg-white border-2 border-neo-dark shadow-neo p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-display font-bold text-lg">Workflow 2A publie a 9h</h4>
+              <span class="font-mono text-xs bg-green-100 text-green-700 px-2 py-0.5 border border-green-300">"Publie"</span>
+            </div>
+            <p class="text-gray-500 text-sm">Le jour J a 9h, le post part sur LinkedIn. Le statut passe a "Publie", l'URL est enregistree.</p>
+          </div>
+        </div>
+        <!-- Step 5 -->
+        <div class="reveal flex items-stretch gap-4 sm:gap-6">
+          <div class="flex flex-col items-center">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-orange border-2 border-neo-dark shadow-neo flex items-center justify-center font-display font-bold text-lg text-white shrink-0">5</div>
+            <div class="w-0.5 flex-1 bg-neo-dark mt-2"></div>
+          </div>
+          <div class="bg-white border-2 border-neo-dark shadow-neo p-5 sm:p-6 mb-4 flex-1 hover:translate-x-1 transition-transform">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-display font-bold text-lg">Workflow 2B suit les stats pendant 7j</h4>
+              <span class="font-mono text-xs bg-orange-100 text-orange-700 px-2 py-0.5 border border-orange-300">TRACKING</span>
+            </div>
+            <p class="text-gray-500 text-sm">Toutes les 4h, Apify scrape tes stats LinkedIn. Colonnes mises a jour + snapshots horodates en bas de page.</p>
+          </div>
+        </div>
+        <!-- Step 6 -->
+        <div class="reveal flex items-stretch gap-4 sm:gap-6">
+          <div class="flex flex-col items-center">
+            <div class="w-12 h-12 sm:w-14 sm:h-14 bg-neo-purple border-2 border-neo-dark shadow-neo flex items-center justify-center font-display font-bold text-lg text-white shrink-0">6</div>
+          </div>
+          <div class="bg-white border-2 border-neo-dark shadow-neo p-5 sm:p-6 flex-1 hover:translate-x-1 transition-transform glow-blue">
+            <div class="flex items-center justify-between mb-2">
+              <h4 class="font-display font-bold text-lg">Workflow 2C analyse avec Claude a J+7</h4>
+              <span class="font-mono text-xs bg-purple-100 text-purple-700 px-2 py-0.5 border border-purple-300">ANALYSE IA</span>
+            </div>
+            <p class="text-gray-500 text-sm">Claude compare tes stats a ta moyenne, identifie ce qui a marche, et te donne des recommandations actionables.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 7: TECH STACK + FEATURES ========== -->
+  <section id="features" class="py-20 sm:py-28 bg-white relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-14 sm:mb-20 reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-neo-dark border-2 border-neo-dark text-white text-xs font-mono font-bold mb-6">
+          SOUS LE CAPOT
+        </div>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-6">
+          Construit avec les meilleurs outils
+        </h2>
+        <p class="text-lg text-gray-500 max-w-2xl mx-auto">Chaque brique est choisie pour sa fiabilite. Pas de gadget, que de l'infrastructure solide.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 stagger">
+        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
+          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-purple transition-colors">Claude AI</div>
+          <div class="text-xs font-mono text-gray-400 mb-3">GENERATION + ANALYSE</div>
+          <p class="text-sm text-gray-500">Redaction dans ton style, choix du support, analyse statistique avec recommandations.</p>
+        </div>
+        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
+          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-blue transition-colors">Notion API</div>
+          <div class="text-xs font-mono text-gray-400 mb-3">DATABASE + INTERFACE</div>
+          <p class="text-sm text-gray-500">Ton cockpit. Lecture, ecriture, statuts, snapshots. Tout passe par Notion.</p>
+        </div>
+        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
+          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-green transition-colors">Nano Banana</div>
+          <div class="text-xs font-mono text-gray-400 mb-3">IMAGE GENERATION</div>
+          <p class="text-sm text-gray-500">Modele Google. Images pro, minimalistes, tons bleu/blanc, sans texte. Upload ImgBB.</p>
+        </div>
+        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
+          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-orange transition-colors">Apify</div>
+          <div class="text-xs font-mono text-gray-400 mb-3">SCRAPING LINKEDIN</div>
+          <p class="text-sm text-gray-500">Scrape ton profil toutes les 4h pour recuperer likes, commentaires, partages, impressions.</p>
+        </div>
+        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
+          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-red transition-colors">LinkedIn API</div>
+          <div class="text-xs font-mono text-gray-400 mb-3">PUBLICATION</div>
+          <p class="text-sm text-gray-500">Publication directe via OAuth. Texte + image, chaque matin a 9h, sans intervention.</p>
+        </div>
+        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
+          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-yellow transition-colors">ImgBB</div>
+          <div class="text-xs font-mono text-gray-400 mb-3">HOSTING IMAGE</div>
+          <p class="text-sm text-gray-500">Upload automatique, URL permanente. Les images restent accessibles dans Notion et LinkedIn.</p>
+        </div>
+        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
+          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-blue transition-colors">n8n / Make</div>
+          <div class="text-xs font-mono text-gray-400 mb-3">ORCHESTRATION</div>
+          <p class="text-sm text-gray-500">Les workflows tournent en boucle, se declenchent sur cron, et gerent toute la logique de routage.</p>
+        </div>
+        <div class="reveal bg-cream border-2 border-neo-dark shadow-neo p-6 hover:translate-y-[-4px] hover:shadow-neo-lg transition-all duration-300 group cursor-default">
+          <div class="font-display font-bold text-lg mb-2 group-hover:text-neo-purple transition-colors">Scalether</div>
+          <div class="text-xs font-mono text-gray-400 mb-3">GUIDELINES + STYLE</div>
+          <p class="text-sm text-gray-500">Tes guidelines de marque injectees dans chaque prompt. Transformation, execution, rentabilite.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SECTION 8: CTA ========== -->
+  <section id="cta" class="py-20 sm:py-28 bg-neo-blue relative noise overflow-hidden">
+    <div class="absolute top-10 left-[5%] w-20 h-20 bg-neo-yellow/20 border-2 border-white/20 rotate-12 float"></div>
+    <div class="absolute bottom-10 right-[8%] w-16 h-16 bg-white/10 border-2 border-white/20 -rotate-6 float-reverse"></div>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <div class="reveal">
+        <div class="inline-flex items-center gap-2 px-4 py-2 bg-white/10 border-2 border-white/30 text-white text-xs font-mono font-bold mb-8">
+          PRET A SCALER ?
+        </div>
+        <h2 class="font-display font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white mb-6 leading-tight">
+          Arrete de perdre du temps.<br>Commence a publier.
+        </h2>
+        <p class="text-lg sm:text-xl text-blue-100 max-w-2xl mx-auto mb-10 leading-relaxed">
+          En 48h, ton systeme est en place. Tu ecris des idees, le reste se fait tout seul. 5 posts par semaine, zero friction.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="#" class="neo-btn px-10 py-5 bg-neo-dark text-white font-bold text-lg border-2 border-white shadow-[6px_6px_0px_rgba(255,255,255,0.3)] hover:bg-black transition-colors">
+            Installer PostPilot &rarr;
+          </a>
+          <a href="#" class="neo-btn px-10 py-5 bg-white text-neo-dark font-bold text-lg border-2 border-neo-dark shadow-neo-lg hover:bg-gray-100 transition-colors">
+            Voir une demo
+          </a>
+        </div>
+        <p class="text-blue-200 text-sm mt-6 font-mono">Setup en 48h &middot; Notion requis &middot; Support inclus</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="bg-neo-dark text-white py-10 border-t-4 border-neo-blue">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-neo-blue border-2 border-white flex items-center justify-center text-white font-bold text-sm">P</div>
+          <span class="font-display font-bold text-lg">PostPilot</span>
+          <span class="text-gray-500 text-sm ml-2 font-mono">by Scalether</span>
+        </div>
+        <div class="flex items-center gap-6 text-sm text-gray-400">
+          <a href="#" class="hover:text-white transition-colors">Contact</a>
+          <a href="#" class="hover:text-white transition-colors">LinkedIn</a>
+          <a href="#" class="hover:text-white transition-colors">Notion Template</a>
+        </div>
+        <div class="text-sm text-gray-500 font-mono" id="footer-secret" title="Try the Konami code...">
+          &copy; 2026 PostPilot
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========== JAVASCRIPT ========== -->
+  <script>
+    // ===== Intersection Observer for Scroll Reveals =====
+    const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          // Trigger counter animation
+          if (entry.target.classList.contains('counter-parent')) {
+            animateCounters(entry.target);
+          }
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale').forEach(el => {
+      observer.observe(el);
+    });
+
+    // ===== Counter Animation =====
+    function animateCounters(parent) {
+      const counters = (parent || document).querySelectorAll('.counter:not(.counted)');
+      counters.forEach(counter => {
+        counter.classList.add('counted');
+        const target = parseInt(counter.dataset.target);
+        const duration = 2000;
+        const start = performance.now();
+        function update(now) {
+          const elapsed = now - start;
+          const progress = Math.min(elapsed / duration, 1);
+          const eased = 1 - Math.pow(1 - progress, 3);
+          counter.textContent = Math.floor(eased * target).toLocaleString();
+          if (progress < 1) requestAnimationFrame(update);
+          else counter.textContent = target.toLocaleString();
+        }
+        requestAnimationFrame(update);
+      });
+    }
+
+    // Observe counter parents
+    document.querySelectorAll('.counter').forEach(c => {
+      const parent = c.closest('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+      if (parent) parent.classList.add('counter-parent');
+    });
+
+    // Also trigger counters that are already visible
+    setTimeout(() => animateCounters(document), 500);
+
+    // ===== Typewriter Effect =====
+    const typewriterText = '> "Tu factures. Mais tu ne sais pas combien tu perds chaque mois."';
+    const typeTarget = document.getElementById('typewriter-target');
+    let charIndex = 0;
+    function typewrite() {
+      if (charIndex < typewriterText.length) {
+        typeTarget.textContent = typewriterText.substring(0, charIndex + 1);
+        charIndex++;
+        setTimeout(typewrite, 40 + Math.random() * 30);
+      } else {
+        typeTarget.classList.add('cursor-blink');
+      }
+    }
+    setTimeout(typewrite, 1500);
+
+    // ===== Navbar Scroll Behavior =====
+    const navbar = document.getElementById('navbar');
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.pageYOffset;
+      if (currentScroll > 100) {
+        navbar.classList.add('border-b-2', 'border-neo-dark');
+      } else {
+        navbar.classList.remove('border-b-2', 'border-neo-dark');
+      }
+      lastScroll = currentScroll;
+    }, { passive: true });
+
+    // ===== Mobile Menu =====
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => mobileMenu.classList.add('hidden'));
+    });
+
+    // ===== Logo Easter Egg =====
+    const logo = document.getElementById('logo');
+    let logoClicks = 0;
+    logo.addEventListener('click', (e) => {
+      e.preventDefault();
+      logoClicks++;
+      if (logoClicks === 7) {
+        launchConfetti();
+        logoClicks = 0;
+      } else if (logoClicks >= 4) {
+        logo.querySelector('span').style.transition = 'transform 0.3s';
+        logo.querySelector('span').style.transform = `rotate(${logoClicks * 30}deg)`;
+      }
+    });
+
+    // ===== Konami Code Easter Egg =====
+    const konamiCode = [38,38,40,40,37,39,37,39,66,65];
+    let konamiIndex = 0;
+    document.addEventListener('keydown', (e) => {
+      if (e.keyCode === konamiCode[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiCode.length) {
+          konamiIndex = 0;
+          activateRainbowMode();
+        }
+      } else {
+        konamiIndex = 0;
+      }
+    });
+
+    function activateRainbowMode() {
+      document.body.style.transition = 'filter 0.5s';
+      document.body.style.filter = 'hue-rotate(0deg)';
+      let hue = 0;
+      const interval = setInterval(() => {
+        hue += 5;
+        document.body.style.filter = `hue-rotate(${hue}deg)`;
+        if (hue >= 360) {
+          clearInterval(interval);
+          document.body.style.filter = 'none';
+          launchConfetti();
+        }
+      }, 30);
+    }
+
+    // ===== Confetti =====
+    function launchConfetti() {
+      const colors = ['#3B82F6', '#FBBF24', '#EF4444', '#10B981', '#8B5CF6', '#F97316'];
+      for (let i = 0; i < 60; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.left = Math.random() * 100 + 'vw';
+        piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+        piece.style.animationDelay = Math.random() * 2 + 's';
+        piece.style.animationDuration = (2 + Math.random() * 2) + 's';
+        piece.style.transform = `rotate(${Math.random() * 360}deg)`;
+        if (Math.random() > 0.5) piece.style.borderRadius = '50%';
+        document.body.appendChild(piece);
+        setTimeout(() => piece.remove(), 5000);
+      }
+    }
+
+    // ===== Magnetic Button Effect =====
+    document.querySelectorAll('.neo-btn').forEach(btn => {
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        btn.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transform = 'translate(0, 0)';
+      });
+    });
+
+    // ===== Cursor Trail (Subtle particles on hero) =====
+    const hero = document.getElementById('hero');
+    let trailThrottle = 0;
+    hero.addEventListener('mousemove', (e) => {
+      if (trailThrottle++ % 4 !== 0) return;
+      const dot = document.createElement('div');
+      dot.style.cssText = `position:fixed;width:6px;height:6px;background:#3B82F6;border-radius:50%;pointer-events:none;z-index:40;left:${e.clientX}px;top:${e.clientY}px;opacity:0.6;transition:all 0.8s ease;`;
+      document.body.appendChild(dot);
+      requestAnimationFrame(() => {
+        dot.style.opacity = '0';
+        dot.style.transform = `translate(${(Math.random()-0.5)*40}px, ${(Math.random()-0.5)*40}px) scale(0)`;
+      });
+      setTimeout(() => dot.remove(), 900);
+    });
+
+    // ===== Analysis box hover reveal =====
+    const analysisBox = document.getElementById('analysis-box');
+    if (analysisBox) {
+      analysisBox.addEventListener('mouseenter', () => {
+        analysisBox.style.transition = 'transform 0.3s, box-shadow 0.3s';
+        analysisBox.style.transform = 'scale(1.02)';
+        analysisBox.style.boxShadow = '0 0 30px rgba(139,92,246,0.2)';
+      });
+      analysisBox.addEventListener('mouseleave', () => {
+        analysisBox.style.transform = 'scale(1)';
+        analysisBox.style.boxShadow = 'none';
+      });
+    }
+
+    // ===== Smooth Scroll =====
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href === '#') return;
+        e.preventDefault();
+        const target = document.querySelector(href);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // ===== Footer Secret Double-Click =====
+    const footerSecret = document.getElementById('footer-secret');
+    footerSecret.addEventListener('dblclick', () => {
+      footerSecret.innerHTML = '&#10084; Fait avec du cafe et de l\'automatisation';
+      footerSecret.style.color = '#FBBF24';
+      setTimeout(() => {
+        footerSecret.innerHTML = '&copy; 2026 PostPilot';
+        footerSecret.style.color = '';
+      }, 3000);
+    });
+
+    // ===== Stats table row hover sound-like effect =====
+    document.querySelectorAll('#stats-table tr').forEach((row, i) => {
+      row.addEventListener('mouseenter', () => {
+        row.style.transition = 'all 0.2s';
+        row.style.backgroundColor = 'rgba(59,130,246,0.05)';
+        row.style.transform = 'translateX(4px)';
+      });
+      row.addEventListener('mouseleave', () => {
+        row.style.backgroundColor = '';
+        row.style.transform = '';
+      });
+    });
+
+    // ===== Active nav link highlight =====
+    const sections = document.querySelectorAll('section[id]');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (pageYOffset >= sectionTop) current = section.getAttribute('id');
+      });
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.classList.remove('bg-neo-dark', 'text-white', 'border-neo-dark');
+        link.classList.add('border-transparent');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('bg-neo-dark', 'text-white', 'border-neo-dark');
+          link.classList.remove('border-transparent');
+        }
+      });
+    }, { passive: true });
+  </script>
 </body>
 </html>
