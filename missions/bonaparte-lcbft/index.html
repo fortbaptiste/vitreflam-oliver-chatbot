@@ -1,0 +1,1392 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bonaparte - Automatisation LCB-FT</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwindcss.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#558eff',
+            noir: '#06060f',
+            surface: '#0d0d1f',
+            card: '#141432',
+            cardHover: '#1a1a42',
+            cream: '#faf9f6',
+            accent: '#ff6b35',
+            success: '#22c55e',
+            alert: '#ef4444',
+            gold: '#f59e0b',
+            muted: '#8b8ba7',
+          },
+          fontFamily: {
+            display: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+            mono: ['JetBrains Mono', 'Fira Code', 'SF Mono', 'monospace'],
+          },
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+    /* === BASE === */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    ::selection { background: #558eff; color: white; }
+    html { scroll-behavior: smooth; background: #06060f; }
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; background: #06060f; color: #ffffff; }
+
+    /* === BRUTAL SHADOWS === */
+    .shadow-brutal { box-shadow: 4px 4px 0px 0px #558eff; }
+    .shadow-brutal-sm { box-shadow: 3px 3px 0px 0px #558eff; }
+    .shadow-brutal-lg { box-shadow: 6px 6px 0px 0px #558eff; }
+    .shadow-brutal-xl { box-shadow: 8px 8px 0px 0px #558eff; }
+    .shadow-brutal-alert { box-shadow: 4px 4px 0px 0px #ef4444; }
+    .shadow-brutal-gold { box-shadow: 4px 4px 0px 0px #f59e0b; }
+    .shadow-brutal-success { box-shadow: 4px 4px 0px 0px #22c55e; }
+    .shadow-brutal-accent { box-shadow: 4px 4px 0px 0px #ff6b35; }
+
+    /* === ANIMATIONS === */
+    @keyframes float { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-12px) rotate(1deg); } }
+    @keyframes floatSlow { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-8px) rotate(-0.5deg); } }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slideInLeft { from { opacity: 0; transform: translateX(-40px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes slideInRight { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    @keyframes pulse-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(85,142,255,0.4); } 50% { box-shadow: 0 0 20px 4px rgba(85,142,255,0.15); } }
+    @keyframes shake { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(-2deg); } 75% { transform: rotate(2deg); } }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    @keyframes counter-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+    @keyframes dash { to { stroke-dashoffset: 0; } }
+    @keyframes typewriter { from { width: 0; } to { width: 100%; } }
+    @keyframes gradient-shift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+    @keyframes scaleIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+    @keyframes wiggle { 0%, 100% { transform: rotate(0); } 20% { transform: rotate(-4deg); } 40% { transform: rotate(4deg); } 60% { transform: rotate(-2deg); } 80% { transform: rotate(2deg); } }
+    @keyframes ripple { 0% { transform: scale(1); opacity: 0.4; } 100% { transform: scale(2.5); opacity: 0; } }
+    @keyframes orbit { 0% { transform: rotate(0deg) translateX(60px) rotate(0deg); } 100% { transform: rotate(360deg) translateX(60px) rotate(-360deg); } }
+
+    .animate-float { animation: float 4s ease-in-out infinite; }
+    .animate-float-slow { animation: floatSlow 6s ease-in-out infinite; }
+    .animate-marquee { animation: marquee 35s linear infinite; }
+    .animate-pulse-glow { animation: pulse-glow 3s ease-in-out infinite; }
+    .animate-wiggle:hover { animation: wiggle 0.5s ease-in-out; }
+    .animate-orbit { animation: orbit 20s linear infinite; }
+
+    /* === SCROLL ANIMATIONS === */
+    .fade-in { opacity: 0; transform: translateY(40px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+    .fade-in-left { opacity: 0; transform: translateX(-40px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+    .fade-in-left.visible { opacity: 1; transform: translateX(0); }
+    .fade-in-right { opacity: 0; transform: translateX(40px); transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1); }
+    .fade-in-right.visible { opacity: 1; transform: translateX(0); }
+    .scale-in { opacity: 0; transform: scale(0.85); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+    .scale-in.visible { opacity: 1; transform: scale(1); }
+
+    /* === CARD INTERACTIONS === */
+    .card-hover { transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+    .card-hover:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0px 0px #558eff; }
+    .card-hover:active { transform: translate(1px, 1px); box-shadow: 3px 3px 0px 0px #558eff; }
+
+    .card-hover-alert { transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+    .card-hover-alert:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0px 0px #ef4444; }
+    .card-hover-alert:active { transform: translate(1px, 1px); box-shadow: 3px 3px 0px 0px #ef4444; }
+
+    /* === LINK STYLES === */
+    .link-arrow { position: relative; }
+    .link-arrow::after { content: ' \2192'; transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); display: inline-block; }
+    .link-arrow:hover::after { transform: translateX(5px); }
+
+    /* === TAG === */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 12px;
+      border: 2px solid;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+
+    /* === PDF BTN === */
+    .pdf-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 14px;
+      border: 2px solid rgba(255,255,255,0.15);
+      background: #141432;
+      color: #e5e7eb;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .pdf-btn:hover { background: #558eff; color: white; border-color: #558eff; transform: translate(-1px, -1px); box-shadow: 3px 3px 0px 0px rgba(85,142,255,0.3); }
+    .pdf-btn:active { transform: translate(1px, 1px); box-shadow: none; }
+    .pdf-btn-alert:hover { background: #ef4444; border-color: #ef4444; }
+
+    .mynotary-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 14px;
+      border: 2px solid #558eff;
+      background: #558eff;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .mynotary-btn:hover { background: white; color: #06060f; transform: translate(-1px, -1px); box-shadow: 3px 3px 0px 0px #558eff; }
+    .mynotary-btn:active { transform: translate(1px, 1px); box-shadow: none; }
+
+    /* === STEP LINE === */
+    .step-line::before {
+      content: '';
+      position: absolute;
+      left: 23px;
+      top: 56px;
+      bottom: -32px;
+      width: 3px;
+      background: linear-gradient(to bottom, #558eff, transparent);
+    }
+
+    /* === TICKER === */
+    .ticker-wrap { overflow: hidden; white-space: nowrap; }
+    .ticker { display: inline-block; white-space: nowrap; }
+
+    /* === NOISE OVERLAY === */
+    .noise::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.4;
+    }
+
+    /* === GRID PATTERN === */
+    .grid-pattern {
+      background-image:
+        linear-gradient(rgba(85,142,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(85,142,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* === SCROLLBAR === */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #06060f; }
+    ::-webkit-scrollbar-thumb { background: #558eff; border: 2px solid #06060f; }
+    ::-webkit-scrollbar-thumb:hover { background: #6fa0ff; }
+
+    /* === FALLBACK BACKGROUNDS === */
+    .bg-noir { background-color: #06060f !important; }
+    .bg-surface { background-color: #0d0d1f !important; }
+    .bg-card { background-color: #141432 !important; }
+
+    /* === MAGNETIC BUTTON === */
+    .magnetic-btn { transition: transform 0.2s ease; }
+
+    /* === RIPPLE EFFECT === */
+    .ripple-container { position: relative; overflow: hidden; }
+    .ripple-container .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(85,142,255,0.3);
+      animation: ripple 0.6s ease-out forwards;
+      pointer-events: none;
+    }
+
+    /* === TOOLTIP === */
+    .tooltip-wrap { position: relative; }
+    .tooltip-wrap .tooltip {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      left: 50%;
+      transform: translateX(-50%) scale(0.9);
+      background: #141432;
+      border: 2px solid #558eff;
+      color: white;
+      padding: 4px 10px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 100;
+    }
+    .tooltip-wrap:hover .tooltip { opacity: 1; transform: translateX(-50%) scale(1); }
+
+    /* === CURSOR GLOW (easter egg) === */
+    .cursor-glow {
+      position: fixed;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(85,142,255,0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: opacity 0.3s ease;
+    }
+
+    /* === PROGRESS BAR === */
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #558eff, #ff6b35, #558eff);
+      background-size: 200% 100%;
+      animation: gradient-shift 3s ease infinite;
+      z-index: 10000;
+      transition: width 0.1s linear;
+    }
+
+    /* === DOSSIER ROW === */
+    .dossier-row {
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+    .dossier-row::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      background: #558eff;
+      transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .dossier-row:hover::before { width: 4px; }
+    .dossier-row:hover { transform: translateX(4px); background: rgba(85,142,255,0.03); }
+
+    .dossier-row-alert::before { background: #ef4444; }
+    .dossier-row-alert:hover { background: rgba(239,68,68,0.05); }
+
+    /* === NUMBER COUNTER === */
+    .counter-value { font-variant-numeric: tabular-nums; }
+
+    /* === SECRET KONAMI (css part) === */
+    .konami-active .shadow-brutal { box-shadow: 4px 4px 0px 0px #ff6b35 !important; }
+    .konami-active .bg-brand { background: #ff6b35 !important; }
+
+    /* === RESPONSIVE HELPERS === */
+    @media (max-width: 640px) {
+      .hide-mobile { display: none; }
+      .mobile-stack { flex-direction: column; }
+    }
+  </style>
+</head>
+<body class="bg-noir text-white font-display noise grid-pattern">
+
+  <!-- SCROLL PROGRESS BAR -->
+  <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+
+  <!-- CURSOR GLOW (easter egg) -->
+  <div class="cursor-glow" id="cursorGlow"></div>
+
+  <!-- ==================== NAV ==================== -->
+  <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-noir/80" style="border-bottom: 3px solid #558eff;" id="navbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3 group cursor-default">
+        <div class="w-9 h-9 bg-brand border-2 border-brand shadow-brutal-sm flex items-center justify-center text-white font-black text-sm transition-all duration-200 group-hover:shadow-brutal-lg group-hover:-translate-x-0.5 group-hover:-translate-y-0.5">B</div>
+        <span class="font-bold text-lg hidden sm:block text-white">Bonaparte <span class="text-brand">LCB-FT</span></span>
+      </div>
+      <div class="flex items-center gap-1 sm:gap-3">
+        <a href="#fonctionnement" class="nav-link text-white/60 hover:text-white text-xs sm:text-sm font-bold px-2 sm:px-3 py-1.5 border-2 border-transparent hover:border-brand/30 transition-all duration-200">Comment</a>
+        <a href="#dossiers" class="nav-link text-white/60 hover:text-white text-xs sm:text-sm font-bold px-2 sm:px-3 py-1.5 border-2 border-transparent hover:border-brand/30 transition-all duration-200">Dossiers</a>
+        <a href="#alertes" class="nav-link text-white/60 hover:text-white text-xs sm:text-sm font-bold px-2 sm:px-3 py-1.5 border-2 border-transparent hover:border-brand/30 transition-all duration-200">Alertes</a>
+        <a href="#production" class="nav-link text-white/60 hover:text-white text-xs sm:text-sm font-bold px-2 sm:px-3 py-1.5 border-2 border-transparent hover:border-brand/30 transition-all duration-200">Production</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== HERO ==================== -->
+  <section class="min-h-screen flex items-center pt-20 relative overflow-hidden" id="hero">
+    <!-- Decorative elements -->
+    <div class="absolute top-24 right-12 w-36 h-36 border-2 border-brand/20 rounded-full animate-float hidden lg:block" style="background: radial-gradient(circle, rgba(85,142,255,0.08) 0%, transparent 70%);"></div>
+    <div class="absolute bottom-24 left-12 w-24 h-24 border-2 border-accent/20 rotate-45 animate-float-slow hidden lg:block" style="animation-delay: 1.2s; background: radial-gradient(circle, rgba(255,107,53,0.06) 0%, transparent 70%);"></div>
+    <div class="absolute top-44 left-1/4 w-3 h-3 bg-gold border-2 border-gold/40 animate-float" style="animation-delay: 0.6s;"></div>
+    <div class="absolute top-1/3 right-1/4 w-2 h-2 bg-success rounded-full animate-float" style="animation-delay: 2s;"></div>
+    <div class="absolute bottom-1/3 right-16 w-5 h-5 border-2 border-brand/30 rotate-12 animate-float-slow hidden md:block" style="animation-delay: 0.8s;"></div>
+
+    <!-- Orbiting dot (easter egg) -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 hidden xl:block" style="width: 1px; height: 1px;">
+      <div class="animate-orbit">
+        <div class="w-1.5 h-1.5 bg-brand/40 rounded-full"></div>
+      </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-20 w-full">
+      <div class="max-w-4xl">
+        <!-- Badge -->
+        <div class="inline-block mb-8 fade-in" style="transition-delay: 0.1s;">
+          <span class="tag bg-brand/10 text-brand border-brand animate-pulse-glow">Nouveau</span>
+        </div>
+
+        <!-- Main headline -->
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black leading-[0.95] mb-8 fade-in" style="transition-delay: 0.2s;">
+          <span class="text-white">Cynthia,</span><br>
+          <span class="text-brand relative">
+            tes rapports LCB-FT
+            <svg class="absolute -bottom-2 left-0 w-full h-3 hidden sm:block" viewBox="0 0 400 12" fill="none">
+              <path d="M2 8C60 3 140 2 200 5C260 8 340 4 398 7" stroke="#558eff" stroke-width="3" stroke-linecap="round" style="stroke-dasharray: 400; stroke-dashoffset: 400; animation: dash 1.5s ease forwards 1s;"/>
+            </svg>
+          </span><br>
+          <span class="text-white">sont automatiques.</span>
+        </h1>
+
+        <!-- Subheadline -->
+        <p class="text-base sm:text-xl text-gray-400 max-w-2xl mb-10 leading-relaxed fade-in" style="transition-delay: 0.35s;">
+          Chaque fois qu'un mandat de vente, un mandat de recherche ou une offre d'achat est signe sur MyNotary, le systeme verifie automatiquement les clients et depose le rapport de conformite directement dans le dossier.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-wrap gap-4 mb-16 fade-in" style="transition-delay: 0.5s;">
+          <a href="#dossiers" class="magnetic-btn ripple-container inline-flex items-center gap-3 bg-brand text-white font-bold px-8 py-4 border-2 border-brand shadow-brutal-lg card-hover text-sm sm:text-base">
+            Voir les 28 dossiers
+            <svg class="w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+          </a>
+          <a href="#alertes" class="magnetic-btn ripple-container inline-flex items-center gap-3 bg-alert/10 text-alert font-bold px-8 py-4 border-2 border-alert shadow-brutal-alert card-hover text-sm sm:text-base">
+            <span class="w-2 h-2 bg-alert rounded-full animate-pulse"></span>
+            Alertes PPE
+          </a>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-2xl">
+          <div class="bg-surface/80 border-2 border-brand/30 shadow-brutal p-4 sm:p-5 text-center card-hover scale-in" style="transition-delay: 0.6s;">
+            <div class="text-3xl sm:text-4xl font-black text-brand counter-value" data-target="28">0</div>
+            <div class="text-[0.65rem] font-bold text-muted uppercase tracking-widest mt-1.5">Dossiers</div>
+          </div>
+          <div class="bg-surface/80 border-2 border-success/30 shadow-brutal-success p-4 sm:p-5 text-center card-hover scale-in" style="transition-delay: 0.7s;">
+            <div class="text-3xl sm:text-4xl font-black text-success counter-value" data-target="76">0</div>
+            <div class="text-[0.65rem] font-bold text-muted uppercase tracking-widest mt-1.5">Rapports PDF</div>
+          </div>
+          <div class="bg-surface/80 border-2 border-white/15 shadow-brutal p-4 sm:p-5 text-center card-hover scale-in" style="transition-delay: 0.8s;">
+            <div class="text-3xl sm:text-4xl font-black text-white counter-value" data-target="0">0</div>
+            <div class="text-[0.65rem] font-bold text-muted uppercase tracking-widest mt-1.5">Erreurs</div>
+          </div>
+          <div class="bg-surface/80 border-2 border-alert/30 shadow-brutal-alert p-4 sm:p-5 text-center card-hover scale-in" style="transition-delay: 0.9s;">
+            <div class="text-3xl sm:text-4xl font-black text-alert counter-value" data-target="4">0</div>
+            <div class="text-[0.65rem] font-bold text-muted uppercase tracking-widest mt-1.5">Alertes PPE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TICKER ==================== -->
+  <div class="bg-brand text-white py-3 overflow-hidden relative" style="border-top: 3px solid #3a6fdd; border-bottom: 3px solid #3a6fdd;">
+    <div class="ticker-wrap">
+      <div class="ticker animate-marquee">
+        <span class="mx-8 font-bold text-sm tracking-wide">MANDAT DE VENTE &rarr; VERIFICATION AUTOMATIQUE</span>
+        <span class="mx-8 font-bold text-sm tracking-wide text-white/70">OFFRE D'ACHAT &rarr; VERIFICATION AUTOMATIQUE</span>
+        <span class="mx-8 font-bold text-sm tracking-wide">MANDAT DE RECHERCHE &rarr; VERIFICATION AUTOMATIQUE</span>
+        <span class="mx-8 font-bold text-sm tracking-wide text-white/70">GEL DES AVOIRS + PPE + BENEFICIAIRES EFFECTIFS</span>
+        <span class="mx-8 font-bold text-sm tracking-wide">MANDAT DE VENTE &rarr; VERIFICATION AUTOMATIQUE</span>
+        <span class="mx-8 font-bold text-sm tracking-wide text-white/70">OFFRE D'ACHAT &rarr; VERIFICATION AUTOMATIQUE</span>
+        <span class="mx-8 font-bold text-sm tracking-wide">MANDAT DE RECHERCHE &rarr; VERIFICATION AUTOMATIQUE</span>
+        <span class="mx-8 font-bold text-sm tracking-wide text-white/70">GEL DES AVOIRS + PPE + BENEFICIAIRES EFFECTIFS</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SECTION 2: COMMENT CA MARCHE ==================== -->
+  <section id="fonctionnement" class="py-24 sm:py-36 bg-surface relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-96 h-96 bg-brand/[0.02] rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative">
+      <!-- Section Header -->
+      <div class="max-w-2xl mb-20 fade-in">
+        <span class="tag bg-card text-gray-400 border-brand/30 mb-4 inline-block">Fonctionnement</span>
+        <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black mt-6 mb-6 text-white leading-tight">Comment ca marche ?</h2>
+        <p class="text-lg text-gray-400 leading-relaxed">C'est tout simple. Tu n'as rien a faire. Le systeme tourne tout seul, toutes les 5 minutes.</p>
+      </div>
+
+      <!-- Steps -->
+      <div class="grid gap-10 max-w-3xl">
+        <!-- Step 1 -->
+        <div class="flex gap-5 sm:gap-7 fade-in-left relative step-line group">
+          <div class="w-14 h-14 bg-brand text-white border-2 border-brand shadow-brutal flex items-center justify-center font-black text-xl shrink-0 transition-all duration-200 group-hover:shadow-brutal-lg group-hover:-translate-x-0.5 group-hover:-translate-y-0.5">1</div>
+          <div class="pt-1">
+            <h3 class="font-black text-xl sm:text-2xl mb-3 text-white group-hover:text-brand transition-colors duration-200">Un contrat est signe sur MyNotary</h3>
+            <p class="text-gray-400 leading-relaxed">Des qu'un mandat de vente, un mandat de recherche ou une offre d'achat est signe, le systeme le detecte automatiquement.</p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="flex gap-5 sm:gap-7 fade-in-left relative step-line group" style="transition-delay: 0.1s;">
+          <div class="w-14 h-14 bg-accent text-white border-2 border-accent shadow-brutal-accent flex items-center justify-center font-black text-xl shrink-0 transition-all duration-200 group-hover:shadow-brutal-lg group-hover:-translate-x-0.5 group-hover:-translate-y-0.5">2</div>
+          <div class="pt-1">
+            <h3 class="font-black text-xl sm:text-2xl mb-3 text-white group-hover:text-accent transition-colors duration-200">Verification Efficiale</h3>
+            <p class="text-gray-400 leading-relaxed">Le systeme verifie chaque personne sur les listes officielles : <strong class="text-white">Gel des avoirs</strong> (sanctions) et <strong class="text-white">PPE</strong> (personnes politiquement exposees). Pour les societes, on verifie aussi les beneficiaires effectifs.</p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="flex gap-5 sm:gap-7 fade-in-left relative step-line group" style="transition-delay: 0.2s;">
+          <div class="w-14 h-14 bg-gold text-white border-2 border-gold shadow-brutal-gold flex items-center justify-center font-black text-xl shrink-0 transition-all duration-200 group-hover:shadow-brutal-lg group-hover:-translate-x-0.5 group-hover:-translate-y-0.5">3</div>
+          <div class="pt-1">
+            <h3 class="font-black text-xl sm:text-2xl mb-3 text-white group-hover:text-gold transition-colors duration-200">Le rapport PDF est genere</h3>
+            <p class="text-gray-400 leading-relaxed">Un rapport de conformite est cree pour chaque personne verifiee, avec tous les details : identite, resultat des recherches, alertes eventuelles.</p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="flex gap-5 sm:gap-7 fade-in-left relative group" style="transition-delay: 0.3s;">
+          <div class="w-14 h-14 bg-success text-white border-2 border-success shadow-brutal-success flex items-center justify-center font-black text-xl shrink-0 transition-all duration-200 group-hover:shadow-brutal-lg group-hover:-translate-x-0.5 group-hover:-translate-y-0.5">4</div>
+          <div class="pt-1">
+            <h3 class="font-black text-xl sm:text-2xl mb-3 text-white group-hover:text-success transition-colors duration-200">Depot dans MyNotary</h3>
+            <p class="text-gray-400 leading-relaxed">Le rapport est uploade dans l'<strong class="text-white">espace de stockage</strong> du dossier MyNotary. Tu le retrouves directement dans le dossier, sans rien faire.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Visual Schema -->
+      <div class="mt-20 bg-card/80 border-2 border-brand/20 shadow-brutal-xl p-6 sm:p-10 max-w-4xl scale-in">
+        <p class="text-xs font-bold text-muted uppercase tracking-widest mb-8 text-center">Pipeline de traitement</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-5 text-center">
+          <div class="bg-surface border-2 border-brand/40 shadow-brutal px-5 py-4 font-bold text-white animate-wiggle w-full sm:w-auto">
+            <div class="text-2xl mb-2">&#128221;</div>
+            <span class="text-sm">Contrat signe</span>
+          </div>
+          <div class="text-brand font-black text-2xl rotate-90 sm:rotate-0 my-1 sm:my-0">&rarr;</div>
+          <div class="bg-surface border-2 border-accent/40 shadow-brutal-accent px-5 py-4 font-bold text-white animate-wiggle w-full sm:w-auto">
+            <div class="text-2xl mb-2">&#128269;</div>
+            <span class="text-sm">Efficiale</span>
+          </div>
+          <div class="text-brand font-black text-2xl rotate-90 sm:rotate-0 my-1 sm:my-0">&rarr;</div>
+          <div class="bg-surface border-2 border-gold/40 shadow-brutal-gold px-5 py-4 font-bold text-white animate-wiggle w-full sm:w-auto">
+            <div class="text-2xl mb-2">&#128196;</div>
+            <span class="text-sm">Rapport PDF</span>
+          </div>
+          <div class="text-brand font-black text-2xl rotate-90 sm:rotate-0 my-1 sm:my-0">&rarr;</div>
+          <div class="bg-brand border-2 border-brand shadow-brutal-lg px-5 py-4 font-bold text-white animate-wiggle w-full sm:w-auto">
+            <div class="text-2xl mb-2">&#128193;</div>
+            <span class="text-sm">MyNotary</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SECTION 3: DOSSIERS ==================== -->
+  <section id="dossiers" class="py-24 sm:py-36 bg-noir relative">
+    <div class="absolute bottom-0 left-0 w-80 h-80 bg-brand/[0.02] rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative">
+      <!-- Section Header -->
+      <div class="max-w-2xl mb-16 fade-in">
+        <span class="tag bg-brand/10 text-brand border-brand mb-4 inline-block">Fevrier 2026</span>
+        <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black mt-6 mb-6 text-white leading-tight">28 dossiers traites</h2>
+        <p class="text-lg text-gray-400 leading-relaxed">Chaque dossier ci-dessous a ete verifie automatiquement. Tu peux cliquer sur le lien MyNotary pour voir le dossier, ou sur les PDFs pour telecharger les rapports.</p>
+      </div>
+
+      <!-- Column headers (desktop) -->
+      <div class="hidden sm:grid grid-cols-12 gap-4 px-5 pb-3 text-xs font-bold text-muted uppercase tracking-widest border-b-2 border-white/5 mb-2">
+        <div class="col-span-1">Date</div>
+        <div class="col-span-2">Type</div>
+        <div class="col-span-5">Dossier</div>
+        <div class="col-span-4 text-right">Actions</div>
+      </div>
+
+      <!-- Dossier List -->
+      <div class="grid gap-1.5" id="dossiers-list">
+
+        <!-- 1 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">02 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">DIARRA - BERTE / Clement DAMBELIN</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/cc35cb83-55b7-41ff-9faf-cf1102837094" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://api.mynotary.fr/files/33c56483-d05d-43ec-8bbd-764c39c96044" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://api.mynotary.fr/files/46498559-e4e9-439f-9966-9e7f26d96b6d" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35566620/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-accent/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-accent/10 text-accent border-accent/40 text-[0.6rem]">Offre d'achat</span>
+                <span class="text-xs text-muted font-mono">02 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">Loire-Authion / Audraine BENON</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/da2dc6d0-825b-4dfc-bcd3-a83f8532e76e" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35601763/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">02 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">SCI DE LA RISLE / Saint-Germain-Laval</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/df5c05ba-969f-4c8a-8055-df9d9d60942f" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35440258/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">03 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">SCI JAC (GREGOIRE/BRUNET) / Bessines</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/3f4e598e-99ea-46b9-b038-84118eb5be03" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://api.mynotary.fr/files/be211278-d188-4008-a916-28ba7ad1241b" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35703305/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">03 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">ANTOINE / Paris 11 / Julia BONNET</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/c414f722-3221-416f-804a-badb49ca4e84" target="_blank" class="pdf-btn">PDF 1</a>
+              <a href="https://api.mynotary.fr/files/023b91ea-68d5-48a9-a7b1-7bceb0accb05" target="_blank" class="pdf-btn">PDF 2</a>
+              <span class="text-xs text-muted font-mono">+4</span>
+              <a href="https://app.mynotary.fr/operation/35641729/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">03 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">JMSD INVEST / Maison CANAPVILLE / Anne Sophie VAZQUEZ</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/de6a361d-433d-4bd6-b723-8196e587d6a0" target="_blank" class="pdf-btn">PDF 1</a>
+              <span class="text-xs text-muted font-mono">+9</span>
+              <a href="https://app.mynotary.fr/operation/35636890/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 7 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">03 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">MAZOYER GRILLET / Clement DAMBELIN</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/e6510d9f-31d3-4ae4-a325-b379264144af" target="_blank" class="pdf-btn">PDF 1</a>
+              <span class="text-xs text-muted font-mono">+5</span>
+              <a href="https://app.mynotary.fr/operation/35589321/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 8 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">03 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">BUNGENER Tina</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/3542fc37-282c-417f-bb5d-ddd5e66844b0" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://api.mynotary.fr/files/c3e37a3e-6e8a-493b-aaad-61903501e668" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35559480/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 9 - BEKER ALERTE PPE -->
+        <div class="dossier-row dossier-row-alert bg-alert/[0.04] border-2 border-alert/40 hover:border-alert p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="tag bg-alert/20 text-alert border-alert text-[0.6rem] animate-pulse">ALERTE PPE</span>
+                <span class="text-xs text-muted font-mono">03 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">BEKER / Rue du Cirque Paris 8</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/06c5b16a-ba23-4931-8c19-68963abf5729" target="_blank" class="pdf-btn pdf-btn-alert">PDF</a>
+              <a href="https://api.mynotary.fr/files/270744b2-b0e0-4e8a-87b9-42fc06f2fd70" target="_blank" class="pdf-btn pdf-btn-alert">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35485618/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 10 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-accent/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-accent/10 text-accent border-accent/40 text-[0.6rem]">Offre d'achat</span>
+                <span class="text-xs text-muted font-mono">04 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">TACK / Baptiste DUBUC</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/452c2bd5-05f0-4de3-ae04-d0592c17d2d7" target="_blank" class="pdf-btn">PDF 1</a>
+              <span class="text-xs text-muted font-mono">+2</span>
+              <a href="https://app.mynotary.fr/operation/35711550/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 11 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">04 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">SCI Phocea Mouflon</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/a122d5fd-9206-415b-9cb0-bbcfa8029e90" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://api.mynotary.fr/files/b1108532-8223-401a-8026-1e4ba9abac92" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35373737/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">05 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">3PELLOUTIER / Boulogne-Billancourt / Julia BONNET</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/98c0a7da-0412-48f1-b49b-61ebec853df8" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35557369/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 13 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">05 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">DENAES / Ferney-Voltaire / Karine PENARANDA</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/bb87a8ad-a103-4d1f-bba8-dcc849617f1e" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://api.mynotary.fr/files/c0716c40-843c-401b-bb41-d0d7884b63bb" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35555926/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 14 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-accent/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-accent/10 text-accent border-accent/40 text-[0.6rem]">Offre d'achat</span>
+                <span class="text-xs text-muted font-mono">06 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">PARIS / SAMY ALEXANDRE</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/fd3eb8dd-bb3a-4ccd-8571-a24def9afc56" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35710601/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 15 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">06 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">BOTELLA / Valescure, Saint-Raphael</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/06b2c233-2b2c-4b3e-813a-20cdaecee384" target="_blank" class="pdf-btn">PDF 1</a>
+              <span class="text-xs text-muted font-mono">+2</span>
+              <a href="https://app.mynotary.fr/operation/35581851/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 16 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">07 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">HUON-DUMENTAT / Marly-le-Roi / Romain GOUBELY</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/f01e14d8-43c8-4f40-80bc-b3057444341c" target="_blank" class="pdf-btn">PDF 1</a>
+              <span class="text-xs text-muted font-mono">+3</span>
+              <a href="https://app.mynotary.fr/operation/35721061/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 17 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">08 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">BERVELT / Mandat 3270</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/b816512a-5cc9-47fa-99f3-5d4a8b7d1274" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://api.mynotary.fr/files/c31ec85c-5739-4bac-96f3-6f6e971febe9" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://app.mynotary.fr/operation/36803550/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 18 - MATON ALERTE PPE -->
+        <div class="dossier-row dossier-row-alert bg-alert/[0.04] border-2 border-alert/40 hover:border-alert p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="tag bg-alert/20 text-alert border-alert text-[0.6rem] animate-pulse">ALERTE PPE</span>
+                <span class="text-xs text-muted font-mono">09 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">BAILLY / Courbevoie / Benoit MATON</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/e62cfb0a-42de-4629-a862-f0ed5ca03d8d" target="_blank" class="pdf-btn pdf-btn-alert">PDF</a>
+              <a href="https://api.mynotary.fr/files/5ac41186-4308-41b4-85b7-7905168f090c" target="_blank" class="pdf-btn pdf-btn-alert">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35755055/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 19 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">09 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">CARROT / Jujurieux / Gerald CHATEL</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/f519343a-b34f-48ac-87ba-473579053376" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35666137/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 20 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">09 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">FILSKOV / Cannes / Emilie CATINELLA</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/651bd03d-09d7-4dde-81ff-a470ecc52d6c" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://api.mynotary.fr/files/a95034ae-1852-46a3-9c2c-6ef5feaa6ad2" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35609903/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 21 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">10 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">KERJEAN / Saint-Malo / Florence SEVESTRE</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/45b0fe0a-0ebb-42ef-bc70-bb6ede77be0b" target="_blank" class="pdf-btn">PDF 1</a>
+              <span class="text-xs text-muted font-mono">+2</span>
+              <a href="https://app.mynotary.fr/operation/36958747/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 22 - MATON ALERTE PPE -->
+        <div class="dossier-row dossier-row-alert bg-alert/[0.04] border-2 border-alert/40 hover:border-alert p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="tag bg-alert/20 text-alert border-alert text-[0.6rem] animate-pulse">ALERTE PPE</span>
+                <span class="text-xs text-muted font-mono">10 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">FRANCE CAPITALE / Benoit MATON</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/52049002-67e3-4fab-9d07-20ef2cfd0058" target="_blank" class="pdf-btn pdf-btn-alert">PDF</a>
+              <a href="https://app.mynotary.fr/operation/36902211/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 23 - MATON ALERTE PPE -->
+        <div class="dossier-row dossier-row-alert bg-alert/[0.04] border-2 border-alert/40 hover:border-alert p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="tag bg-alert/20 text-alert border-alert text-[0.6rem] animate-pulse">ALERTE PPE</span>
+                <span class="text-xs text-muted font-mono">10 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">LAIR / Paris 10 / Benoit MATON</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/28b69e12-f8fb-441e-a3b3-6ce9a80db70e" target="_blank" class="pdf-btn pdf-btn-alert">PDF</a>
+              <a href="https://api.mynotary.fr/files/1c836b83-d523-43ca-973d-f161a0ba588e" target="_blank" class="pdf-btn pdf-btn-alert">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35771688/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 24 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">11 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">LEMAISTRE / Benerville / Gregory VALLEE</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/8c440878-e5b9-4525-a4b0-5368380e562b" target="_blank" class="pdf-btn">PDF 1</a>
+              <span class="text-xs text-muted font-mono">+2</span>
+              <a href="https://app.mynotary.fr/operation/36797391/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 25 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">11 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">SCI DE LA LAUVE / Saint-Raphael / Stephane GAMBIRASIO</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/54c6803e-1cd6-498e-9fd6-98112ab5c121" target="_blank" class="pdf-btn">PDF</a>
+              <a href="https://app.mynotary.fr/operation/35803674/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 26 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">11 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">COCQUET-RAQUILLET / Paris 13 / Pierre-Axel BASTIEGE</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/f1c1d858-6747-4aa0-8d5c-3eb78238a3eb" target="_blank" class="pdf-btn">PDF 1</a>
+              <span class="text-xs text-muted font-mono">+2</span>
+              <a href="https://app.mynotary.fr/operation/35599853/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 27 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-brand/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-brand/10 text-brand border-brand/40 text-[0.6rem]">Mandat de vente</span>
+                <span class="text-xs text-muted font-mono">12 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">LEVY / Asnieres-sur-Seine / Benoit MATON</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/cbfefd68-704b-44a0-a326-e03ce3e96574" target="_blank" class="pdf-btn">PDF 1</a>
+              <span class="text-xs text-muted font-mono">+2</span>
+              <a href="https://app.mynotary.fr/operation/36957622/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 28 -->
+        <div class="dossier-row bg-surface/50 border-2 border-white/5 hover:border-accent/20 p-4 sm:p-5 fade-in">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 flex-wrap mb-1.5">
+                <span class="tag bg-accent/10 text-accent border-accent/40 text-[0.6rem]">Offre d'achat</span>
+                <span class="text-xs text-muted font-mono">12 fev</span>
+              </div>
+              <h3 class="font-bold text-sm sm:text-base text-white truncate">DE PERTHUIS / VOS / Cuy-Saint-Fiacre / Baptiste DUBUC</h3>
+            </div>
+            <div class="flex items-center gap-2 shrink-0 flex-wrap">
+              <a href="https://api.mynotary.fr/files/d162a943-7512-49e3-98b5-8f5934302374" target="_blank" class="pdf-btn">PDF 1</a>
+              <span class="text-xs text-muted font-mono">+3</span>
+              <a href="https://app.mynotary.fr/operation/36836407/espace-stockage" target="_blank" class="mynotary-btn link-arrow">MyNotary</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Dossier count footer -->
+      <div class="mt-6 flex items-center gap-3 text-sm text-muted font-mono fade-in">
+        <div class="w-2 h-2 bg-success rounded-full animate-pulse"></div>
+        28 dossiers affiches &middot; Derniere mise a jour : 13 fevrier 2026
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SECTION 4: ALERTES PPE ==================== -->
+  <section id="alertes" class="py-24 sm:py-36 bg-surface relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-alert/30 to-transparent"></div>
+    <div class="absolute top-20 right-10 w-40 h-40 bg-alert/[0.03] rounded-full blur-3xl"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative">
+      <!-- Section Header -->
+      <div class="max-w-2xl mb-16 fade-in">
+        <span class="tag bg-alert/10 text-alert border-alert mb-4 inline-block animate-pulse-glow" style="--tw-shadow-color: rgba(239,68,68,0.4);">Important</span>
+        <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black mt-6 mb-6 text-white leading-tight">Alertes PPE detectees</h2>
+        <p class="text-lg text-gray-400 leading-relaxed">Le systeme a detecte des correspondances sur les listes de Personnes Politiquement Exposees (PPE) pour certains clients. Ca ne veut pas dire qu'il y a un probleme, mais ca demande une verification manuelle.</p>
+      </div>
+
+      <!-- Alert Cards -->
+      <div class="grid gap-5 max-w-3xl">
+
+        <!-- MATON -->
+        <div class="bg-card border-2 border-alert/50 p-6 sm:p-8 card-hover-alert fade-in relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-1 h-full bg-alert"></div>
+          <div class="flex items-start gap-5">
+            <div class="w-14 h-14 bg-alert/10 border-2 border-alert flex items-center justify-center text-2xl shrink-0 animate-wiggle">&#9888;</div>
+            <div class="flex-1">
+              <h3 class="font-black text-xl sm:text-2xl mb-2 text-white">Benoit MATON</h3>
+              <p class="text-gray-400 text-sm mb-4">Mandataire — Detecte sur 3 dossiers differents</p>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="tag bg-alert/10 text-alert border-alert text-[0.65rem]">3 alertes PPE</span>
+                <span class="tag bg-white/5 text-gray-400 border-white/20 text-[0.65rem]">0 alerte Gel</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+                <a href="https://app.mynotary.fr/operation/36902211/espace-stockage" target="_blank" class="text-sm text-brand hover:text-white transition-colors link-arrow font-semibold">FRANCE CAPITALE</a>
+                <span class="text-gray-600">|</span>
+                <a href="https://app.mynotary.fr/operation/35755055/espace-stockage" target="_blank" class="text-sm text-brand hover:text-white transition-colors link-arrow font-semibold">BAILLY / Courbevoie</a>
+                <span class="text-gray-600">|</span>
+                <a href="https://app.mynotary.fr/operation/35771688/espace-stockage" target="_blank" class="text-sm text-brand hover:text-white transition-colors link-arrow font-semibold">LAIR / Paris 10</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BEKER -->
+        <div class="bg-card border-2 border-alert/50 p-6 sm:p-8 card-hover-alert fade-in relative overflow-hidden">
+          <div class="absolute top-0 left-0 w-1 h-full bg-alert"></div>
+          <div class="flex items-start gap-5">
+            <div class="w-14 h-14 bg-alert/10 border-2 border-alert flex items-center justify-center text-2xl shrink-0 animate-wiggle">&#9888;</div>
+            <div class="flex-1">
+              <h3 class="font-black text-xl sm:text-2xl mb-2 text-white">Nicolas BEKER</h3>
+              <p class="text-gray-400 text-sm mb-4">Vendeur — Mandat 3244, Rue du Cirque Paris 8</p>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="tag bg-alert/10 text-alert border-alert text-[0.65rem]">Alerte PPE</span>
+                <span class="tag bg-white/5 text-gray-400 border-white/20 text-[0.65rem]">0 alerte Gel</span>
+              </div>
+              <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+                <a href="https://app.mynotary.fr/operation/35485618/espace-stockage" target="_blank" class="text-sm text-brand hover:text-white transition-colors link-arrow font-semibold">Voir le dossier</a>
+                <span class="text-gray-600">|</span>
+                <a href="https://api.mynotary.fr/files/06c5b16a-ba23-4931-8c19-68963abf5729" target="_blank" class="text-sm text-accent hover:text-white transition-colors link-arrow font-semibold">Rapport PDF</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Note -->
+      <div class="mt-10 p-5 sm:p-6 border-2 border-white/10 max-w-3xl fade-in bg-card/50 relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-brand/30 via-white/10 to-brand/30"></div>
+        <p class="text-sm text-gray-400 leading-relaxed"><strong class="text-white">Note :</strong> les alertes PPE sont des correspondances de noms sur les listes officielles. Ouvre le rapport PDF pour voir les details et verifier si c'est bien la meme personne. Dans la plupart des cas, c'est un homonyme.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SECTION 5: MISE EN PRODUCTION ==================== -->
+  <section id="production" class="py-24 sm:py-36 bg-noir relative overflow-hidden">
+    <div class="absolute bottom-0 right-0 w-96 h-96 bg-success/[0.02] rounded-full blur-3xl translate-y-1/2 translate-x-1/2"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 relative">
+      <!-- Section Header -->
+      <div class="max-w-2xl mb-16 fade-in">
+        <span class="tag bg-success/10 text-success border-success mb-4 inline-block">Prochaine etape</span>
+        <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black mt-6 mb-6 text-white leading-tight">Mise en production</h2>
+        <p class="text-lg text-gray-400 leading-relaxed">Le systeme est pret a tourner en continu. Voila ce que ca change pour toi.</p>
+      </div>
+
+      <!-- Feature grid -->
+      <div class="grid sm:grid-cols-2 gap-5 max-w-4xl">
+        <div class="bg-surface/80 border-2 border-white/8 hover:border-brand/30 p-7 card-hover fade-in group">
+          <div class="text-3xl mb-5 transition-transform duration-300 group-hover:scale-110 inline-block">&#128340;</div>
+          <h3 class="font-black text-xl mb-3 text-white group-hover:text-brand transition-colors duration-200">Automatique 24/7</h3>
+          <p class="text-gray-400 leading-relaxed text-sm">Le systeme verifie toutes les 5 minutes s'il y a de nouveaux contrats signes. Tu n'as rien a lancer, rien a faire. Ca tourne tout seul sur un serveur.</p>
+        </div>
+
+        <div class="bg-surface/80 border-2 border-white/8 hover:border-brand/30 p-7 card-hover fade-in group" style="transition-delay: 0.1s;">
+          <div class="text-3xl mb-5 transition-transform duration-300 group-hover:scale-110 inline-block">&#128196;</div>
+          <h3 class="font-black text-xl mb-3 text-white group-hover:text-brand transition-colors duration-200">Rapports dans MyNotary</h3>
+          <p class="text-gray-400 leading-relaxed text-sm">Les rapports de conformite sont deposes directement dans l'espace de stockage de chaque dossier. Pas besoin de les chercher, ils sont la ou tu en as besoin.</p>
+        </div>
+
+        <div class="bg-surface/80 border-2 border-white/8 hover:border-brand/30 p-7 card-hover fade-in group" style="transition-delay: 0.2s;">
+          <div class="text-3xl mb-5 transition-transform duration-300 group-hover:scale-110 inline-block">&#128274;</div>
+          <h3 class="font-black text-xl mb-3 text-white group-hover:text-brand transition-colors duration-200">Gel + PPE + Beneficiaires</h3>
+          <p class="text-gray-400 leading-relaxed text-sm">Chaque personne est verifiee sur les listes de gel des avoirs et de PPE. Pour les societes, on verifie aussi les beneficiaires effectifs via le SIREN.</p>
+        </div>
+
+        <div class="bg-surface/80 border-2 border-white/8 hover:border-brand/30 p-7 card-hover fade-in group" style="transition-delay: 0.3s;">
+          <div class="text-3xl mb-5 transition-transform duration-300 group-hover:scale-110 inline-block">&#9888;&#65039;</div>
+          <h3 class="font-black text-xl mb-3 text-white group-hover:text-brand transition-colors duration-200">Alertes en temps reel</h3>
+          <p class="text-gray-400 leading-relaxed text-sm">Si une alerte est detectee, le rapport est quand meme genere et uploade. Tu peux le consulter pour voir les details et decider si c'est un vrai match ou un homonyme.</p>
+        </div>
+      </div>
+
+      <!-- Summary card -->
+      <div class="mt-16 bg-brand/5 border-2 border-brand/30 p-8 sm:p-10 max-w-4xl scale-in relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand via-success to-brand"></div>
+        <h3 class="font-black text-xl sm:text-2xl mb-6 text-white">En resume</h3>
+        <ul class="space-y-4">
+          <li class="flex items-start gap-4 group">
+            <span class="text-success font-black text-lg leading-none mt-0.5 transition-transform duration-200 group-hover:scale-125 inline-block">&#10003;</span>
+            <span class="text-gray-300 leading-relaxed"><strong class="text-white">28 dossiers</strong> de fevrier deja traites avec <strong class="text-white">76 rapports PDF</strong></span>
+          </li>
+          <li class="flex items-start gap-4 group">
+            <span class="text-success font-black text-lg leading-none mt-0.5 transition-transform duration-200 group-hover:scale-125 inline-block">&#10003;</span>
+            <span class="text-gray-300 leading-relaxed"><strong class="text-white">Janvier 2026</strong> entierement traite aussi (27 contrats)</span>
+          </li>
+          <li class="flex items-start gap-4 group">
+            <span class="text-success font-black text-lg leading-none mt-0.5 transition-transform duration-200 group-hover:scale-125 inline-block">&#10003;</span>
+            <span class="text-gray-300 leading-relaxed">Les prochains contrats signes seront traites <strong class="text-white">automatiquement</strong></span>
+          </li>
+          <li class="flex items-start gap-4 group">
+            <span class="text-alert font-black text-lg leading-none mt-0.5 transition-transform duration-200 group-hover:scale-125 inline-block">!</span>
+            <span class="text-gray-300 leading-relaxed"><strong class="text-white">4 alertes PPE</strong> detectees (MATON x3 + BEKER) — a verifier manuellement</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-surface text-white py-10 relative" style="border-top: 4px solid #558eff;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 text-center">
+      <div class="flex items-center justify-center gap-3 mb-5">
+        <div class="w-9 h-9 bg-brand border-2 border-brand shadow-brutal-sm flex items-center justify-center text-white font-black text-sm">B</div>
+        <span class="font-bold text-lg text-white">Bonaparte LCB-FT</span>
+      </div>
+      <p class="text-gray-400 text-sm">Automatisation des verifications de conformite LCB-FT — Fevrier 2026</p>
+      <p class="text-gray-600 text-xs mt-2">Construit par Baptiste pour le reseau Bonaparte</p>
+
+      <!-- Easter egg: hidden message on triple click -->
+      <p class="text-noir text-[0.5rem] mt-6 select-all cursor-default" title="Tu as trouve l'easter egg !">{ systeme: "operationnel", erreurs: 0, cafe: "necessaire" }</p>
+    </div>
+  </footer>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <script>
+    // === SCROLL ANIMATIONS ===
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry, index) => {
+        if (entry.isIntersecting) {
+          const delay = entry.target.style.transitionDelay || '0s';
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+
+    document.querySelectorAll('.fade-in, .fade-in-left, .fade-in-right, .scale-in').forEach((el, i) => {
+      if (!el.style.transitionDelay) {
+        el.style.transitionDelay = `${Math.min(i * 0.03, 0.3)}s`;
+      }
+      observer.observe(el);
+    });
+
+    // === COUNTER ANIMATION ===
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target);
+          if (target === 0) { el.textContent = '0'; counterObserver.unobserve(el); return; }
+          let current = 0;
+          const duration = 1500;
+          const startTime = performance.now();
+
+          function easeOutExpo(t) { return t === 1 ? 1 : 1 - Math.pow(2, -10 * t); }
+
+          function update(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            current = Math.round(easeOutExpo(progress) * target);
+            el.textContent = current;
+            if (progress < 1) requestAnimationFrame(update);
+          }
+          requestAnimationFrame(update);
+          counterObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.counter-value').forEach(el => counterObserver.observe(el));
+
+    // === SMOOTH SCROLL ===
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    // === SCROLL PROGRESS BAR ===
+    window.addEventListener('scroll', () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      document.getElementById('progressBar').style.width = progress + '%';
+    }, { passive: true });
+
+    // === CURSOR GLOW (easter egg - desktop only) ===
+    if (window.matchMedia('(pointer: fine)').matches) {
+      const glow = document.getElementById('cursorGlow');
+      let mouseX = 0, mouseY = 0, glowX = 0, glowY = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }, { passive: true });
+
+      function animateGlow() {
+        glowX += (mouseX - glowX) * 0.08;
+        glowY += (mouseY - glowY) * 0.08;
+        glow.style.left = glowX + 'px';
+        glow.style.top = glowY + 'px';
+        requestAnimationFrame(animateGlow);
+      }
+      animateGlow();
+    } else {
+      document.getElementById('cursorGlow').style.display = 'none';
+    }
+
+    // === NAVBAR SHRINK ON SCROLL ===
+    const navbar = document.getElementById('navbar');
+    let lastScroll = 0;
+    window.addEventListener('scroll', () => {
+      const currentScroll = window.scrollY;
+      if (currentScroll > 100) {
+        navbar.style.padding = '0';
+        navbar.style.boxShadow = '0 4px 30px rgba(0,0,0,0.3)';
+      } else {
+        navbar.style.padding = '';
+        navbar.style.boxShadow = '';
+      }
+      lastScroll = currentScroll;
+    }, { passive: true });
+
+    // === ACTIVE NAV LINK HIGHLIGHTING ===
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 120;
+        if (window.scrollY >= sectionTop) {
+          current = section.getAttribute('id');
+        }
+      });
+      navLinks.forEach(link => {
+        link.style.color = '';
+        link.style.borderColor = 'transparent';
+        if (link.getAttribute('href') === '#' + current) {
+          link.style.color = '#558eff';
+          link.style.borderColor = 'rgba(85,142,255,0.3)';
+        }
+      });
+    }, { passive: true });
+
+    // === RIPPLE EFFECT ON BUTTONS ===
+    document.querySelectorAll('.ripple-container').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const rect = this.getBoundingClientRect();
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        ripple.style.width = ripple.style.height = Math.max(rect.width, rect.height) + 'px';
+        ripple.style.left = (e.clientX - rect.left - Math.max(rect.width, rect.height) / 2) + 'px';
+        ripple.style.top = (e.clientY - rect.top - Math.max(rect.width, rect.height) / 2) + 'px';
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+      });
+    });
+
+    // === MAGNETIC BUTTON EFFECT (desktop) ===
+    if (window.matchMedia('(pointer: fine)').matches) {
+      document.querySelectorAll('.magnetic-btn').forEach(btn => {
+        btn.addEventListener('mousemove', function(e) {
+          const rect = this.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          this.style.transform = `translate(${x * 0.15}px, ${y * 0.15}px)`;
+        });
+        btn.addEventListener('mouseleave', function() {
+          this.style.transform = '';
+        });
+      });
+    }
+
+    // === EASTER EGG: KONAMI CODE ===
+    let konamiProgress = 0;
+    const konamiCode = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+    document.addEventListener('keydown', (e) => {
+      if (e.keyCode === konamiCode[konamiProgress]) {
+        konamiProgress++;
+        if (konamiProgress === konamiCode.length) {
+          document.body.classList.toggle('konami-active');
+          konamiProgress = 0;
+
+          // Flash effect
+          const flash = document.createElement('div');
+          flash.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;background:#558eff;z-index:99999;opacity:0.3;pointer-events:none;transition:opacity 0.5s;';
+          document.body.appendChild(flash);
+          setTimeout(() => { flash.style.opacity = '0'; }, 50);
+          setTimeout(() => flash.remove(), 600);
+        }
+      } else {
+        konamiProgress = 0;
+      }
+    });
+
+    // === EASTER EGG: CLICK COUNTER ON LOGO ===
+    let logoClicks = 0;
+    document.querySelector('nav .group').addEventListener('click', () => {
+      logoClicks++;
+      if (logoClicks === 7) {
+        document.querySelector('nav .group').style.animation = 'wiggle 0.5s ease-in-out 3';
+        logoClicks = 0;
+      }
+    });
+
+    // === TILT EFFECT ON STAT CARDS (desktop) ===
+    if (window.matchMedia('(pointer: fine)').matches) {
+      document.querySelectorAll('.counter-value').forEach(card => {
+        const parent = card.closest('[class*="card-hover"]');
+        if (!parent) return;
+        parent.addEventListener('mousemove', function(e) {
+          const rect = this.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          this.style.transform = `translate(-3px, -3px) perspective(600px) rotateX(${y * -8}deg) rotateY(${x * 8}deg)`;
+        });
+        parent.addEventListener('mouseleave', function() {
+          this.style.transform = '';
+        });
+      });
+    }
+
+    // === TYPING EFFECT ON HERO (run once) ===
+    const heroH1 = document.querySelector('#hero h1');
+    if (heroH1) {
+      heroH1.style.opacity = '0';
+      heroH1.style.transform = 'translateY(30px)';
+      setTimeout(() => {
+        heroH1.style.transition = 'all 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+        heroH1.style.opacity = '1';
+        heroH1.style.transform = 'translateY(0)';
+      }, 200);
+    }
+  </script>
+
+</body>
+</html>
